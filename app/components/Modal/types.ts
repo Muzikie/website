@@ -1,10 +1,7 @@
-import { ReactNode } from 'react';
+import {ModalContent} from '@/app/context/modalContext/types';
 
 export interface ModalProps {
-  discardable?: boolean;
-  onDiscard?: () => void;
-  className?: string;
-  children: ReactNode;
-  theme?: 'dark' | 'light';
-  notStickyInMobile?: boolean;
+  data: ModalContent | null;
+  hide: () => void;
+  isVisible: boolean;
 }

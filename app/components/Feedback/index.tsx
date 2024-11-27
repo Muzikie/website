@@ -1,17 +1,23 @@
 import React from 'react';
+import {Span, View} from '@/app/components/Polyfills';
+import {FeedbackProps} from './types';
+import {FetchStatus} from '@/app/config/types';
 
-import { FeedbackProps } from './type';
+const messages = {
+  [FetchStatus.Idle]: '',
+  [FetchStatus.Pending]: '',
+  [FetchStatus.Success]: 'That was successful!',
+  [FetchStatus.Error]: 'Oops, try again later.',
+};
 
-const Feedback = ({ data }: FeedbackProps) => {
-  let className = 'empty';
-  if (data.message && data.error) {
-    className = 'error';
-  } else if (data.message && !data.error) {
-    className = 'success';
-  }
-  return <div className={`component feedback ${className}`}>
-    <h5>{data.message}</h5>
-  </div>;
+const Feedback = ({status, message}: FeedbackProps) => {
+  return (
+    <View className="pt-4 pb-6">
+      <Span className={`text-${status === FetchStatus.Success ? 'assureStrong' : 'warnStrong'}`}>
+        {message || messages[status]}
+      </Span>
+    </View>
+  );
 };
 
 export default Feedback;

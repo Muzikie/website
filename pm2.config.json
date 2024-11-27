@@ -1,9 +1,0 @@
-{
-  "name": "player",
-  "cwd": ".",
-  "script": "node ./server.js",
-  "env": {
-    "NODE_ENV": "production",
-    "PORT": 3002
-  }
-}
