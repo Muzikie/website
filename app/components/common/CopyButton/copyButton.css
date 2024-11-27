@@ -1,8 +1,0 @@
-.copyAddress {
-  display: flex;
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: var(--white);
-  font-size: var(--size-h3);
-}
