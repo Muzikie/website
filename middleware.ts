@@ -31,6 +31,7 @@ export async function middleware(request: NextRequest) {
 
         const res = await fetch(url);
         const data = await res.json();
+        console.log('---- data', data);
 
         const response = NextResponse.redirect(homeUrl);
         response.cookies.set(AUTH_COOKIE, data.jwt, LIVE_COOKIE);
