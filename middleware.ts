@@ -29,6 +29,7 @@ export async function middleware(request: NextRequest) {
         const path = `/auth/${provider}/callback`;
         const url = `${apiBaseUrl}${path}?access_token=${token}`;
 
+        console.log('---- url', url);
         const res = await fetch(url);
         const data = await res.json();
         console.log('---- data', data);
