@@ -19,7 +19,7 @@ const Carrot = () => {
   );
 }
 
-const Wallet: FC<WalletProps> = ({data}) => {
+const Wallet: FC<WalletProps> = ({data, balances}) => {
   const [copied, setCopied] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -57,13 +57,13 @@ const Wallet: FC<WalletProps> = ({data}) => {
 
   const fullName = [formData?.first_name, formData?.last_name]
     .filter(item => !!item)
-    .join(' ');
+    .join(' ') || 'Set your name';
 
   return (
     <View className="w-full bg-neutralPale rounded-3xl relative mt-14 pb-6">
       <Carrot />
       <View>
-        {fullName.length && !isEditing ? (
+        {!isEditing ? (
           <View className="w-full flex flex-row justify-center items-center mb-6">
             <H2 className="text-primaryStrong font-light">{fullName}</H2>
             <TouchableHighlight
@@ -107,9 +107,9 @@ const Wallet: FC<WalletProps> = ({data}) => {
           )
         }
         <View className="w-full text-center mb-6">
-          <Span className="text-neutralSteady font-light">Points</Span>
+          <Span className="text-neutralSteady font-light">Balances</Span>
           <H1 className="text-primaryStrong">
-            {data?.points ?? 0}
+            {balances.join(', ')}
           </H1>
         </View>
         <View className="w-full text-center">

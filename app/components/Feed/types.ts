@@ -1,10 +1,6 @@
 interface User {
-  data: {
-    id: string;
-    attributes: {
-      email: string;
-    };
-  };
+  id: string;
+  email: string;
 }
 
 interface Owner {
@@ -15,25 +11,24 @@ interface Owner {
 }
 
 export interface Image {
-  id: string;
-  attributes: {
-    formats: {
-      large: {
-        url: string;
-        name: string;
-      };
-      medium: {
-        url: string;
-        name: string;
-      };
-      small: {
-        url: string;
-        name: string;
-      };
-      thumbnail: {
-        url: string;
-        name: string;
-      };
+  id: number;
+  documentId: string;
+  formats: {
+    large: {
+      url: string;
+      name: string;
+    };
+    medium: {
+      url: string;
+      name: string;
+    };
+    small: {
+      url: string;
+      name: string;
+    };
+    thumbnail: {
+      url: string;
+      name: string;
     };
   };
 }
@@ -87,7 +82,8 @@ export interface ExclusiveContentAttrs {
 
 export type Project = ProjectAttrs & {
   id: number;
-  current_funding: number;
+  documentId: string;
+  current_funding: string;
   reaction_count: number;
   users_permissions_user: User;
   images: Images;
@@ -105,7 +101,8 @@ export type Content = ExclusiveContentAttrs & {
   owner: Owner;
   project: {
     name: string;
-    id: string;
+    id: number;
+    documentId: string;
   };
   type: FeedType.Content;
 }

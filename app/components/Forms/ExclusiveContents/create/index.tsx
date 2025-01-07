@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import {View, ScrollView, Dimensions, Text} from '@/app/components/Polyfills';
+import {View, ScrollView, Text} from '@/app/components/Polyfills';
 
 import {useModal} from '@/app/hooks/useModal';
 import {useGetData} from '@/app/hooks/useQuery';
@@ -28,7 +28,7 @@ const AccessibleTiersSelect: FC<AccessibleTiersSelectProps> = ({
       {tiers.map(item => (
         <CheckBox
           key={item.id}
-          title={item?.attributes.name}
+          title={item?.name}
           onSelect={() => onSelect(item)}
           selected={selection.includes(item.id)}
         />
@@ -52,7 +52,7 @@ const PostExclusiveContentsForm: FC<PostExclusiveContentsFormProps> = ({
     },
   });
 
-  const maxHeight = Dimensions.get('window').height * 0.6;
+  // const maxHeight = Dimensions.get('window').height * 0.6;
   const onSubmit = async () => {
     // Keyboard.dismiss();
     const previewData = {
@@ -90,7 +90,7 @@ const PostExclusiveContentsForm: FC<PostExclusiveContentsFormProps> = ({
 
   return (
     <View>
-      <ScrollView style={{maxHeight}}>
+      <ScrollView>
         <Input
           placeholder="Title"
           onChange={onChange}

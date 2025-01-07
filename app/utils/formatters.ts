@@ -27,12 +27,14 @@ enum SupportedTokens {
   Sol = 'SOL',
   Usdc = 'USDC',
   Klayr = 'KLY',
+  MZK = 'MZK',
 }
 
 const factors: Record<SupportedTokens, BigNumber> = {
   [SupportedTokens.Sol]: BigNumber(1e9),
   [SupportedTokens.Usdc]: BigNumber(1),
   [SupportedTokens.Klayr]: BigNumber(1e8),
+  [SupportedTokens.MZK]: BigNumber(1e8),
 };
 
 export const fromBaseToken = (
@@ -48,7 +50,7 @@ export const fromBaseToken = (
 };
 
 export const toBaseToken = (num: string | number): string => {
-  const token: SupportedTokens = process.env.NEXT_PUBLIC_TOKEN_SYMBOL;
+  const token = process.env.NEXT_PUBLIC_TOKEN_SYMBOL as SupportedTokens;
   return BigNumber(num).multipliedBy(factors[token]).toFixed(0);
 };
 

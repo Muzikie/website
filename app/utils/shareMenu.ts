@@ -1,10 +1,10 @@
 import {Project} from '@/app/components/Projects/types';
-import {ArtistShareProp} from '@/app/components/ProjectDetails/types';
+import { AccountAttrs } from '../config/types';
 
 export const shareProjectInvitation = async (
-  user: unknown,
+  user: AccountAttrs | undefined,
   project: Project,
-  artist: ArtistShareProp['attributes'],
+  artist: AccountAttrs,
 ) => {
   // Fetch user's name and family, fallback to email if not available
   const userName =
@@ -20,7 +20,7 @@ export const shareProjectInvitation = async (
   // Format message
   const message = `
     ${userName} has invited you to view and support a new music project on Muzikie\n\n
-    ${project.attributes.name} by ${artistName}\n\n
+    ${project.name} by ${artistName}\n\n
     Join the project: muzikie://project/${project.id}\n\n
     New to Muzikie? Visit https://muzikie.app/install
   `;

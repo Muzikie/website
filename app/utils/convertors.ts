@@ -1,41 +1,4 @@
-import type {StrapiResponse, FlattenedResponse, MapObjectConfig} from './types';
-
-export const flattenStrapiResponse = (
-  response: StrapiResponse,
-): FlattenedResponse => {
-  const {id, attributes} = response;
-  const result: FlattenedResponse = {id};
-
-  const processAttributes = (attrs: {
-    [key: string]: unknown;
-  }): {[key: string]: unknown} => {
-    const processedAttrs: {[key: string]: unknown} = {};
-
-    for (const key in attrs) {
-      if (attrs.hasOwnProperty(key)) {
-        if (key === 'createdAt' || key === 'updatedAt') {
-          continue;
-        } else if (typeof attrs[key] === 'object' && attrs[key] !== null) {
-          if (
-            attrs[key].hasOwnProperty('id') &&
-            attrs[key].hasOwnProperty('attributes')
-          ) {
-            processedAttrs[key] = flattenStrapiResponse(attrs[key]);
-          } else {
-            processedAttrs[key] = processAttributes(attrs[key]);
-          }
-        } else {
-          processedAttrs[key] = attrs[key];
-        }
-      }
-    }
-
-    return processedAttrs;
-  };
-
-  Object.assign(result, processAttributes(attributes));
-  return result;
-};
+import type {MapObjectConfig} from './types';
 
 /**
  * Maps an object to a new objects that includes a subset of properties

@@ -27,7 +27,6 @@ const Editable: FC<GalleryEditableProps> = ({images = [], id}) => {
       .fill(null)
       .map((_, index) => images[index] || null);
 
-
   return (
     <View className="p-5">
       <View className="flex w-full flex-row gap-2 rounded-xl overflow-hidden h-[500px] wrap">

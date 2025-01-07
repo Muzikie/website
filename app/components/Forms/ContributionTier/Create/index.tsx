@@ -28,8 +28,6 @@ const CreateContributionTierForm: FC<ContributionTier> = ({
   const [data, setData] = useState<Partial<ContributionTierAttrs>>(
     initialData || emptyFormValues,
   );
-  console.log('projectId', projectId);
-
  const validity = validateForm(schema, data);
 
  const handleSubmit = () => {

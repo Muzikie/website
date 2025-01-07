@@ -8,8 +8,8 @@ export interface PublishProjectProps {
       amount: string;
     }
   };
-  projectId: number;
-  onPublish: (projectId: number) => Promise<{
+  projectId: string;
+  onPublish: (projectId: string) => Promise<{
     success: boolean;
     error: string;
   }>

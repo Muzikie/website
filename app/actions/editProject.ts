@@ -2,8 +2,9 @@
 
 import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
+import {Project} from '../components/Projects/types';
 
-export const editProject = async (data: Record<string, unknown>, projectId: number) => {
+export const editProject = async (data: Project, projectId: string) => {
   const result = {
     success: false,
     error: '',

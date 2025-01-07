@@ -8,8 +8,7 @@ export const getFeed = async () => {
     data: [],
   };
   try {
-    const data = await apiClient(ENDPOINTS.FEED);
-    result = data;
+    result = await apiClient(ENDPOINTS.FEED);
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }

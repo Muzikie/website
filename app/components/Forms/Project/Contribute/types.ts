@@ -4,12 +4,11 @@ import {Project} from '@/app/components/Projects/types';
 
 export interface ContributionTier {
   id: number;
-  attributes: {
-    name: string;
-    description: string;
-    rewards: string;
-    amount: number;
-  };
+  documentId: string;
+  name: string;
+  description: string;
+  rewards: string;
+  amount: number;
 }
 
 export interface ContributeProps {

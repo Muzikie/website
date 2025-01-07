@@ -2,7 +2,7 @@
 import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
 
-export const deleteProjectPhoto = async (projectId: number, removedId: number, remainingIds: number[]) => {
+export const deleteProjectPhoto = async (projectId: string, removedId: number, remainingIds: number[]) => {
   try {
     const data = JSON.stringify({data: {images: remainingIds}});
     const project = await apiClient(`${ENDPOINTS.PROJECTS}/${projectId}`, {method: 'PUT', body: data});

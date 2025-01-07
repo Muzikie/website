@@ -5,15 +5,8 @@ export const constructQueryParams = (params: QueryParams) => {
 
   // Flattening include params for population
   if (params.include) {
-    Object.entries(params.include).forEach(([key, value]) => {
-      value.forEach((field: string) => {
-        if (field === '*') {
-          queryParams[`populate[${key}][populate]`] = '*';
-        } else {
-          const index = value.indexOf(field);
-          queryParams[`populate[${key}][fields][${index}]`] = field;
-        }
-      });
+    Object.entries(params.include).forEach(([key], index) => {
+        queryParams[`populate[${index}]`] = key;
     });
   }
 

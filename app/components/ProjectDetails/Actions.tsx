@@ -18,11 +18,11 @@ import {ActionsProps} from './types';
 const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
   const account = await getUserAccount();
 
-  const ownerId = Number(project?.attributes.users_permissions_user.data.id);
+  const ownerId = Number(project.users_permissions_user.id);
   const accountId = account?.id;
-  const projectId = project?.id;
-  const status = project?.attributes?.status;
-  const deadline = project?.attributes.deadline;
+  const projectId = project?.documentId;
+  const status = project?.project_status;
+  const deadline = project.deadline;
 
   const editable = ownerId === accountId && status === ProjectStatus.Draft;
 

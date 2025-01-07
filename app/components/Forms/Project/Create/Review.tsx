@@ -8,15 +8,8 @@ import {ButtonThemes} from '@/app/components/Elements/Button/types';
 import FormSummary from '@/app/components/FormElements/GenericSummary';
 import {Button} from '@/app/components/Elements';
 import type {CreateProjectReviewProps} from './types';
-import {FetchStatus} from '@/app/config/types';
+import {FetchStatus, SubmitTitle} from '@/app/config/types';
 import Feedback from '@/app/components/Feedback';
-
-const SubmitTitle = {
-  [FetchStatus.Idle]: 'Submit',
-  [FetchStatus.Pending]: 'Submitting',
-  [FetchStatus.Error]: 'Failed',
-  [FetchStatus.Success]: 'Succeeded',
-};
 
 const CreateProjectReview: FC<CreateProjectReviewProps> = ({data, onEdit, onSubmit, feedback}) => {
   const handleSubmit = async () => {
@@ -26,7 +19,6 @@ const CreateProjectReview: FC<CreateProjectReviewProps> = ({data, onEdit, onSubm
         soft_goal: toBaseToken(data?.soft_goal ?? ''),
         hard_goal: toBaseToken(data?.hard_goal ?? ''),
       });
-      console.log('result', result);
     } catch (e) {
       console.error('Error creating project:', e);
     }

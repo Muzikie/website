@@ -1,4 +1,4 @@
-import {SongAttributes, FetchStatus} from '@/app/config/types';
+import {FetchStatus} from '@/app/config/types';
 import {ContributionTierAttrs, ProjectAttrs} from '@/app/components/Projects/types';
 
 export interface ContributionTier {
@@ -21,9 +21,4 @@ export interface CreateContributionTierReviewProps {
 export interface Feedback {
   status: FetchStatus;
   message: string;
-}
-
-export interface ConfirmProps {
-  anchor: SongAttributes;
-  onDone: (feedback: Feedback) => void;
 }

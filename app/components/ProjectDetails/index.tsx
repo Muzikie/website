@@ -22,37 +22,37 @@ const ProjectDetails: FC<ProjectDetailsProps> = async ({projectId}) => {
     project = result.project;
   };
 
-  if (projectId && project.id != projectId) {
+  if (projectId && project.documentId != projectId) {
     return <NotFound />;
   }
 
   return (
     <ScrollView>
       <Gallery
-        images={project.attributes.images?.data || undefined}
-        id={project.id}
-        projectStatus={project.attributes.status}
-        ownerId={project.attributes.users_permissions_user?.data.id}
+        images={project.images || []}
+        id={project.documentId}
+        projectStatus={project.project_status}
+        ownerId={project.users_permissions_user?.id}
         refresh={refresh}
       />
       <View className="p-4">
         <H2 className="dark:!text-primaryStrong">
-          {project.attributes.name}
+          {project.name}
         </H2>
         <Span className="mb-4 !font-light dark:!text-neutralStrong">
-          {project.attributes.summary}
+          {project.summary}
         </Span>
-        <Deadline date={project.attributes.deadline} />
-        <Span className="!font-light dark:!text-neutralStrong">{project.attributes.description}</Span>
-        <Artist data={artist.attributes} />
+        <Deadline date={project.deadline} />
+        <Span className="!font-light dark:!text-neutralStrong">{project.description}</Span>
+        <Artist data={artist} />
         <H3 className="!font-light pt-4 pb-6 dark:!text-neutralStrong">
           By supporting her, you are not just funding the music—you are becoming a
           part of the creative journey!
         </H3>
         <FundingProgress
-          currentFunding={project.attributes.current_funding}
-          softGoal={project.attributes.soft_goal}
-          hardGoal={project.attributes.hard_goal}
+          currentFunding={project.current_funding}
+          softGoal={project.soft_goal}
+          hardGoal={project.hard_goal}
         />
         <Actions
           project={project}

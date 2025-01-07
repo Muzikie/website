@@ -12,10 +12,9 @@ const Project: FC<ContentProps> = ({data}) => {
   // const image = data?.length
   //   ? {uri: `${API_URL}${data[0].attributes.formats.thumbnail.url}`}
   //   : avatar;
-
   return (
     <View className="w-full bg-secondaryMild p-4 mb-6 rounded-xl">
-      <LinkToProject name={project.name} id={project.id} />
+      <LinkToProject name={project.name} id={project.documentId} />
       <Artist data={owner} />
       <View className="mt-2">
         {title && <H4 className="pt-4 pb-2">{title}</H4>}

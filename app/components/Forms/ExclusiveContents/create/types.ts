@@ -1,4 +1,4 @@
-import {SongAttributes, FetchStatus} from '@/app/config/types';
+import {FetchStatus} from '@/app/config/types';
 import {ContributionTier} from '../../../Projects/types';
 
 export interface PostExclusiveContentsFormProps {
@@ -10,10 +10,10 @@ export interface FormData {
   accessible_tiers: number[];
 }
 
-export interface ExclusiveContent {
+export type ExclusiveContent = {
   id: number;
-  attributes: FormData;
-}
+  documentId: string;
+} & FormData
 
 export interface PostExclusiveContentsReviewProps {
   data: {
@@ -26,11 +26,6 @@ export interface PostExclusiveContentsReviewProps {
 export interface Feedback {
   status: FetchStatus;
   message: string;
-}
-
-export interface ConfirmProps {
-  anchor: SongAttributes;
-  onDone: (feedback: Feedback) => void;
 }
 
 export interface AccessibleTiersSelectProps {

@@ -46,11 +46,21 @@ export interface IncomingHttpHeaders {
   [header: string]: string | string[] | undefined;
 }
 
+interface KlayrSuccessResponse<T> {
+  success: true;
+  data: T;
+}
+interface KlayrFailureResponse {
+  success: false;
+  error: string;
+}
+
+export type KlayrResponse<T> = KlayrSuccessResponse<T> | KlayrFailureResponse;
+
 export type StrapiResponse = {
   id: number;
-  attributes: {
-    [key: string]: unknown;
-  };
+  documentId: string;
+  [key: string]: unknown;
 };
 
 export type FlattenedResponse = {

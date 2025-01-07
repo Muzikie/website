@@ -8,6 +8,7 @@ import {Button} from '@/app/components/Elements';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
 import successImage from '@/public/images/success.png';
 import errorImage from '@/public/images/error.png';
+import {publishProject} from '@/app/actions/publishProject';
 import {
   DefaultProjectStatusProps,
   FullDataComponentProps,
@@ -18,9 +19,7 @@ import { Routes } from '@/app/config/routes';
 
 export const EditProject: FC<DefaultProjectStatusProps> = ({projectId}) => {
   const publish = () => {
-    // publish first, then
-
-    // refresh();
+    publishProject(projectId);
   };
 
   return (
@@ -80,7 +79,7 @@ export const SupportProject: FC<FullDataComponentProps> = ({
         </Span>
       </View>
       <View className="flex flex-row justify-stretch gap-4">
-        <Link className="grow" to={{screen: `${Routes.Projects}/${project.id}/contribute`}}>
+        <Link className="grow" to={{screen: `${Routes.Projects}/${project.documentId}/contribute`}}>
           <Button
             className="w-full"
             title="Support"
@@ -91,7 +90,7 @@ export const SupportProject: FC<FullDataComponentProps> = ({
           title="Share"
           theme={ButtonThemes.secondary}
           onPress={() =>
-            shareProjectInvitation(account, project, artist && artist.attributes)
+            shareProjectInvitation(account, project, artist)
           }
         />
       </View>
@@ -120,7 +119,7 @@ export const PublishedProjectOwner: FC<PublishedProjectOwnerProps> = ({
       title="Share"
       theme={ButtonThemes.secondary}
       onPress={() =>
-        shareProjectInvitation(account, project, artist && artist.attributes)
+        shareProjectInvitation(account, project, artist)
       }
     />
   </View>

@@ -4,7 +4,7 @@ import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
 import {ProjectStatus} from '@/app/components/Projects/types';
 
-export const publishProject = async (projectId: number) => {
+export const publishProject = async (projectId: string) => {
   const result = {
     success: false,
     error: '',
@@ -14,7 +14,7 @@ export const publishProject = async (projectId: number) => {
     const res = await apiClient(`${ENDPOINTS.PROJECTS}/${projectId}`, {
       method: 'PUT',
       body: JSON.stringify({
-        data: {status: ProjectStatus.Published}
+        data: {project_status: ProjectStatus.Published}
       }),
     });
 

@@ -59,93 +59,46 @@ export interface ImageSource {
   height: number;
 }
 
+export interface Profile {
+  id: number;
+  documentId: string;
+  first_name: string;
+  last_name: string;
+  points: number;
+  avatar: {
+    id: number;
+    documentId: string;
+    formats: ImageFormats;
+  };
+  twitter: string;
+  instagram: string;
+  twitch: string;
+}
+
 export interface AccountAttrs {
   first_name: string;
   last_name: string;
   points: number;
   email: string;
   id: number;
-  profileId: number;
+  documentId: string;
+  profileId: string;
   address: string;
   avatarUrl: string | null;
   avatar: {
     id: number;
     formats: ImageFormats;
   };
+  twitter: string;
+  instagram: string;
+  twitch: string;
 }
 
-export interface Account {
+export type Account  = {
   id: number;
-  attributes: AccountAttrs;
-}
+  documentId: string;
+} & AccountAttrs;
 
-export interface SongAttributes {
-  apple_music_url?: string;
-  spotify_url?: string;
-  name: string;
-  album: string;
-  artists: string;
-  cover_photo_url: string;
-}
-
-export interface Anchor {
-  id: number;
-  attributes: {
-    apple_music_url?: string;
-    spotify_url?: string;
-    name: string;
-    album: string;
-    artists: string;
-    cover_photo_url: string;
-    anchorID: string;
-    createdAt: string;
-    rank?: number;
-    hasVoted: boolean;
-  };
-}
-
-export enum Badges {
-  AOTN = 'Song of the minute',
-  AOTD = 'Badge of the day',
-  AOTW = 'Badge of the week',
-  AOTM = 'Badge of the month',
-}
-
-export const BADGE_TITLES = {
-  [Badges.AOTN]: 'Song Of The Minute',
-  [Badges.AOTD]: 'Song Of The Day',
-  [Badges.AOTW]: 'Song Of The Week',
-  [Badges.AOTM]: 'Song Of The Month',
-};
-// types.ts (or the appropriate file for your types)
-export interface Badge {
-  id: string;
-  attributes: {
-    claimed: boolean;
-    createdAt: string;
-    nft_id: string;
-    publishedAt: string;
-    reward: string;
-    updatedAt: string;
-  };
-}
-export interface BadgeStat {
-  type: Badges;
-  count: number;
-}
-
-export interface BadgeStat {
-  type: Badges;
-  count: number;
-}
-
-export interface Badge {
-  id: string;
-  nft_id: string;
-  createdAt: string;
-  reward: string;
-  claimed: boolean;
-}
 export enum FetchStatus {
   Idle = 'idle',
   Pending = 'pending',
@@ -153,19 +106,16 @@ export enum FetchStatus {
   Error = 'error',
 }
 
+export const SubmitTitle = {
+  [FetchStatus.Idle]: 'Submit',
+  [FetchStatus.Pending]: 'Submitting',
+  [FetchStatus.Error]: 'Failed',
+  [FetchStatus.Success]: 'Succeeded',
+};
+
 export interface Feedback {
   status: FetchStatus;
   message: string;
-}
-
-export enum MODULES {
-  ANCHOR = 'anchor',
-  BADGE = 'badge',
-}
-
-export enum COMMANDS {
-  CREATE = 'create',
-  VOTE = 'vote',
 }
 
 export type Timeout = NodeJS.Timeout;

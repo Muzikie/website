@@ -57,7 +57,7 @@ const PostExclusiveContentsReview: FC<PostExclusiveContentsReviewProps> = ({
     title: data.title,
     description: data.description,
     accessible_to_tiers: data.accessible_tiers
-      .map(item => item.attributes.name)
+      .map(item => item.name)
       .join(', '),
   };
 

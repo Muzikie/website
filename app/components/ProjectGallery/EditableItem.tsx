@@ -28,7 +28,7 @@ const ImageItem: FC<EditableImageProps> = ({
     onRemove(index);
   }
 
-  const source = getLargestSize(image?.attributes.formats ?? {});
+  const source = getLargestSize(image?.formats ?? {});
 
   return (
     <label

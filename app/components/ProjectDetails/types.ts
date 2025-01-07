@@ -1,25 +1,12 @@
 import type {Project} from '../Projects/types';
-import type {FetchStatus, ImageFormats} from '@/app/config/types';
+import type {FetchStatus, AccountAttrs} from '@/app/config/types';
 
 export interface ProjectDetailsProps {
-  projectId: number;
+  projectId: string;
 }
 
 export interface ArtistProps {
-  data: {
-    first_name: string;
-    last_name: string;
-    avatar: {
-      data: {
-        attributes: {
-          formats: ImageFormats;
-        };
-      } | null;
-    };
-    instagram: string;
-    twitter: string;
-    twitch: string;
-  };
+  data: AccountAttrs;
 }
 
 export interface DeadlineProps {
@@ -27,21 +14,13 @@ export interface DeadlineProps {
 }
 
 export interface FundingProgressProps {
-  currentFunding: number;
-  softGoal: number;
-  hardGoal: number;
+  currentFunding: string;
+  softGoal: string;
+  hardGoal: string;
 }
 
-export interface ArtistShareProp {
-  id: number;
-  attributes: {
-    formats?: ImageFormats;
-    first_name: string;
-    last_name: string;
-  };
-}
 export interface ActionsProps {
-  owner: ArtistShareProp;
+  owner: AccountAttrs;
   project: Project;
   refresh: () => Promise<void>;
 }

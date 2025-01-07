@@ -8,18 +8,12 @@ import {Routes} from '@/app/config/routes';
 
 const Project: FC<ProjectProps> = ({item}) => {
   const {
-    attributes: {name, summary, project_type, images, users_permissions_user},
-    id,
+    name, summary, project_type, images, users_permissions_user, id,
   } = item;
-  const {
-    data: {
-      attributes: {email},
-    },
-  } = users_permissions_user;
-  const {data} = images;
+  const {email} = users_permissions_user;
   const baseURl = `${process.env.NEXT_PUBLIC_IMAGE_PROTOCOL}://${process.env.NEXT_PUBLIC_IMAGE_HOSTNAME}${process.env.NEXT_PUBLIC_IMAGE_PORT ? ':' + process.env.NEXT_PUBLIC_IMAGE_PORT : ''}`
-  const image = data?.length
-    ? {uri: `${baseURl}${data[0].attributes.formats.thumbnail.url}`}
+  const image = images?.length
+    ? {uri: `${baseURl}${images[0].formats.thumbnail.url}`}
     : avatar;
 
   return (

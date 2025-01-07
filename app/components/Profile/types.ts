@@ -1,28 +1,19 @@
 import {ImageData} from '@/app/components/Projects/types';
-import {AccountAttrs} from '@/app/config/types';
+import {AccountAttrs, ImageFormats} from '@/app/config/types';
 
 export interface Contribution {
-  id: string;
-  attributes: {
-    amount: number;
+  id: number;
+  documentId: string;
+  amount: number;
+  contribution_tier: {
+    id: number;
+    documentId: string;
+    name: string;
     project: {
-      data: {
-        id: string;
-        attributes: {
-          name: string;
-          images: {
-            data: ImageData[];
-          };
-        };
-      };
-    };
-    contribution_tier: {
-      data: {
-        id: string;
-        attributes: {
-          name: string;
-        };
-      };
+      id: number;
+      documentId: string;
+      name: string;
+      images: ImageData[];
     };
   };
 }
@@ -39,5 +30,10 @@ export interface FileEvent {
 
 export interface WalletProps {
   data: AccountAttrs;
-  balance: string;
+  balances: string[];
+}
+
+export interface AvatarAttrs {
+  profileId: string;
+  data: ImageFormats;
 }

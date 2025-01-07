@@ -1,4 +1,4 @@
-import {SongAttributes, FetchStatus} from '@/app/config/types';
+import {FetchStatus} from '@/app/config/types';
 import {ProjectAttrs} from '../../../Projects/types';
 
 export interface CreateProjectReviewProps {
@@ -14,11 +14,6 @@ export interface CreateProjectReviewProps {
 export interface Feedback {
   status: FetchStatus;
   message: string;
-}
-
-export interface ConfirmProps {
-  anchor: SongAttributes;
-  onDone: (feedback: Feedback) => void;
 }
 
 export interface CreateProjectFormProps {
