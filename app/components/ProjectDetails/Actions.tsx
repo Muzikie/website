@@ -18,7 +18,7 @@ import {ActionsProps} from './types';
 const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
   const account = await getUserAccount();
 
-  const ownerId = Number(project.users_permissions_user.id);
+  const ownerId = Number(project?.users_permissions_user?.id);
   const accountId = account?.id;
   const projectId = project?.documentId;
   const status = project?.project_status;

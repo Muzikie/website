@@ -10,6 +10,7 @@ export const ENDPOINTS = {
   CONTRIBUTIONS: '/contributions',
   EXCLUSIVE_CONTENT: '/exclusive-contents',
   FILES: '/upload/files',
+  REACTIONS: '/reactions',
 };
 
 export const KLAYR_ENDPOINTS = {
