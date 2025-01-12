@@ -29,6 +29,7 @@ export const klayrClient = async <T>(
           data: data.result,
         });
       } catch (err) {
+        console.error('Error communicating with blockchain:', err);
         reject({
           success: false,
           error: 'Failed to parse response',
@@ -39,6 +40,7 @@ export const klayrClient = async <T>(
     };
 
     ws.onerror = (err) => {
+      console.error('Error communicating with blockchain:', err);
       reject({
         success: false,
         error: 'WebSocket error',

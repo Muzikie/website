@@ -14,7 +14,7 @@ import Feedback from '@/app/components/Feedback';
 const CreateProjectReview: FC<CreateProjectReviewProps> = ({data, onEdit, onSubmit, feedback}) => {
   const handleSubmit = async () => {
     try {
-      const result = await onSubmit({
+      await onSubmit({
         ...data,
         soft_goal: toBaseToken(data?.soft_goal ?? ''),
         hard_goal: toBaseToken(data?.hard_goal ?? ''),
