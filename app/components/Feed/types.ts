@@ -1,3 +1,5 @@
+import {ImageFormats, ImageSource} from '@/app/config/types';
+
 interface User {
   id: string;
   email: string;
@@ -13,28 +15,7 @@ interface Owner {
 export interface Image {
   id: number;
   documentId: string;
-  formats: {
-    large: {
-      url: string;
-      name: string;
-    };
-    medium: {
-      url: string;
-      name: string;
-    };
-    small: {
-      url: string;
-      name: string;
-    };
-    thumbnail: {
-      url: string;
-      name: string;
-    };
-  };
-}
-
-interface Images {
-  data: Image[];
+  formats: ImageFormats;
 }
 
 export enum ProjectType {
@@ -86,7 +67,7 @@ export type Project = ProjectAttrs & {
   current_funding: string;
   reaction_count: number;
   users_permissions_user: User;
-  images: Images;
+  images: Image[];
   owner: Owner;
   type: FeedType.Project;
 }
@@ -135,4 +116,8 @@ export interface FeedProps {
     data: (Project | Content)[];
   };
   isLoading?: boolean;
+}
+
+export interface ThumbnailsProps {
+  data: ImageSource[]
 }
