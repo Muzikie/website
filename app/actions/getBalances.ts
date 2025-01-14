@@ -13,10 +13,15 @@ interface Balances {
 } 
 
 export const getBalances = async (address: string) => {
-  const response = await klayrClient<Balances>(KLAYR_ENDPOINTS.BALANCE, {address});
-  if (response.success && response.data.balances.length) {
+  try {
+    const response = await klayrClient<Balances>(KLAYR_ENDPOINTS.BALANCE, {address});
+    if (!response.success) {
+      throw new Error('Failed to fetch balances');
+
+    }
     return response.data.balances.map(({availableBalance}) => fromBaseToken(availableBalance, 4, true));
-  } else {
+  } catch (err) {
+    console.error('Failed to fetch balances', err);
     return [fromBaseToken('0', 4, true)]
   }
 };
