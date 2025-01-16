@@ -13,7 +13,7 @@ interface ProjectDetailsResponse {
 export const getProjectDetails = async (id: string): Promise<ProjectDetailsResponse> => {
   const projectParams = {
     include: {
-      users_permissions_user: ['email'],
+      users_permissions_user: ['*'],
       images: ['*'],
     },
   };

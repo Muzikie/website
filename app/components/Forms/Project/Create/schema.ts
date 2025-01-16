@@ -7,11 +7,11 @@ export const schema = {
   planned_release_date: /\d{4}-\d{2}-\d{2}$/,
   soft_goal: (value: unknown) => {
     const parsedValue = parseFloat(value);
-    return !isNaN(parsedValue) && isFinite(parsedValue);
+    return !isNaN(parsedValue) && isFinite(parsedValue) && parsedValue > 0;
   },
   deadline: /\d{4}-\d{2}-\d{2}$/,
   hard_goal: (value: unknown) => {
     const parsedValue = parseFloat(value);
-    return !isNaN(parsedValue) && isFinite(parsedValue);
+    return !isNaN(parsedValue) && isFinite(parsedValue) && parsedValue > 0;
   },
 };

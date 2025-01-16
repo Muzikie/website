@@ -16,8 +16,8 @@ const CreateProjectReview: FC<CreateProjectReviewProps> = ({data, onEdit, onSubm
     try {
       await onSubmit({
         ...data,
-        soft_goal: toBaseToken(data?.soft_goal ?? ''),
-        hard_goal: toBaseToken(data?.hard_goal ?? ''),
+        soft_goal: toBaseToken(data.soft_goal),
+        hard_goal: toBaseToken(data.hard_goal),
       });
     } catch (e) {
       console.error('Error creating project:', e);
@@ -29,6 +29,9 @@ const CreateProjectReview: FC<CreateProjectReviewProps> = ({data, onEdit, onSubm
     soft_goal: `${data?.soft_goal} ${process.env.NEXT_PUBLIC_TOKEN_SYMBOL}`,
     hard_goal: `${data?.hard_goal} ${process.env.NEXT_PUBLIC_TOKEN_SYMBOL}`,
   };
+
+  // @todo update account balance (fetch from Klayr blockchain)
+  // @todo disable submit button if account balance is less than the tx fee
 
   return (
     <ScrollView className="w-full h-full p-4">

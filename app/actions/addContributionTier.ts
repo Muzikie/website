@@ -15,7 +15,7 @@ export const addContributionTier = async (data: Record<string, unknown>) => {
       body: JSON.stringify({data}),
     });
 
-    if (res.data) {
+    if (res.documentId) {
       result.success = true;
     } else {
       result.error = 'Failed to create contribution tier';

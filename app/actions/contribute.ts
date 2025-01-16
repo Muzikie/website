@@ -3,7 +3,7 @@
 import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
 
-export const contribute = async (contributionTierId: number) => {
+export const contribute = async (contributionTierId: string) => {
   const result = {
     success: false,
     error: '',
@@ -12,7 +12,9 @@ export const contribute = async (contributionTierId: number) => {
   try {
     const res = await apiClient(ENDPOINTS.CONTRIBUTIONS, {
       method: 'POST',
-      body: JSON.stringify({contribution_tier: contributionTierId}),
+      body: JSON.stringify({
+        data: { contribution_tier: contributionTierId },
+      }),
     });
 
     if (res.data) {

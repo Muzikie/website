@@ -25,12 +25,15 @@ const Contribute: FC<ContributeProps> = ({project, artist, options}) => {
       message: '',
     });
     const optionData = options.find(item => item.id === selected);
-    const result = await contribute(optionData?.id ?? 0);
+    const result = await contribute(optionData.documentId);
     setFeedback({
       status: result.success ? FetchStatus.Success : FetchStatus.Error,
       message: result.error,
     });
   };
+
+  // @todo update account balance (fetch from Klayr blockchain)
+  // @todo disable submit button if account balance is less than the contribution amount
 
   return (
     <ScrollView className="w-full h-full p-4">

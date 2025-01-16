@@ -8,7 +8,6 @@ import {Button} from '@/app/components/Elements';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
 import successImage from '@/public/images/success.png';
 import errorImage from '@/public/images/error.png';
-import {publishProject} from '@/app/actions/publishProject';
 import {
   DefaultProjectStatusProps,
   FullDataComponentProps,
@@ -17,48 +16,41 @@ import {
 } from './type';
 import { Routes } from '@/app/config/routes';
 
-export const EditProject: FC<DefaultProjectStatusProps> = ({projectId}) => {
-  const publish = () => {
-    publishProject(projectId);
-  };
-
-  return (
-    <View className="bg-primaryMild rounded-md p-4 mt-4">
-      <H3 className="text-primaryMighty !font-normal pb-2">
-        Now What?
-      </H3>
-      <Span className="text-neutralMighty">
-        You Can edit your project if needed, and once ready, publish it.
+export const EditProject: FC<DefaultProjectStatusProps> = ({projectId}) => (
+  <View className="bg-primaryMild rounded-md p-4 mt-4">
+    <H3 className="text-primaryMighty !font-normal pb-2">
+      Now What?
+    </H3>
+    <Span className="text-neutralMighty">
+      You Can edit your project if needed, and once ready, publish it.
+    </Span>
+    <View className="w-full pt-2">
+      <Span className="text-neutralMighty !font-medium">
+        You can add up to 5 contribution tiers.
       </Span>
-      <View className="w-full pt-2">
-        <Span className="text-neutralMighty !font-medium">
-          You can add up to 5 contribution tiers.
-        </Span>
-      </View>
-      <View className="flex flex-row justify-stretch gap-4 my-4">
-        <Link to={{screen: `${Routes.Projects}/${projectId}/add-contribution-tier`}}>
-          <Button
-            title="Add contribution tier"
-            theme={ButtonThemes.secondary}
-          />
-        </Link>
-        <Link to={{screen: `${Routes.Projects}/${projectId}/edit`}}>
-          <Button
-            title="Edit"
-            theme={ButtonThemes.secondary}
-          />
-        </Link>
-        <Link to={{screen: `${Routes.Projects}/${projectId}/publish`}}>
-          <Button
-            title="Go live"
-            theme={ButtonThemes.primary}
-            onPress={publish}
-          />
-        </Link>
-      </View>
     </View>
-  );
-};
+    <View className="flex flex-row justify-stretch gap-4 my-4">
+      <Link to={{screen: `${Routes.Projects}/${projectId}/add-contribution-tier`}}>
+        <Button
+          title="Add contribution tier"
+          theme={ButtonThemes.secondary}
+        />
+      </Link>
+      <Link to={{screen: `${Routes.Projects}/${projectId}/edit`}}>
+        <Button
+          title="Edit"
+          theme={ButtonThemes.secondary}
+        />
+      </Link>
+      <Link to={{screen: `${Routes.Projects}/${projectId}/publish`}}>
+        <Button
+          title="Go live"
+          theme={ButtonThemes.primary}
+        />
+      </Link>
+    </View>
+  </View>
+);
 
 export const SupportProject: FC<FullDataComponentProps> = ({
   account,
