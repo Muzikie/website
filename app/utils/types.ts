@@ -1,4 +1,4 @@
-import {FetchStatus} from '@/app/config/types';
+import {FetchStatus, Balance} from '@/app/config/types';
 import {StaticImageData} from 'next/image';
 
 export type EndpointParams = Partial<
@@ -108,3 +108,7 @@ export interface ApiOptions {
   method?: 'POST'|'GET'|'DELETE'|'PUT';
   body?: string | FormData;
 }
+
+export interface Balances {
+  balances: Balance[]
+} 

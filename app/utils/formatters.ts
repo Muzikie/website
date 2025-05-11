@@ -1,4 +1,15 @@
 import BigNumber from 'bignumber.js';
+import {SupportedTokens, Balance} from '@/app/config/types';
+import {tokenConversionFactors} from '@/app/config/constants';
+
+export const formatBalances = (balances: Balance[]): string[] => {
+  if (!balances.length) {
+    return [fromBaseToken('0', 4)];
+  }
+
+  return balances.map(({tokenID, availableBalance}) => fromBaseToken(availableBalance, 4));
+}
+
 
 export const formatThousands = (num: number): string => {
   const si = [
@@ -23,35 +34,20 @@ export const getYear = (num: number): string => {
   return year.toString();
 };
 
-enum SupportedTokens {
-  Sol = 'SOL',
-  Usdc = 'USDC',
-  Klayr = 'KLY',
-  MZK = 'MZK',
-}
-
-const factors: Record<SupportedTokens, BigNumber> = {
-  [SupportedTokens.Sol]: BigNumber(1e9),
-  [SupportedTokens.Usdc]: BigNumber(1),
-  [SupportedTokens.Klayr]: BigNumber(1e8),
-  [SupportedTokens.MZK]: BigNumber(1e8),
-};
-
 export const fromBaseToken = (
-  num: string | number,
+  num: string | number = '0',
   floatingPoints: number = 8,
-  showSymbol?: boolean,
+  token: SupportedTokens = SupportedTokens.LSK,
 ): string => {
-  const token = process.env.NEXT_PUBLIC_TOKEN_SYMBOL as SupportedTokens;
   const formatted = BigNumber(num)
-    .dividedBy(factors[token])
+    .dividedBy(tokenConversionFactors[token])
     .toFixed(floatingPoints);
-  return showSymbol ? `${formatted} ${token}` : formatted;
+  return token ? `${formatted} ${token}` : formatted;
 };
 
 export const toBaseToken = (num: string | number): string => {
   const token = process.env.NEXT_PUBLIC_TOKEN_SYMBOL as SupportedTokens;
-  return BigNumber(num).multipliedBy(factors[token]).toFixed(0);
+  return BigNumber(num).multipliedBy(tokenConversionFactors[token]).toFixed(0);
 };
 
 export const truncateAddress = (address: string): string => {

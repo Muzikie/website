@@ -25,7 +25,7 @@ const Option: FC<ContributeOptionProps> = ({data, selected, onSelected}) => {
             <H3>
               {data.name}
             </H3>
-            <H4>{fromBaseToken(data.amount, 3, true)}</H4>
+            <H4>{fromBaseToken(data.amount, 3)}</H4>
           </View>
           <Span className="w-full text-left">
             {data.rewards}

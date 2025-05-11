@@ -47,6 +47,7 @@ export interface ProjectReadOnlyAttrs {
   images: ImageData[];
   project_status?: ProjectStatus;
   id: number;
+  on_chain_id: number;
   documentId: string;
 }
 
@@ -58,7 +59,6 @@ export interface ProjectProps {
 
 export interface ContributionTierAttrs {
   name: string;
-  description: string;
   rewards: string;
   amount: number;
   project: number;

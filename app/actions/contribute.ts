@@ -2,18 +2,24 @@
 
 import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
+import {getContract} from '@/app/utils/blockchain';
+import {TierData} from '@/app/components/Forms/Project/Contribute/types';
 
-export const contribute = async (contributionTierId: string) => {
+export const contribute = async (campaignId:number, tierData: TierData) => {
   const result = {
     success: false,
     error: '',
   };
 
   try {
+    const campaignContract = getContract();
+    const tx = await campaignContract.contribute(campaignId, tierData.index);
+    await tx.wait();
+
     const res = await apiClient(ENDPOINTS.CONTRIBUTIONS, {
       method: 'POST',
       body: JSON.stringify({
-        data: { contribution_tier: contributionTierId },
+        data: { contribution_tier: tierData.documentId },
       }),
     });
 

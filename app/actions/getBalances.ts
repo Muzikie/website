@@ -1,27 +1,18 @@
 'use server'
 
-import {KLAYR_ENDPOINTS} from '@/app/config/endpoints';
-import {klayrClient} from '@/app/utils/klayrClient';
-import {fromBaseToken} from '@/app/utils/formatters';
+import {Balance} from '@/app/config/types';
 
-interface Balances {
-  balances: {
-    tokenID: string;
-    availableBalance: string;
-    lockedBalances: unknown[]
-  }[]
-} 
-
-export const getBalances = async (address: string) => {
+export const getBalances = async (address: string): Promise<Balance[]> => {
   try {
-    const response = await klayrClient<Balances>(KLAYR_ENDPOINTS.BALANCE, {address});
+    const response = {};
+    // const response = await klayrClient<Balances>(KLAYR_ENDPOINTS.BALANCE, {address});
     if (!response.success) {
       throw new Error('Failed to fetch balances');
-
     }
-    return response.data.balances.map(({availableBalance}) => fromBaseToken(availableBalance, 4, true));
+
+    return response.data.balances ?? [];
   } catch (err) {
     console.error('Failed to fetch balances', err);
-    return [fromBaseToken('0', 4, true)]
+    return [];
   }
 };

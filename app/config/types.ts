@@ -135,3 +135,24 @@ export type Params<T = ParamsDefault> = T extends object ? Promise<T> : Promise<
 export type SearchParams<T = SearchParamsDefault> = T extends object ? Promise<T> : Promise<SearchParamsDefault>;
 
 export type SamSite = true | false | 'lax' | 'strict' | 'none' | undefined;
+
+export enum SupportedTokens {
+  LSK = 'LSK',
+  ETH = 'ETH',
+}
+
+export enum SupportedBlockchains {
+  LISK = 'lisk',
+  ETHEREUM = 'ethereum',
+}
+
+export enum SupportedWallets {
+  META_MASK = 'metamask',
+}
+export interface WalletInput {
+  public_key: string;
+  address: string;
+  blockchain: SupportedBlockchains;
+  wallet_type: SupportedWallets;
+}
+

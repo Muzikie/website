@@ -1,13 +1,15 @@
 'use client'
 
 import React, {FC} from 'react';
+import NextImage from 'next/image';
 
-import {Image, View, H3, Span, Link} from '@/app/components/Polyfills';
+import {View, H3, Span, Link} from '@/app/components/Polyfills';
 import {shareProjectInvitation} from '@/app/utils/shareMenu';
 import {Button} from '@/app/components/Elements';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
-import successImage from '@/public/images/success.png';
-import errorImage from '@/public/images/error.png';
+import successImage from '@/public/images/success.svg';
+import errorImage from '@/public/images/error.svg';
+import {withdraw} from '@/app/actions/withdraw';
 import {
   DefaultProjectStatusProps,
   FullDataComponentProps,
@@ -118,10 +120,13 @@ export const PublishedProjectOwner: FC<PublishedProjectOwnerProps> = ({
 );
 
 export const SuccessfulProjectOwner: FC<SuccessfulProjectOwnerProps> = ({
-//   projectId,
+  projectId,
 }) => {
-  const withdraw = () => {};
-  const postExclusiveContent = () => {};
+  const onWithdraw = async () => {
+    console.log('Withdraw', projectId);
+    const res = await withdraw(projectId);
+    console.log('res', res);
+  };
 
   return (
     <View className="bg-skyWeak p-4 rounded-md mt-6">
@@ -134,17 +139,18 @@ export const SuccessfulProjectOwner: FC<SuccessfulProjectOwnerProps> = ({
           Once ready, you can post updates to deliver your promise.
         </Span>
       </View>
-      <Image alt="Successful" source={successImage} className="w-[80px] pb-4" />
+      <NextImage alt="Successful" src={successImage} className="w-[80px] pb-4" />
       <View className="flex flex-row justify-stretch gap-4">
-        <Button
-          title="Post exclusive content"
-          theme={ButtonThemes.secondary}
-          onPress={postExclusiveContent}
-        />
+        <Link className="grow flex" to={{screen: `${Routes.Projects}/${projectId}/post-exclusive-content`}}>
+          <Button
+            title="Post exclusive content"
+            theme={ButtonThemes.secondary}
+          />
+        </Link>
         <Button
           title="Withdraw"
           theme={ButtonThemes.secondary}
-          onPress={withdraw}
+          onPress={onWithdraw}
         />
       </View>
     </View>
@@ -158,7 +164,7 @@ export const SuccessfulProjectContributor: FC = () => (
       This project has successfully raised funds. Once ready, The artist will
       publish updates to deliver your rewards.
     </Span>
-    <Image alt="Successful" source={successImage} className="w-[80px] py-4" />
+    <NextImage alt="Successful" src={successImage} className="w-[80px] py-4" />
   </View>
 );
 
@@ -168,6 +174,6 @@ export const FailingProjectOwner: FC = () => (
     <Span className="text-neutralSteady">
       This project did not raise the required funds.
     </Span>
-    <Image alt="Failed" source={errorImage} className="w-[60px] py-4" />
+    <NextImage alt="Failed" src={errorImage} className="w-[60px] py-4" />
   </View>
 );

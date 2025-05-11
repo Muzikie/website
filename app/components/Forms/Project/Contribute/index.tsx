@@ -25,7 +25,12 @@ const Contribute: FC<ContributeProps> = ({project, artist, options}) => {
       message: '',
     });
     const optionData = options.find(item => item.id === selected);
-    const result = await contribute(optionData.documentId);
+    const tierData = {
+      index: selected,
+      id: optionData?.id,
+      documentId: optionData?.documentId,
+    }
+    const result = await contribute(project.on_chain_id, tierData);
     setFeedback({
       status: result.success ? FetchStatus.Success : FetchStatus.Error,
       message: result.error,
