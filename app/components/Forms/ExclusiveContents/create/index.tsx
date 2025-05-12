@@ -35,9 +35,7 @@ const AccessibleTiersSelect: FC<AccessibleTiersSelectProps> = ({
   );
 };
 
-const PostExclusiveContentsForm: FC<PostExclusiveContentsFormProps> = ({
-  projectId,
-}) => {
+const PostExclusiveContentsForm: FC<PostExclusiveContentsFormProps> = () => {
   const [data, setData] = useState<FormData>({
     title: '',
     description: '',
@@ -52,21 +50,7 @@ const PostExclusiveContentsForm: FC<PostExclusiveContentsFormProps> = ({
   const contributionTiers = {data: []};
 
   // const maxHeight = Dimensions.get('window').height * 0.6;
-  const onSubmit = async () => {
-    // Keyboard.dismiss();
-    const previewData = {
-      title: data.title,
-      description: data.description,
-      accessible_tiers: data.accessible_tiers.map((id: number) =>
-        contributionTiers.data.find((item: ContributionTier) => item.id === id),
-      ),
-    };
-    // show({
-    //   title: 'Looking good!',
-    //   description: '',
-    //   content: <PostExclusiveContentsReview data={previewData} />,
-    // });
-  };
+  const onSubmit = async () => {};
 
   const onChange = (fieldName: string) => (value: string) => {
     setData({

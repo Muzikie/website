@@ -9,7 +9,7 @@ import {ButtonThemes} from '@/app/components/Elements/Button/types';
 // import {ENDPOINTS} from '@/app/config/endpoints';
 import FormSummary from '@/app/components/FormElements/GenericSummary';
 import {Button} from '@/app/components/Elements';
-import type {PostExclusiveContentsReviewProps, Feedback} from './types';
+import type {PostExclusiveContentsReviewProps} from './types';
 
 const PostExclusiveContentsReview: FC<PostExclusiveContentsReviewProps> = ({
   data,

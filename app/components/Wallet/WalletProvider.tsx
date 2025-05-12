@@ -33,7 +33,9 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const connect = async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!(window as any).ethereum) return alert('Please install MetaMask');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const _provider = new ethers.BrowserProvider((window as any).ethereum);
     const accounts = await _provider.send('eth_requestAccounts', []);
     setAddress(accounts[0]);
@@ -51,7 +53,9 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const check = async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (!(window as any).ethereum) return;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const _provider = new ethers.BrowserProvider((window as any).ethereum);
       const accounts = await _provider.send('eth_accounts', []);
       if (accounts.length > 0) {
