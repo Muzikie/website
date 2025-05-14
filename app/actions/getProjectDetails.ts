@@ -3,18 +3,14 @@
 import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
 import {AccountAttrs} from '@/app/config/types';
-import {Project} from '@/app/components/Projects/types';
-
-interface ProjectDetailsResponse {
-  project: Project;
-  artist: AccountAttrs;
-}
+import {Project, ProjectDetailsResponse} from '@/app/components/Projects/types';
 
 export const getProjectDetails = async (id: string): Promise<ProjectDetailsResponse> => {
   const projectParams = {
     include: {
       users_permissions_user: ['*'],
       images: ['*'],
+      contribution_tiers: ['*'],
     },
   };
   

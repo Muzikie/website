@@ -1,4 +1,5 @@
 import {ImageFormats, ImageSource} from '@/app/config/types';
+import type {ContributionTier} from '@/app/components/Projects/types';
 
 interface User {
   id: string;
@@ -56,7 +57,16 @@ export interface ExclusiveContentAttrs {
   media: unknown;
   project: string;
   public_access: boolean;
-  accessibleTiers: string[];
+  accessible_tiers: ContributionTier[];
+  title: string;
+  description: string;
+}
+
+export interface PostExclusiveContentData {
+  media: unknown;
+  project: string;
+  public_access: boolean;
+  accessible_tiers: number[];
   title: string;
   description: string;
 }

@@ -60,7 +60,7 @@ const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
       ) : null}
 
       {succeeded && ownerId === accountId ? (
-        <SuccessfulProjectOwner projectId={projectId} />
+        <SuccessfulProjectOwner projectId={projectId} onChainId={project.on_chain_id} />
       ) : null}
 
       {succeeded && ownerId !== accountId ? (

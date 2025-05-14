@@ -15,6 +15,7 @@ export interface FullDataComponentProps {
 
 export interface SuccessfulProjectOwnerProps {
   projectId: string;
+  onChainId: number;
 }
 
 export interface DefaultProjectStatusProps {

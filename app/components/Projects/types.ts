@@ -49,6 +49,7 @@ export interface ProjectReadOnlyAttrs {
   id: number;
   on_chain_id: number;
   documentId: string;
+  contribution_tiers: ContributionTier[];
 }
 
 export type Project = ProjectAttrs & ProjectReadOnlyAttrs;
@@ -67,4 +68,10 @@ export interface ContributionTierAttrs {
 export type ContributionTier = {
   id: number;
   documentId: string;
+  selected?: boolean,
 } & ContributionTierAttrs
+
+export interface ProjectDetailsResponse {
+  project: Project;
+  artist: AccountAttrs;
+}
