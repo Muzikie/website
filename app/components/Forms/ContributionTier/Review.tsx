@@ -31,12 +31,24 @@ const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
 
   const handleSubmit = async () => {
     try {
-      await addContributionTier({
+      const res = await addContributionTier({
         ...data,
         project: projectId,
         amount: Number(toBaseToken(data?.amount ?? '')),
       });
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+
+      setFeedback({
+        status: FetchStatus.Success,
+        message: ''
+      });
     } catch (e) {
+      setFeedback({
+        status: FetchStatus.Error,
+        message: 'Error posting exclusive content'
+      });
       console.error('Error creating project:', e);
     }
   };

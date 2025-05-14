@@ -7,7 +7,7 @@ export const formatBalances = (balances: Balance[]): string[] => {
     return [fromBaseToken('0', 4)];
   }
 
-  return balances.map(({tokenID, availableBalance}) => fromBaseToken(availableBalance, 4));
+  return balances.map(({availableBalance}) => fromBaseToken(availableBalance, 4));
 }
 
 
