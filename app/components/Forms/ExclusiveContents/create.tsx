@@ -22,22 +22,19 @@ const AccessibleTiersSelect: FC<AccessibleTiersSelectProps> = ({
   tiers,
   onSelect,
   selection,
-}) => {
-  console.log('selection', selection);
-  return (
-    <View className="w-full h-full p-4">
-      <SectionHeader title="Which contributors can access?" />
-      {tiers.map(item => (
-        <CheckBox
-          key={item.id}
-          title={item?.name}
-          onSelect={() => onSelect(item)}
-          selected={selection.includes(item.id)}
-        />
-      ))}
-    </View>
-  );
-};
+}) => (
+  <View className="w-full h-full p-4">
+    <SectionHeader title="Which contributors can access?" />
+    {tiers.map(item => (
+      <CheckBox
+        key={item.id}
+        title={item?.name}
+        onSelect={() => onSelect(item)}
+        selected={selection.includes(item.id)}
+      />
+    ))}
+  </View>
+);
 
 const PostExclusiveContentsForm: FC<PostExclusiveContent> = ({
   initialData, projectId
@@ -51,7 +48,6 @@ const PostExclusiveContentsForm: FC<PostExclusiveContent> = ({
     media: null,
     project: projectId,
   });
-  console.log('project.project?.contribution_tiers', initialData);
 
   const onSubmit = async () => {
     localStorage.setItem('exclusiveContent', JSON.stringify(data));
@@ -82,8 +78,6 @@ const PostExclusiveContentsForm: FC<PostExclusiveContent> = ({
   };
 
   const validity = validateForm(schema, data);
-  console.log('++', data.accessible_tiers);
-  console.log('==', data.accessible_tiers.filter(item => item.selected).map((item) => item.id));
 
   return (
     <ScrollView className="w-full h-full p-4">

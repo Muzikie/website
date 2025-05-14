@@ -34,15 +34,14 @@ const PostExclusiveContentsReview: FC<PostExclusiveContentsReviewProps> = ({
 
   const handleSubmit = async () => {
     try {
-      console.log('Submitting', {
-        ...data,
-        accessible_tiers: data.accessible_tiers.filter(item => item.selected).map(item => item.id)
-      });
       const res = await postExclusiveContent({
         ...data,
         accessible_tiers: data.accessible_tiers.filter(item => item.selected).map(item => item.id)
       });
-      console.log('res', res);
+      if (!res.success) {
+        throw new Error(res.error);
+      }
+
       setFeedback({
         status: FetchStatus.Success,
         message: ''
@@ -70,8 +69,6 @@ const PostExclusiveContentsReview: FC<PostExclusiveContentsReviewProps> = ({
       console.log(`Error reading form data, ${error}`);
     }
   }, []);
-
-  console.log('----- data', data);
 
   const formattedValue = {
     title: data.title,
