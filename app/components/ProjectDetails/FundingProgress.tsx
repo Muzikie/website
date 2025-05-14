@@ -28,7 +28,7 @@ const FundingProgress: FC<FundingProgressProps> = ({
           <View className="flex flex-row items-center gap-2">
             <Span className="text-neutralLight dark:text-neutralSteady">Goal:&nbsp;</Span>
             <H4 className="text-neutralPure dark:text-neutralMighty">
-              {fromBaseToken(softGoal, 2, true)}
+              {fromBaseToken(softGoal, 2)}
             </H4>
           </View>
           <View className="flex flex-row items-center gap-2">
@@ -36,7 +36,7 @@ const FundingProgress: FC<FundingProgressProps> = ({
               Max acceptable:&nbsp;
             </Span>
             <H3 className="text-neutralPure dark:text-neutralMighty">
-              {fromBaseToken(hardGoal, 2, true)}
+              {fromBaseToken(hardGoal, 2)}
             </H3>
           </View>
         </View>

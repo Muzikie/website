@@ -34,7 +34,9 @@ const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
     new Date(deadline) <= new Date() &&
     (status === ProjectStatus.Successful || status === ProjectStatus.soldOut);
 
-  const failing = status === ProjectStatus.Failing;
+  const failing = (
+    new Date(deadline) <= new Date() && status !== ProjectStatus.Successful && status !== ProjectStatus.soldOut
+  ) || status === ProjectStatus.Failing;
 
   return (
     <View>
@@ -65,7 +67,7 @@ const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
         <SuccessfulProjectContributor />
       ) : null}
 
-      {failing && ownerId === accountId ? <FailingProjectOwner /> : null}
+      {failing ? <FailingProjectOwner /> : null}
     </View>
   );
 };

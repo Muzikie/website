@@ -14,9 +14,14 @@ export interface ContributionTier {
 export interface ContributeProps {
   project: Project;
   artist: Account;
-  options: ContributionTier[];
+  options: TierData[];
 }
 
+export interface TierData {
+  index: number;
+  id: string;
+  documentId: string;
+}
 export interface ContributeOptionProps {
   data: ContributionTier;
   selected: boolean;

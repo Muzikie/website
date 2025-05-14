@@ -1,14 +1,12 @@
+'use client'
+
 import React, {FC, useState} from 'react';
 import {View, ScrollView, Text} from '@/app/components/Polyfills';
 
-import {useModal} from '@/app/hooks/useModal';
-import {useGetData} from '@/app/hooks/useQuery';
 import {validateForm} from '@/app/utils/validators';
-import {ENDPOINTS} from '@/app/config/endpoints';
 import ValidationFeedback from '@/app/components/FormElements/ValidationFeedback';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
 import {Button, Input, CheckBox} from '@/app/components/Elements';
-import PostExclusiveContentsReview from './Review';
 import {schema} from './schema';
 import type {ContributionTier} from '../../../Projects/types';
 import type {
@@ -37,37 +35,22 @@ const AccessibleTiersSelect: FC<AccessibleTiersSelectProps> = ({
   );
 };
 
-const PostExclusiveContentsForm: FC<PostExclusiveContentsFormProps> = ({
-  projectId,
-}) => {
+const PostExclusiveContentsForm: FC<PostExclusiveContentsFormProps> = () => {
   const [data, setData] = useState<FormData>({
     title: '',
     description: '',
     accessible_tiers: [],
   });
-  const {show} = useModal();
-  const {data: contributionTiers} = useGetData(ENDPOINTS.CONTRIBUTION_TIERS, {
-    filters: {
-      project: projectId,
-    },
-  });
+  // const {show} = useModal();
+  // const {data: contributionTiers} = useGetData(ENDPOINTS.CONTRIBUTION_TIERS, {
+  //   filters: {
+  //     project: projectId,
+  //   },
+  // });
+  const contributionTiers = {data: []};
 
   // const maxHeight = Dimensions.get('window').height * 0.6;
-  const onSubmit = async () => {
-    // Keyboard.dismiss();
-    const previewData = {
-      title: data.title,
-      description: data.description,
-      accessible_tiers: data.accessible_tiers.map((id: number) =>
-        contributionTiers.data.find((item: ContributionTier) => item.id === id),
-      ),
-    };
-    show({
-      title: 'Looking good!',
-      description: '',
-      content: <PostExclusiveContentsReview data={previewData} />,
-    });
-  };
+  const onSubmit = async () => {};
 
   const onChange = (fieldName: string) => (value: string) => {
     setData({

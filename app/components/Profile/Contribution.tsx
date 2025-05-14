@@ -32,7 +32,7 @@ const Contribution: FC<ContributionProps> = ({data}) => {
             {data.contribution_tier.name}
           </H4>
           <Span className="text-primaryStrong font-light">
-            {fromBaseToken(data.amount, 2, true)}
+            {fromBaseToken(data.amount, 2)}
           </Span>
         </View>
       </View>

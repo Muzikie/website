@@ -30,7 +30,6 @@ export interface FileEvent {
 
 export interface WalletProps {
   data: AccountAttrs;
-  balances: string[];
 }
 
 export interface AvatarAttrs {

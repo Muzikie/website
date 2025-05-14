@@ -15,11 +15,11 @@ const ProjectEditScreen: FC<{params: Params<{id: string}>}> = async ({params}) =
   const initialData = {
     deadline: result.project?.deadline ?? '',
     description: result.project?.description ?? '',
-    hard_goal: fromBaseToken(result.project?.hard_goal ?? '0', 4),
+    hard_goal: fromBaseToken(result.project?.hard_goal, 4),
     name: result.project?.name ?? '',
     planned_release_date: result.project?.planned_release_date ?? '',
     publishedAt: result.project?.publishedAt ?? '',
-    soft_goal: fromBaseToken(result.project?.soft_goal ?? '0', 4),
+    soft_goal: fromBaseToken(result.project?.soft_goal, 4),
     summary: result.project?.summary ?? '',
   };
   const projectId = awaitedParams.id;

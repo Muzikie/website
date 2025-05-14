@@ -16,7 +16,6 @@ import {schema} from './schema';
 
 const emptyFormValues = {
   name: '',
-  description: '',
   rewards: '',
   amount: 0,
 }
@@ -56,13 +55,6 @@ const CreateContributionTierForm: FC<ContributionTier> = ({
         onChange={onChange}
         value={data.name}
         name="name"
-      />
-      <Input
-        placeholder="Description (10-100 characters)"
-        onChange={onChange}
-        value={data.description}
-        name="description"
-        multiline
       />
       <Input
         placeholder="Rewards (Min 140 characters)"

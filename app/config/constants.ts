@@ -1,4 +1,6 @@
-import {SamSite} from './types';
+import BigNumber from 'bignumber.js';
+
+import {SamSite, SupportedTokens} from './types';
 
 export const SPOTIFY_LINK_REG = /^https:\/\/open\.spotify\.com\/track\/[\w-]+/;
 
@@ -45,3 +47,8 @@ export const DEAD_COOKIE = {
 export const AUTH_PROVIDERS = [
   'google'
 ];
+
+export const tokenConversionFactors: Record<SupportedTokens, BigNumber> = {
+  [SupportedTokens.LSK]: BigNumber(1e8),
+  [SupportedTokens.ETH]: BigNumber(1e8),
+};
