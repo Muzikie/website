@@ -3,7 +3,7 @@
 import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
 import {getContract} from '@/app/utils/blockchain';
-import { getProjectDetails } from './getProjectDetails';
+import {getProjectDetails} from './getProjectDetails';
 
 export const addContributionTier = async (data: Record<string, unknown>) => {
   const result = {

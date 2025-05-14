@@ -1,6 +1,7 @@
-'use client'
+'use client';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {useRouter} from 'next/navigation';
 
 import {View, ScrollView} from '@/app/components/Polyfills';
 import {toBaseToken} from '@/app/utils/formatters';
@@ -10,13 +11,27 @@ import {Button} from '@/app/components/Elements';
 import Feedback from '@/app/components/Feedback';
 import {FetchStatus, SubmitTitle} from '@/app/config/types';
 import type {CreateContributionTierReviewProps} from './types';
+import {addContributionTier} from '@/app/actions/addContributionTier';
+import type {ContributionTierForm} from '@/app/components/Feed/types';
+import {Routes} from '@/app/config/routes';
 
-const CreateProjectReview = ({
-  data, onEdit, onSubmit, feedback, projectId,
-}: CreateContributionTierReviewProps) => {
+const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
+  const {push} = useRouter();
+  const [feedback, setFeedback] = useState({
+    status: FetchStatus.Idle,
+    message: '',
+  });
+  const [data, setData] = useState<ContributionTierForm>({
+    name: '',
+    description: '',
+    rewards: '',
+    amount: 0,
+    project: projectId,
+  });
+
   const handleSubmit = async () => {
     try {
-      await onSubmit({
+      await addContributionTier({
         ...data,
         project: projectId,
         amount: Number(toBaseToken(data?.amount ?? '')),
@@ -25,6 +40,21 @@ const CreateProjectReview = ({
       console.error('Error creating project:', e);
     }
   };
+
+  const handleEdit = () => {
+    push(`${Routes.Projects}/${projectId}/post-exclusive-content`);
+  };
+
+  useEffect(() => {
+    try {
+      const storedData = localStorage.getItem('formData') || '';
+      console.log('storedData', storedData);
+      const parsedData = JSON.parse(storedData) as ContributionTierForm;
+      setData(parsedData);
+    } catch (error) {
+      console.log(`Error reading form data, ${error}`);
+    }
+  }, []);
 
   const formattedValue = {
     ...data,
@@ -38,7 +68,7 @@ const CreateProjectReview = ({
         <Button
           title={'Edit'}
           theme={ButtonThemes.secondary}
-          onPress={onEdit}
+          onPress={handleEdit}
         />
         <Button
           title={SubmitTitle[feedback.status]}
@@ -52,4 +82,4 @@ const CreateProjectReview = ({
   );
 };
 
-export default CreateProjectReview;
+export default CreateTierReview;
