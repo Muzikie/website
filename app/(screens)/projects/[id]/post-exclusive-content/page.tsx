@@ -1,28 +1,27 @@
+'use server'
+
 import React, {FC} from 'react';
 
 import {Params} from '@/app/config/types';
-import FormSteps from '@/app/components/FormElements/FormSteps';
 import {SafeArea} from '@/app/components/Elements';
-import PostExclusiveContentsForm from '@/app/components/Forms/ExclusiveContents/create';
-import PostExclusiveContentsReview from '@/app/components/Forms/ExclusiveContents/create/Review';
+import {getProjectDetails} from '@/app/actions/getProjectDetails';
+import PostContentsForm from '@/app/components/Forms/ExclusiveContents/create';
 
-const PostExclusiveContentScreen: FC<{params: Params<{id: string}>}> = async ({params}) => {
+const PostContentScreen: FC<{params: Params<{id: string}>}> = async ({params}) => {
   const awaitedParams = await params;
   const projectId = awaitedParams.id;
-  const editProject = async () => {
-    'use server'
+  const project = await getProjectDetails(projectId);
+  const initialData = {
+    title: '',
+    description: '',
+    accessible_tiers: project.project.contribution_tiers,
   };
 
   return (
     <SafeArea>
-      <FormSteps
-        Form={PostExclusiveContentsForm}
-        Review={PostExclusiveContentsReview}
-        submit={editProject}
-        id={{projectId}}
-      />
+      <PostContentsForm projectId={projectId} initialData={initialData} />
     </SafeArea>
   );
 };
 
-export default PostExclusiveContentScreen;
+export default PostContentScreen;

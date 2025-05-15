@@ -4,18 +4,16 @@ import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
 import {getContract} from '@/app/utils/blockchain';
 import {ProjectStatus} from '@/app/components/Projects/types';
-import { getProjectDetails } from './getProjectDetails';
 
-export const withdraw = async (projectId: string) => {
+export const withdraw = async (projectId: string, onChainId: number) => {
   const result = {
     success: false,
     error: '',
   };
 
   try {
-    const {project} = await getProjectDetails(projectId);
     const campaignContract = getContract();
-    const tx = await campaignContract.withdraw(project.on_chain_id);
+    const tx = await campaignContract.withdraw(onChainId);
     await tx.wait();
     const res = await apiClient(`${ENDPOINTS.PROJECTS}/${projectId}`, {
       method: 'PUT',
