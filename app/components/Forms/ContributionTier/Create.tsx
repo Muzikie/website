@@ -16,24 +16,20 @@ import {schema} from './schema';
 
 const emptyFormValues = {
   name: '',
-  description: '',
   rewards: '',
   amount: 0,
 }
 
-const CreateContributionTierForm: FC<ContributionTier> = ({
-  initialData, onProceed, projectId,
-}) => {
+const CreateContributionTierForm: FC<ContributionTier> = ({projectId}) => {
   const {push} = useRouter();
   const [data, setData] = useState<Partial<ContributionTierAttrs>>(
-    initialData || emptyFormValues,
+    emptyFormValues,
   );
-  console.log('projectId', projectId);
-
  const validity = validateForm(schema, data);
 
  const handleSubmit = () => {
-    onProceed(data);
+    localStorage.setItem('formData', JSON.stringify(data));
+    push(`${Routes.Projects}/${projectId}/add-contribution-tier/review`)
   };
 
   const handleCancel = () => {
@@ -60,13 +56,6 @@ const CreateContributionTierForm: FC<ContributionTier> = ({
         name="name"
       />
       <Input
-        placeholder="Description (10-100 characters)"
-        onChange={onChange}
-        value={data.description}
-        name="description"
-        multiline
-      />
-      <Input
         placeholder="Rewards (Min 140 characters)"
         onChange={onChange}
         value={data.rewards}
@@ -76,7 +65,7 @@ const CreateContributionTierForm: FC<ContributionTier> = ({
       <Input
         placeholder={`Amount (in ${process.env.NEXT_PUBLIC_TOKEN_SYMBOL})`}
         onChange={onChange}
-        value={data.amount}
+        value={String(data.amount)}
         name="amount"
         inputMode="decimal"
       />

@@ -1,13 +1,15 @@
 'use client'
 
 import React, {FC} from 'react';
+import NextImage from 'next/image';
 
-import {Image, View, H3, Span, Link} from '@/app/components/Polyfills';
+import {View, H3, Span, Link} from '@/app/components/Polyfills';
 import {shareProjectInvitation} from '@/app/utils/shareMenu';
 import {Button} from '@/app/components/Elements';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
-import successImage from '@/public/images/success.png';
-import errorImage from '@/public/images/error.png';
+import successImage from '@/public/images/success.svg';
+import errorImage from '@/public/images/error.svg';
+import {withdraw} from '@/app/actions/withdraw';
 import {
   DefaultProjectStatusProps,
   FullDataComponentProps,
@@ -16,50 +18,41 @@ import {
 } from './type';
 import { Routes } from '@/app/config/routes';
 
-export const EditProject: FC<DefaultProjectStatusProps> = ({projectId}) => {
-  const publish = () => {
-    // publish first, then
-
-    // refresh();
-  };
-
-  return (
-    <View className="bg-primaryMild rounded-md p-4 mt-4">
-      <H3 className="text-primaryMighty !font-normal pb-2">
-        Now What?
-      </H3>
-      <Span className="text-neutralMighty">
-        You Can edit your project if needed, and once ready, publish it.
+export const EditProject: FC<DefaultProjectStatusProps> = ({projectId}) => (
+  <View className="bg-primaryMild rounded-md p-4 mt-4">
+    <H3 className="text-primaryMighty !font-normal pb-2">
+      Now What?
+    </H3>
+    <Span className="text-neutralMighty">
+      You Can edit your project if needed, and once ready, publish it.
+    </Span>
+    <View className="w-full pt-2">
+      <Span className="text-neutralMighty !font-medium">
+        You can add up to 5 contribution tiers.
       </Span>
-      <View className="w-full pt-2">
-        <Span className="text-neutralMighty !font-medium">
-          You can add up to 5 contribution tiers.
-        </Span>
-      </View>
-      <View className="flex flex-row justify-stretch gap-4 my-4">
-        <Link to={{screen: `${Routes.Projects}/${projectId}/add-contribution-tier`}}>
-          <Button
-            title="Add contribution tier"
-            theme={ButtonThemes.secondary}
-          />
-        </Link>
-        <Link to={{screen: `${Routes.Projects}/${projectId}/edit`}}>
-          <Button
-            title="Edit"
-            theme={ButtonThemes.secondary}
-          />
-        </Link>
-        <Link to={{screen: `${Routes.Projects}/${projectId}/publish`}}>
-          <Button
-            title="Go live"
-            theme={ButtonThemes.primary}
-            onPress={publish}
-          />
-        </Link>
-      </View>
     </View>
-  );
-};
+    <View className="flex flex-row justify-stretch gap-4 my-4">
+      <Link to={{screen: `${Routes.Projects}/${projectId}/add-contribution-tier`}}>
+        <Button
+          title="Add contribution tier"
+          theme={ButtonThemes.secondary}
+        />
+      </Link>
+      <Link to={{screen: `${Routes.Projects}/${projectId}/edit`}}>
+        <Button
+          title="Edit"
+          theme={ButtonThemes.secondary}
+        />
+      </Link>
+      <Link to={{screen: `${Routes.Projects}/${projectId}/publish`}}>
+        <Button
+          title="Go live"
+          theme={ButtonThemes.primary}
+        />
+      </Link>
+    </View>
+  </View>
+);
 
 export const SupportProject: FC<FullDataComponentProps> = ({
   account,
@@ -80,7 +73,7 @@ export const SupportProject: FC<FullDataComponentProps> = ({
         </Span>
       </View>
       <View className="flex flex-row justify-stretch gap-4">
-        <Link className="grow" to={{screen: `${Routes.Projects}/${project.id}/contribute`}}>
+        <Link className="grow" to={{screen: `${Routes.Projects}/${project.documentId}/contribute`}}>
           <Button
             className="w-full"
             title="Support"
@@ -91,7 +84,7 @@ export const SupportProject: FC<FullDataComponentProps> = ({
           title="Share"
           theme={ButtonThemes.secondary}
           onPress={() =>
-            shareProjectInvitation(account, project, artist && artist.attributes)
+            shareProjectInvitation(account, project, artist)
           }
         />
       </View>
@@ -120,17 +113,20 @@ export const PublishedProjectOwner: FC<PublishedProjectOwnerProps> = ({
       title="Share"
       theme={ButtonThemes.secondary}
       onPress={() =>
-        shareProjectInvitation(account, project, artist && artist.attributes)
+        shareProjectInvitation(account, project, artist)
       }
     />
   </View>
 );
 
 export const SuccessfulProjectOwner: FC<SuccessfulProjectOwnerProps> = ({
-//   projectId,
+  projectId, onChainId,
 }) => {
-  const withdraw = () => {};
-  const postExclusiveContent = () => {};
+  const onWithdraw = async () => {
+    console.log('Withdraw', projectId);
+    const res = await withdraw(projectId, onChainId);
+    console.log('res', res);
+  };
 
   return (
     <View className="bg-skyWeak p-4 rounded-md mt-6">
@@ -143,17 +139,18 @@ export const SuccessfulProjectOwner: FC<SuccessfulProjectOwnerProps> = ({
           Once ready, you can post updates to deliver your promise.
         </Span>
       </View>
-      <Image alt="Successful" source={successImage} className="w-[80px] pb-4" />
+      <NextImage alt="Successful" src={successImage} className="w-[80px] pb-4" />
       <View className="flex flex-row justify-stretch gap-4">
-        <Button
-          title="Post exclusive content"
-          theme={ButtonThemes.secondary}
-          onPress={postExclusiveContent}
-        />
+        <Link className="grow flex" to={{screen: `${Routes.Projects}/${projectId}/post-exclusive-content`}}>
+          <Button
+            title="Post exclusive content"
+            theme={ButtonThemes.secondary}
+          />
+        </Link>
         <Button
           title="Withdraw"
           theme={ButtonThemes.secondary}
-          onPress={withdraw}
+          onPress={onWithdraw}
         />
       </View>
     </View>
@@ -167,7 +164,7 @@ export const SuccessfulProjectContributor: FC = () => (
       This project has successfully raised funds. Once ready, The artist will
       publish updates to deliver your rewards.
     </Span>
-    <Image alt="Successful" source={successImage} className="w-[80px] py-4" />
+    <NextImage alt="Successful" src={successImage} className="w-[80px] py-4" />
   </View>
 );
 
@@ -177,6 +174,6 @@ export const FailingProjectOwner: FC = () => (
     <Span className="text-neutralSteady">
       This project did not raise the required funds.
     </Span>
-    <Image alt="Failed" source={errorImage} className="w-[60px] py-4" />
+    <NextImage alt="Failed" src={errorImage} className="w-[60px] py-4" />
   </View>
 );

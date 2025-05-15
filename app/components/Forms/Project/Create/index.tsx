@@ -115,7 +115,7 @@ const CreateProjectForm: FC<CreateProjectFormProps> = ({
           title="Continue"
           theme={ButtonThemes.primary}
           onPress={handleSubmit}
-          disabled={!validity.isValid}
+          // disabled={!validity.isValid}
         />
       </View>
     </ScrollView>

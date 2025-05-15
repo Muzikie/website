@@ -9,18 +9,18 @@ import {editProject} from '@/app/actions/editProject';
 import {getProjectDetails} from '@/app/actions/getProjectDetails';
 import {fromBaseToken} from '@/app/utils/formatters';
 
-const ProjectEditScreen: FC<{params: Params<{id: number}>}> = async ({params}) => {
+const ProjectEditScreen: FC<{params: Params<{id: string}>}> = async ({params}) => {
   const awaitedParams = await params;
   const result = await getProjectDetails(awaitedParams.id);
   const initialData = {
-    deadline: result.project.attributes?.deadline ?? '',
-    description: result.project.attributes?.description ?? '',
-    hard_goal: fromBaseToken(result.project.attributes?.hard_goal ?? '0', 4),
-    name: result.project.attributes?.name ?? '',
-    planned_release_date: result.project.attributes?.planned_release_date ?? '',
-    publishedAt: result.project.attributes?.publishedAt ?? '',
-    soft_goal: fromBaseToken(result.project.attributes?.soft_goal ?? '0', 4),
-    summary: result.project.attributes?.summary ?? '',
+    deadline: result.project?.deadline ?? '',
+    description: result.project?.description ?? '',
+    hard_goal: fromBaseToken(result.project?.hard_goal, 4),
+    name: result.project?.name ?? '',
+    planned_release_date: result.project?.planned_release_date ?? '',
+    publishedAt: result.project?.publishedAt ?? '',
+    soft_goal: fromBaseToken(result.project?.soft_goal, 4),
+    summary: result.project?.summary ?? '',
   };
   const projectId = awaitedParams.id;
 

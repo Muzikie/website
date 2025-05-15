@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import BigNumber from 'bignumber.js';
 
 import {FundingProgressProps} from './types';
 import {View, Span, H1, H3, H4} from '@/app/components/Polyfills';
@@ -9,9 +10,12 @@ const FundingProgress: FC<FundingProgressProps> = ({
   softGoal,
   hardGoal,
 }) => {
-  const fundingPercentage = Math.floor((100 * currentFunding) / hardGoal);
-  const softCapPercentage = Math.floor((100 * softGoal) / hardGoal);
-  const successPercentage = Math.floor((100 * currentFunding) / softGoal);
+  const currentFundingBN = new BigNumber(currentFunding);
+  const hardGoalBN = new BigNumber(hardGoal);
+  const softGoalBN = new BigNumber(softGoal);
+  const fundingPercentage = currentFundingBN.multipliedBy(100).dividedBy(hardGoalBN).integerValue(BigNumber.ROUND_FLOOR);
+  const softCapPercentage = softGoalBN.multipliedBy(100).dividedBy(hardGoalBN).integerValue(BigNumber.ROUND_FLOOR);
+  const successPercentage = currentFundingBN.multipliedBy(100).dividedBy(softGoalBN).integerValue(BigNumber.ROUND_FLOOR);
 
   return (
     <View className="bg-neutralStrong dark:bg-neutralPale rounded-md p-4">
@@ -24,7 +28,7 @@ const FundingProgress: FC<FundingProgressProps> = ({
           <View className="flex flex-row items-center gap-2">
             <Span className="text-neutralLight dark:text-neutralSteady">Goal:&nbsp;</Span>
             <H4 className="text-neutralPure dark:text-neutralMighty">
-              {fromBaseToken(softGoal, 2, true)}
+              {fromBaseToken(softGoal, 2)}
             </H4>
           </View>
           <View className="flex flex-row items-center gap-2">
@@ -32,7 +36,7 @@ const FundingProgress: FC<FundingProgressProps> = ({
               Max acceptable:&nbsp;
             </Span>
             <H3 className="text-neutralPure dark:text-neutralMighty">
-              {fromBaseToken(hardGoal, 2, true)}
+              {fromBaseToken(hardGoal, 2)}
             </H3>
           </View>
         </View>

@@ -5,9 +5,10 @@ import {View, Image} from '@/app/components/Polyfills';
 
 import {Icon, ImagePicker} from '@/app/components/Elements';
 import {getSmallestSize} from '@/app/utils/image';
-import {ImageFormats} from '@/app/config/types';
+import {updateAvatar} from '@/app/actions/updateAvatar';
+import {AvatarAttrs} from './types';
 
-const Avatar: FC<{data: ImageFormats}> = ({data}) => {
+const Avatar: FC<AvatarAttrs> = ({data, profileId}) => {
   const source = getSmallestSize(data);
 
   const submit = async (file) => {
@@ -16,8 +17,7 @@ const Avatar: FC<{data: ImageFormats}> = ({data}) => {
 
       formData.append('files.avatar', file);
       formData.append('data', JSON.stringify({}));
-      // @ts-expect-error Form Data type is not properly defined.
-      await update(formData);
+      await updateAvatar(profileId, formData);
     }
   };
 

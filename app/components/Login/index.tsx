@@ -1,44 +1,103 @@
 'use client'
 
-import React, { FC } from 'react';
-import { redirect } from 'next/navigation';
+import React, {FC, useState} from 'react';
 import NextImage from 'next/image';
+import {useRouter} from 'next/navigation';
 
-import {AUTH_PROVIDERS} from '@/app/config/constants';
-import {apiBaseUrl} from '@/app/config/endpoints';
-import {H3, H4, View} from '@/app/components/Polyfills';
-import {Button, Icon} from '@/app/components/Elements';
-import appLogo from '@/public/images/logo.svg';
+import { signIn, signUp } from '@/app/actions/auth';
+import {Small, H3, Span, View, TextInput} from '../Polyfills';
+import {Button, SafeArea} from '../Elements';
+import appLogo from '../../../public/images/applogo.png';
+import {Routes} from '@/app/config/routes';
 
-const Login: FC = () => {
-  const onPress = (provider: string) => {
-    redirect(`${apiBaseUrl}/connect/${provider}`);
+const ErrorMessage: FC<{errorMessage: string}> = ({errorMessage}) => {
+  if (typeof errorMessage !== 'string' || !errorMessage) {
+    return null;
+  }
+  const networkReg = /network/i;
+  let formattedMessage = errorMessage;
+
+  if (networkReg.test(errorMessage)) {
+    formattedMessage = 'Check your internet connection';
+  } else {
+    formattedMessage = 'The email/password combination was not correct.';
   }
 
   return (
-    <View className="px-6 w-[510px] flex flex-col justify-center items-center gap-6">
-      <View className="flex flex-row justify-center items-center">
-        <NextImage alt="App Logo" src={appLogo} width={150} height={150} />
-      </View>
-
-      <H3 className="text-primaryStrong py-6">Login using your Google account</H3>
-
-      {
-        AUTH_PROVIDERS.map(provider => (
-          <Button
-            className="min-w-[300px]"
-            key={provider}
-            onPress={() => onPress(provider)}
-            title={
-              <View className="flex flex-row justify-between items-center px-4">
-                <Icon name="google" color="#fff" />
-                <H4 className="text-white grow !text-normal">Google</H4>
-              </View>
-            }
-          />
-        ))
-      }
+    <View className="pb-4">
+      <Small className="text-warnStrong">{formattedMessage}</Small>
     </View>
+  );
+};
+
+const Login = () => {
+  const [error, setError] = useState('');
+  const [email, setEmail] = useState('ali@muzikie.com');
+  const [password, setPassword] = useState('Sina1373ksh');
+  const router = useRouter();
+
+  const onLogin = async () => {
+    const response = await signIn(email, password);
+    if (!response.success) {
+      setError(response.error)
+    }
+
+    router.replace(Routes.Home);
+  };
+
+  const onRegister = async () => {
+    const response = await signUp(email, password);
+    if (!response.success) {
+      setError(response.error)
+    }
+
+    router.replace(Routes.Home);
+  };
+
+  const isButtonDisabled = !email || !password;
+
+  return (
+    <SafeArea className="flex flex-col justify-center items-center">
+      <View className="px-6 w-[510px]">
+        <View className="p-6 flex flex-row justify-center items-center">
+          <NextImage alt="App Logo" src={appLogo} />
+        </View>
+
+        <H3 className="text-primaryStrong py-6">Login</H3>
+
+        <TextInput
+          onChangeText={setEmail}
+          value={email}
+          placeholder="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TextInput
+          onChangeText={setPassword}
+          value={password}
+          placeholder="Password"
+          secureTextEntry
+          autoCapitalize="none"
+          keyboardType="password"
+        />
+
+        <ErrorMessage errorMessage={error} />
+
+        <View className="flex flex-row nowrap gap-6 justify-center items-center">
+          <Button
+            onPress={onLogin}
+            title="Sign in"
+            disabled={isButtonDisabled}
+          />
+          <Span>Or</Span>
+          <Button
+            onPress={onRegister}
+            title="Sign up"
+            disabled={isButtonDisabled}
+          />
+        </View>
+      </View>
+    </SafeArea>
   );
 };
 

@@ -18,11 +18,11 @@ import {ActionsProps} from './types';
 const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
   const account = await getUserAccount();
 
-  const ownerId = Number(project?.attributes.users_permissions_user.data.id);
+  const ownerId = Number(project.users_permissions_user.id);
   const accountId = account?.id;
-  const projectId = project?.id;
-  const status = project?.attributes?.status;
-  const deadline = project?.attributes.deadline;
+  const projectId = project?.documentId;
+  const status = project?.project_status;
+  const deadline = project.deadline;
 
   const editable = ownerId === accountId && status === ProjectStatus.Draft;
 
@@ -34,7 +34,9 @@ const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
     new Date(deadline) <= new Date() &&
     (status === ProjectStatus.Successful || status === ProjectStatus.soldOut);
 
-  const failing = status === ProjectStatus.Failing;
+  const failing = (
+    new Date(deadline) <= new Date() && status !== ProjectStatus.Successful && status !== ProjectStatus.soldOut
+  ) || status === ProjectStatus.Failing;
 
   return (
     <View>
@@ -58,14 +60,14 @@ const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
       ) : null}
 
       {succeeded && ownerId === accountId ? (
-        <SuccessfulProjectOwner projectId={projectId} />
+        <SuccessfulProjectOwner projectId={projectId} onChainId={project.on_chain_id} />
       ) : null}
 
       {succeeded && ownerId !== accountId ? (
         <SuccessfulProjectContributor />
       ) : null}
 
-      {failing && ownerId === accountId ? <FailingProjectOwner /> : null}
+      {failing ? <FailingProjectOwner /> : null}
     </View>
   );
 };

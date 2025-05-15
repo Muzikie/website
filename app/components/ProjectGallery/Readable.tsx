@@ -6,7 +6,7 @@ import {GalleryReadableProps, ReadableImageProps} from './types';
 import {Routes} from '@/app/config/routes';
 
 const ImageItem: FC<ReadableImageProps> = ({index, image}) => {
-  const img = getLargestSize(image?.attributes.formats ?? {});
+  const img = getLargestSize(image?.formats ?? {});
   return (
     <Link
       disabled={typeof img === 'number'}

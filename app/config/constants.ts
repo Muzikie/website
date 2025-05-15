@@ -1,4 +1,6 @@
-import {SamSite} from './types';
+import BigNumber from 'bignumber.js';
+
+import {SamSite, SupportedTokens} from './types';
 
 export const SPOTIFY_LINK_REG = /^https:\/\/open\.spotify\.com\/track\/[\w-]+/;
 
@@ -30,14 +32,14 @@ export const LIVE_COOKIE = {
   maxAge: 60 * 60 * 24 * 7, 
   path: '/',
   httpOnly: false,
-  secure: process.env.NEXT_PUBLIC_PROTOCOL === 'http',
+  secure: process.env.NEXT_PUBLIC_PROTOCOL === 'https',
   sameSite: 'lax' as unknown as SamSite,
   domain: process.env.NEXT_PUBLIC_BASE_URL?.replace(/:\d+$/, ''),
 };
 export const DEAD_COOKIE = {
   maxAge: -1,
   path: '/',
-  secure: process.env.NEXT_PUBLIC_PROTOCOL === 'http',
+  secure: process.env.NEXT_PUBLIC_PROTOCOL === 'https',
   expires: new Date(0).getTime(),
   domain: process.env.NEXT_PUBLIC_BASE_URL?.replace(/:\d+$/, ''),
 }
@@ -45,3 +47,8 @@ export const DEAD_COOKIE = {
 export const AUTH_PROVIDERS = [
   'google'
 ];
+
+export const tokenConversionFactors: Record<SupportedTokens, BigNumber> = {
+  [SupportedTokens.LSK]: BigNumber(1e8),
+  [SupportedTokens.ETH]: BigNumber(1e8),
+};

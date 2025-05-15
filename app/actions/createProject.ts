@@ -1,7 +1,10 @@
 'use server'
 
+import { ethers } from 'ethers';
+import campaignJson from '@/app/config/abi.json';
 import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
+import {getContract} from '@/app/utils/blockchain';
 
 export const createProject = async (data: Record<string, unknown>) => {
   const result = {
@@ -10,12 +13,43 @@ export const createProject = async (data: Record<string, unknown>) => {
   };
 
   try {
+    const deadline = Math.floor(new Date(data.planned_release_date as string).getTime() / 1000); // timestamp in seconds
+    const goal = ethers.parseEther(data.soft_goal as string);
+    const hardCap = ethers.parseEther(data.hard_goal as string);
+
+    const campaignContract = getContract();
+    const tx = await campaignContract.createCampaign(goal, hardCap, deadline);
+    const receipt = await tx.wait();
+    if (!receipt.hash) {
+      throw new Error('Error creating project.');
+    }
+
+    const iface = new ethers.Interface(campaignJson.abi);
+
+    let campaignId: string | null = null;
+    for (const log of receipt.logs) {
+      try {
+        const parsed = iface.parseLog(log);
+        if (parsed?.name === 'CampaignCreated') {
+          campaignId = parsed.args[0].toString();
+          break;
+        }
+      } catch (err) {
+        console.log('Skip log', err);
+        continue;
+      }
+    }
+
+    if (!campaignId) {
+      throw new Error('CampaignCreated event not found in transaction receipt');
+    }
+
     const res = await apiClient(ENDPOINTS.PROJECTS, {
       method: 'POST',
       body: JSON.stringify({ data }),
     });
 
-    if (res.data) {
+    if (res.documentId) {
       result.success = true;
     } else {
       result.error = 'Failed to create project';

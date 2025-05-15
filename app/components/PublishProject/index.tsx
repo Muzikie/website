@@ -7,16 +7,9 @@ import FormSummary from '@/app/components/FormElements/GenericSummary';
 import {Button} from '@/app/components/Elements';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
 import {Routes} from '@/app/config/routes';
-import {FetchStatus} from '@/app/config/types';
+import {FetchStatus, SubmitTitle} from '@/app/config/types';
 import Feedback from '@/app/components/Feedback';
 import {PublishProjectProps} from './types';
-
-const SubmitTitle = {
-  [FetchStatus.Idle]: 'Submit',
-  [FetchStatus.Pending]: 'Submitting',
-  [FetchStatus.Error]: 'Failed',
-  [FetchStatus.Success]: 'Succeeded',
-};
 
 const PublishProject: FC<PublishProjectProps> = ({projectId, data, onPublish}) => {
   const [feedback, setFeedback] = useState({

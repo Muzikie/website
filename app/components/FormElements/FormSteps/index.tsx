@@ -4,16 +4,17 @@ import React, {FC, useState} from 'react';
 
 import {FormStep, FormStepsProps} from './types';
 import {FetchStatus} from '@/app/config/types';
+import {Project} from '@/app/components/Projects/types';
 
 const FormSteps: FC<FormStepsProps> = ({Form, Review, submit, initialData, id}) => {
   const [step, setStep] = useState<FormStep>(FormStep.Form);
-  const [formData, setFormData] = useState<Record<string, unknown>>(initialData);
+  const [formData, setFormData] = useState<Project>(initialData);
   const [feedback, setFeedback] = useState({
     status: FetchStatus.Idle,
     message: ','
   });
 
-  const handleProceed = (data: Record<string, unknown>) => {
+  const handleProceed = (data: Project) => {
     setFormData(data);
     setStep(FormStep.Review);  // Go to summary step
   };
@@ -22,7 +23,7 @@ const FormSteps: FC<FormStepsProps> = ({Form, Review, submit, initialData, id}) 
     setStep(FormStep.Form);  // Go back to form step
   };
 
-  const handleSubmit = async(data: Record<string, unknown>, id?: number) => {
+  const handleSubmit = async(data: Project, id?: string) => {
     setFeedback({
       status: FetchStatus.Pending,
       message: ','

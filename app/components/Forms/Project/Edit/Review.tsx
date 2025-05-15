@@ -3,7 +3,7 @@
 import React, {FC} from 'react';
 
 import {View, ScrollView} from '@/app/components/Polyfills';
-import {FetchStatus} from '@/app/config/types';
+import {FetchStatus, SubmitTitle} from '@/app/config/types';
 import {toBaseToken} from '@/app/utils/formatters';
 import SectionHeader from '@/app/components/SectionHeader';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
@@ -11,13 +11,6 @@ import FormSummary from '@/app/components/FormElements/GenericSummary';
 import {Button} from '@/app/components/Elements';
 import Feedback from '@/app/components/Feedback';
 import type {EditProjectReviewProps} from './types';
-
-const SubmitTitle = {
-  [FetchStatus.Idle]: 'Submit',
-  [FetchStatus.Pending]: 'Submitting',
-  [FetchStatus.Error]: 'Failed',
-  [FetchStatus.Success]: 'Succeeded',
-};
 
 const CreateProjectReview: FC<EditProjectReviewProps> = ({
   data, onEdit, onSubmit, feedback, projectId,

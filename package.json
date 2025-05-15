@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^1.7.7",
     "bignumber.js": "^9.1.2",
+    "ethers": "^6.14.0",
     "js-cookie": "^3.0.5",
     "next": "15.0.1",
     "react": "19.0.0-rc-69d4b800-20241021",
@@ -28,5 +29,6 @@
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "yarn@3.2.3+sha512.f26f951f67de0c6a33ee381e5ff364709c87e70eb5e65c694e4facde3512f1fa80b8679e6ba31ce7d340fbb46f08dd683af9457e240f25a204be7427940d767e"
 }

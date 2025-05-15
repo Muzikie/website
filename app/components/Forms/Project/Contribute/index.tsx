@@ -8,16 +8,9 @@ import {ButtonThemes} from '@/app/components/Elements/Button/types';
 import SectionHeader from '@/app/components/SectionHeader';
 import Feedback from '@/app/components/Feedback';
 import {contribute} from '@/app/actions/contribute';
-import {FetchStatus} from '@/app/config/types';
+import {FetchStatus, SubmitTitle} from '@/app/config/types';
 import {ContributeProps} from './types';
 import Option from './Option';
-
-const SubmitTitle = {
-  [FetchStatus.Idle]: 'Submit',
-  [FetchStatus.Pending]: 'Submitting',
-  [FetchStatus.Error]: 'Failed',
-  [FetchStatus.Success]: 'Succeeded',
-};
 
 const Contribute: FC<ContributeProps> = ({project, artist, options}) => {
   const [selected, setSelected] = useState<number>(0);
@@ -32,23 +25,31 @@ const Contribute: FC<ContributeProps> = ({project, artist, options}) => {
       message: '',
     });
     const optionData = options.find(item => item.id === selected);
-    const result = await contribute(optionData?.id ?? 0);
+    const tierData = {
+      index: selected,
+      id: optionData?.id,
+      documentId: optionData?.documentId,
+    }
+    const result = await contribute(project.on_chain_id, tierData);
     setFeedback({
       status: result.success ? FetchStatus.Success : FetchStatus.Error,
       message: result.error,
     });
   };
 
+  // @todo update account balance (fetch from Klayr blockchain)
+  // @todo disable submit button if account balance is less than the contribution amount
+
   return (
     <ScrollView className="w-full h-full p-4">
       <SectionHeader
-        title={`Support ${artist.attributes.first_name}`}
-        subtitle={`You are contributing to "${project.attributes.name}"`}
+        title={`Support ${artist.first_name}`}
+        subtitle={`You are contributing to "${project.name}"`}
       />
       <View>
         {options.map(item => (
           <Option
-            key={`${item.id}${item.attributes.name}`}
+            key={`${item.id}${item.name}`}
             data={item}
             selected={selected === item.id}
             onSelected={setSelected}

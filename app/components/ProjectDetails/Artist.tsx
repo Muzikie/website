@@ -37,7 +37,7 @@ const Artist: FC<ArtistProps> = ({data}) => {
     twitter,
     twitch,
   } = data;
-  const image = getSmallestSize(avatar?.data?.attributes.formats ?? {});
+  const image = getSmallestSize(avatar?.formats ?? {});
   const name = [first_name, last_name].join(' ') || 'What\'s his face?';
 
   return (

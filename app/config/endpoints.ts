@@ -3,11 +3,8 @@ export const LAUNCH_PROTOCOL = 'muzikie://';
 export const ENDPOINTS = {
   SONGS: '/songs',
   FEED: '/projects/feed',
-  VOTES: '/votes',
-  BADGES: '/badges',
-  SONG_BADGES: '/song-badges',
-  SONG_FETCH: '/song/fetch',
   PROFILES: '/profiles',
+  WALLETS: '/profiles',
   ME: '/profiles/me',
   PROJECTS: '/projects',
   CONTRIBUTION_TIERS: '/contribution-tiers',
@@ -26,4 +23,3 @@ const IMAGE_HOSTNAME = process.env.NEXT_PUBLIC_IMAGE_HOSTNAME;
 const IMAGE_PORT = process.env.NEXT_PUBLIC_IMAGE_PORT;
 
 export const apiBaseUrl = `${IMAGE_PROTOCOL}://${IMAGE_HOSTNAME}${IMAGE_PORT ? ':' + IMAGE_PORT : ''}/api`
-export const klayrBaseUrl = process.env.NEXT_PUBLIC_KLAYR_URL;

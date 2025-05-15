@@ -3,7 +3,6 @@
 import React, {FC, useState} from 'react';
 import {useRouter} from 'next/navigation';
 
-// import {mapObject} from '@/app/utils/convertors';
 import {validateForm} from '@/app/utils/validators';
 import {ProjectAttrs, ProjectType} from '@/app/components/Projects/types';
 import {View, ScrollView} from '@/app/components/Polyfills';
@@ -49,23 +48,6 @@ const EditProjectForm: FC<EditProjectFormProps> = ({
       [fieldName]: value,
     });
   };
-
-  // useEffect(() => {
-  //   if (existingData?.data && !isLoading) {
-  //     setData(
-  //       mapObject(existingData.data.attributes, [
-  //         'name',
-  //         'summary',
-  //         'description',
-  //         'project_type',
-  //         'planned_release_date',
-  //         'soft_goal',
-  //         'deadline',
-  //         'hard_goal',
-  //       ]),
-  //     );
-  //   }
-  // }, [existingData, isLoading]);
 
   return (
     <ScrollView className="w-full h-full p-4">

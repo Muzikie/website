@@ -3,11 +3,13 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 
 import {Timeout} from '@/app/config/types';
-import {truncateAddress} from '@/app/utils/formatters';
-import {View, H1, H2, H4, Span, TouchableHighlight} from '@/app/components/Polyfills';
+import {View, H1, H2, Span, TouchableHighlight} from '@/app/components/Polyfills';
 import {Icon, Input} from '@/app/components/Elements';
+
+import ConnectWalletButton from '@/app/components/Wallet/ConnectWalletButton';
 import {updateProfile} from '@/app/actions/updateProfile';
-import { WalletProps } from './types';
+import {WalletProps} from './types';
+import { useWallet } from '../Wallet/useWallet';
 
 const Carrot = () => {
   const presets = {};
@@ -20,8 +22,9 @@ const Carrot = () => {
 }
 
 const Wallet: FC<WalletProps> = ({data}) => {
-  const [copied, setCopied] = useState(false);
+  const {getBalance, address} = useWallet();
   const [isEditing, setIsEditing] = useState(false);
+  const [balance, setBalance] = useState('');
   const [formData, setFormData] = useState({
     first_name: data?.first_name ?? '',
     last_name: data?.last_name ?? '',
@@ -29,19 +32,16 @@ const Wallet: FC<WalletProps> = ({data}) => {
   const timer = useRef<Timeout>();
   const presets = {};
 
+  const updateBalance = async () => {
+    const value = await getBalance();
+    setBalance(value);
+  };
+
   const save = async () => {
     const result = await updateProfile(formData, data.profileId);
     if (result.success) {
       setIsEditing(false);
     }
-  };
-
-  const onCopy = async () => {
-    setCopied(true);
-    timer.current = setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-    navigator.clipboard.writeText(data?.address ?? '');
   };
 
   const onInputChange = (fieldName: string) => (value: string) => {
@@ -57,13 +57,17 @@ const Wallet: FC<WalletProps> = ({data}) => {
 
   const fullName = [formData?.first_name, formData?.last_name]
     .filter(item => !!item)
-    .join(' ');
+    .join(' ') || 'Set your name';
+
+  useEffect(() => {
+    updateBalance();
+  }, [address]);
 
   return (
     <View className="w-full bg-neutralPale rounded-3xl relative mt-14 pb-6">
       <Carrot />
       <View>
-        {fullName.length && !isEditing ? (
+        {!isEditing ? (
           <View className="w-full flex flex-row justify-center items-center mb-6">
             <H2 className="text-primaryStrong font-light">{fullName}</H2>
             <TouchableHighlight
@@ -107,21 +111,16 @@ const Wallet: FC<WalletProps> = ({data}) => {
           )
         }
         <View className="w-full text-center mb-6">
-          <Span className="text-neutralSteady font-light">Points</Span>
+          <Span className="text-neutralSteady font-light">Balances</Span>
           <H1 className="text-primaryStrong">
-            {data?.points ?? 0}
+            {balance}
           </H1>
         </View>
         <View className="w-full text-center">
           <Span className="text-neutralSteady font-light">{`${
             process.env.NEXT_PUBLIC_NETWORK_NAME || ''
           } Wallet Address`}</Span>
-          <TouchableHighlight onPress={onCopy} className="w-full">
-            <H4
-              className="font-light">
-              {copied ? 'Copied to clipboard' : (truncateAddress(data?.address ?? '') ?? 'Loading')}
-            </H4>
-          </TouchableHighlight>
+          <ConnectWalletButton />
         </View>
       </View>
     </View>

@@ -1,4 +1,4 @@
-import {FetchStatus} from '@/app/config/types';
+import {FetchStatus, Balance} from '@/app/config/types';
 import {StaticImageData} from 'next/image';
 
 export type EndpointParams = Partial<
@@ -46,11 +46,21 @@ export interface IncomingHttpHeaders {
   [header: string]: string | string[] | undefined;
 }
 
+interface KlayrSuccessResponse<T> {
+  success: true;
+  data: T;
+}
+interface KlayrFailureResponse {
+  success: false;
+  error: string;
+}
+
+export type KlayrResponse<T> = KlayrSuccessResponse<T> | KlayrFailureResponse;
+
 export type StrapiResponse = {
   id: number;
-  attributes: {
-    [key: string]: unknown;
-  };
+  documentId: string;
+  [key: string]: unknown;
 };
 
 export type FlattenedResponse = {
@@ -98,3 +108,7 @@ export interface ApiOptions {
   method?: 'POST'|'GET'|'DELETE'|'PUT';
   body?: string | FormData;
 }
+
+export interface Balances {
+  balances: Balance[]
+} 

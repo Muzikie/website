@@ -4,20 +4,24 @@ import {Project} from '@/app/components/Projects/types';
 
 export interface ContributionTier {
   id: number;
-  attributes: {
-    name: string;
-    description: string;
-    rewards: string;
-    amount: number;
-  };
+  documentId: string;
+  name: string;
+  description: string;
+  rewards: string;
+  amount: number;
 }
 
 export interface ContributeProps {
   project: Project;
   artist: Account;
-  options: ContributionTier[];
+  options: TierData[];
 }
 
+export interface TierData {
+  index: number;
+  id: string;
+  documentId: string;
+}
 export interface ContributeOptionProps {
   data: ContributionTier;
   selected: boolean;

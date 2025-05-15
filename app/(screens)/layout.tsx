@@ -5,6 +5,7 @@ import NextImage from 'next/image';
 import {Routes} from '@/app/config/routes';
 import {Icon} from '@/app/components/Elements';
 import {Link} from '@/app/components/Polyfills';
+import {WalletProvider} from '@/app/components/Wallet/WalletProvider';
 import logo from '@/public/images/logo.svg';
 import '../globals.css';
 
@@ -38,7 +39,9 @@ export default function RootLayout({
           </nav>
         </header>
         <main id="app-main" className="relative overflow-hidden grow order-1 md:order-2">
-          {children}
+          <WalletProvider>
+            {children}
+          </WalletProvider>
         </main>
       </body>
     </html>

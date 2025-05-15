@@ -1,23 +1,13 @@
-import {ImageFormats} from '@/app/config/types';
+import {ImageFormats, AccountAttrs} from '@/app/config/types';
 
 interface User {
-  data: {
-    id: number;
-    attributes: {
-      email: string;
-    };
-  };
-}
-
-export interface ImageData {
   id: number;
-  attributes: {
-    formats: ImageFormats;
-  };
+  email: string;
 }
 
-interface Images {
-  data: ImageData[];
+export type ImageData  = {
+  id: number;
+  formats: ImageFormats;
 }
 
 export enum ProjectType {
@@ -43,24 +33,26 @@ export interface ProjectAttrs {
   description: string;
   project_type: ProjectType;
   planned_release_date: string;
-  soft_goal: number | string;
+  soft_goal: string;
   deadline: string;
-  hard_goal: number | string;
-  users_permissions_user?: User;
+  hard_goal: string;
+  users_permissions_user?: AccountAttrs;
 }
 
 export interface ProjectReadOnlyAttrs {
-  current_funding: number;
+  publishedAt?: string;
+  current_funding: string;
   reaction_count: number;
   users_permissions_user: User;
-  images: Images;
-  status?: ProjectStatus;
+  images: ImageData[];
+  project_status?: ProjectStatus;
+  id: number;
+  on_chain_id: number;
+  documentId: string;
+  contribution_tiers: ContributionTier[];
 }
 
-export interface Project {
-  id: number;
-  attributes: ProjectAttrs & ProjectReadOnlyAttrs;
-}
+export type Project = ProjectAttrs & ProjectReadOnlyAttrs;
 
 export interface ProjectProps {
   item: Project;
@@ -68,12 +60,18 @@ export interface ProjectProps {
 
 export interface ContributionTierAttrs {
   name: string;
-  description: string;
   rewards: string;
   amount: number;
+  project: number;
 }
 
-export interface ContributionTier {
+export type ContributionTier = {
   id: number;
-  attributes: ContributionTierAttrs;
+  documentId: string;
+  selected?: boolean,
+} & ContributionTierAttrs
+
+export interface ProjectDetailsResponse {
+  project: Project;
+  artist: AccountAttrs;
 }

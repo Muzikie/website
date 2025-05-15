@@ -1,10 +1,9 @@
+import {ImageFormats, ImageSource} from '@/app/config/types';
+import type {ContributionTier} from '@/app/components/Projects/types';
+
 interface User {
-  data: {
-    id: string;
-    attributes: {
-      email: string;
-    };
-  };
+  id: string;
+  email: string;
 }
 
 interface Owner {
@@ -15,31 +14,9 @@ interface Owner {
 }
 
 export interface Image {
-  id: string;
-  attributes: {
-    formats: {
-      large: {
-        url: string;
-        name: string;
-      };
-      medium: {
-        url: string;
-        name: string;
-      };
-      small: {
-        url: string;
-        name: string;
-      };
-      thumbnail: {
-        url: string;
-        name: string;
-      };
-    };
-  };
-}
-
-interface Images {
-  data: Image[];
+  id: number;
+  documentId: string;
+  formats: ImageFormats;
 }
 
 export enum ProjectType {
@@ -80,17 +57,27 @@ export interface ExclusiveContentAttrs {
   media: unknown;
   project: string;
   public_access: boolean;
-  accessibleTiers: string[];
+  accessible_tiers: ContributionTier[];
+  title: string;
+  description: string;
+}
+
+export interface PostExclusiveContentData {
+  media: unknown;
+  project: string;
+  public_access: boolean;
+  accessible_tiers: number[];
   title: string;
   description: string;
 }
 
 export type Project = ProjectAttrs & {
   id: number;
-  current_funding: number;
+  documentId: string;
+  current_funding: string;
   reaction_count: number;
   users_permissions_user: User;
-  images: Images;
+  images: Image[];
   owner: Owner;
   type: FeedType.Project;
 }
@@ -105,7 +92,8 @@ export type Content = ExclusiveContentAttrs & {
   owner: Owner;
   project: {
     name: string;
-    id: string;
+    id: number;
+    documentId: string;
   };
   type: FeedType.Content;
 }
@@ -119,6 +107,14 @@ export interface ContributionTierAttrs {
   description: string;
   rewards: string;
   amount: number;
+}
+
+export interface ContributionTierForm {
+  name: string;
+  description: string;
+  rewards: string;
+  amount: number;
+  project: string;  // documentId, retrieved from URL, used by forms
 }
 
 export interface LinkToProjectProps {
@@ -138,4 +134,8 @@ export interface FeedProps {
     data: (Project | Content)[];
   };
   isLoading?: boolean;
+}
+
+export interface ThumbnailsProps {
+  data: ImageSource[]
 }

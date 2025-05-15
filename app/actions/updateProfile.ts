@@ -1,14 +1,11 @@
 
 'use server'
 
+import {Profile} from '@/app/config/types';
 import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
-interface Data {
-  first_name: string;
-  last_name: string;
-}
 
-export const updateProfile = async (data: Data, profileId: number) => {
+export const updateProfile = async (data: Partial<Profile>, profileId: string) => {
   const result = {
     success: false,
     error: '',

@@ -16,19 +16,19 @@ const Option: FC<ContributeOptionProps> = ({data, selected, onSelected}) => {
       onPress={onPress}>
       <View className="w-full flex flex-row justify-between items-start">
         <CheckBox
-          key={data.attributes.name}
+          key={data.name}
           selected={selected}
           className="!w-[45px]"
         />
         <View className="pl-4">
           <View className="w-full flex flex-row justify-between">
             <H3>
-              {data.attributes.name}
+              {data.name}
             </H3>
-            <H4>{fromBaseToken(data.attributes.amount, 3, true)}</H4>
+            <H4>{fromBaseToken(data.amount, 3)}</H4>
           </View>
           <Span className="w-full text-left">
-            {data.attributes.rewards}
+            {data.rewards}
           </Span>
         </View>
       </View>
