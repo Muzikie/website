@@ -17,32 +17,29 @@ import {ActionsProps} from './types';
 
 const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
   const account = await getUserAccount();
-
-  const ownerId = Number(project.users_permissions_user.id);
-  const accountId = account?.id;
   const projectId = project?.documentId;
   const status = project?.project_status;
-  const deadline = project.deadline;
-
-  const editable = ownerId === accountId && status === ProjectStatus.Draft;
+  const isPastDeadline = new Date(project.deadline) < new Date();
+  const isOwner = Number(project.users_permissions_user.id) === account?.id;
+  const editable = isOwner && status === ProjectStatus.Draft && !isPastDeadline;
 
   const published =
-    new Date(deadline) > new Date() &&
+    !isPastDeadline &&
     (status === ProjectStatus.Published || status === ProjectStatus.Successful);
 
   const succeeded =
-    new Date(deadline) <= new Date() &&
+    isPastDeadline &&
     (status === ProjectStatus.Successful || status === ProjectStatus.soldOut);
 
   const failing = (
-    new Date(deadline) <= new Date() && status !== ProjectStatus.Successful && status !== ProjectStatus.soldOut
+    isPastDeadline && status !== ProjectStatus.Successful && status !== ProjectStatus.soldOut
   ) || status === ProjectStatus.Failing;
 
   return (
     <View>
       {editable && <EditProject projectId={projectId} refresh={refresh} />}
 
-      {published && ownerId === accountId ? (
+      {published && isOwner ? (
         <PublishedProjectOwner
           project={project}
           account={account!}
@@ -50,7 +47,7 @@ const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
         />
       ) : null}
 
-      {published && ownerId !== accountId ? (
+      {published && !isOwner ? (
         <SupportProject
           project={project}
           account={account!}
@@ -59,11 +56,11 @@ const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
         />
       ) : null}
 
-      {succeeded && ownerId === accountId ? (
+      {succeeded && isOwner ? (
         <SuccessfulProjectOwner projectId={projectId} onChainId={project.on_chain_id} />
       ) : null}
 
-      {succeeded && ownerId !== accountId ? (
+      {succeeded && !isOwner ? (
         <SuccessfulProjectContributor />
       ) : null}
 

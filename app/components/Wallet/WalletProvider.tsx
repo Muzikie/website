@@ -3,7 +3,9 @@
 import React, {createContext, useEffect, useState} from 'react';
 import {ethers} from 'ethers';
 import {createWallet} from '@/app/actions/createWallet';
-import { SupportedBlockchains, SupportedWallets } from '@/app/config/types';
+import {SupportedBlockchains, SupportedWallets} from '@/app/config/types';
+import {NETWORK, CHAIN_ID} from '@/app/config/network';
+import {EthereumProvider} from './types';
 
 type WalletContextType = {
   address: string | null;
@@ -32,38 +34,88 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     return ethers.formatEther(balance);
   };
 
-  const connect = async () => {
+   const switchToLisk = async (ethereum: EthereumProvider) => {
+    try {
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: CHAIN_ID }],
+      });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (!(window as any).ethereum) return alert('Please install MetaMask');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const _provider = new ethers.BrowserProvider((window as any).ethereum);
-    const accounts = await _provider.send('eth_requestAccounts', []);
-    setAddress(accounts[0]);
-    setProvider(_provider);
-
-    await createWallet({
-      address: accounts[0],
-      public_key: accounts[0],
-      wallet_type: SupportedWallets.META_MASK,
-      blockchain: SupportedBlockchains.ETHEREUM,
-    })
+    } catch (switchError: any) {
+      if (switchError.code === 4902) {
+        // Chain not added to MetaMask
+        await ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [NETWORK],
+        });
+      } else {
+        console.error('Error switching to Lisk network:', switchError);
+      }
+    }
   };
 
-  const disconnect = async () => {};
+  const connect = async () => {
+    try {
+      if (!window.ethereum) return alert('Please install MetaMask');
+      const _provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts = await _provider.send('eth_requestAccounts', []);
+
+      await switchToLisk(window.ethereum);
+
+      setAddress(accounts[0]);
+      setProvider(_provider);
+
+      await createWallet({
+        address: accounts[0],
+        public_key: accounts[0],
+        wallet_type: SupportedWallets.META_MASK,
+        blockchain: SupportedBlockchains.ETHEREUM,
+      });
+    } catch (err: unknown) {
+      console.error('Wallet connection cancelled or failed:', err);
+      setAddress(null);
+      setProvider(null);
+    }
+  };
+
+  const disconnect = async () => {
+    setAddress(null);
+    setProvider(null);
+  };
+
+  const check = async (provider: ethers.BrowserProvider) => {
+    const accounts = await provider.send('eth_accounts', []);
+    if (accounts.length > 0) {
+      setAddress(accounts[0]);
+      setProvider(provider);
+    }
+  };
+
+  const handleAccountChange = (accounts: string[]) => {
+    if (accounts.length === 0) {
+      disconnect();
+    } else {
+      setAddress(accounts[0]);
+    }
+  };
+
+  const handleDisconnection = () => {
+    disconnect();
+  };
 
   useEffect(() => {
-    const check = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (!(window as any).ethereum) return;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const _provider = new ethers.BrowserProvider((window as any).ethereum);
-      const accounts = await _provider.send('eth_accounts', []);
-      if (accounts.length > 0) {
-        setAddress(accounts[0]);
-        setProvider(_provider);
-      }
-    };
-    check();
+    const ethereum = window.ethereum as EthereumProvider;
+    const provider = new ethers.BrowserProvider(ethereum);
+    if (window.ethereum) {
+      check(provider);
+      ethereum.on('accountsChanged', handleAccountChange);
+      ethereum.on('disconnect', handleDisconnection);
+    }
+
+    return () => {
+      ethereum.removeListener('accountsChanged', handleAccountChange);
+      ethereum.removeListener('disconnect', handleDisconnection);
+    }
   }, []);
 
   return (
