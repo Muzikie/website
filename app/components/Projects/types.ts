@@ -33,9 +33,9 @@ export interface ProjectAttrs {
   description: string;
   project_type: ProjectType;
   planned_release_date: string;
-  soft_goal: string;
+  soft_goal: number;
   deadline: string;
-  hard_goal: string;
+  hard_goal: number;
   users_permissions_user?: AccountAttrs;
 }
 

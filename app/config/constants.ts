@@ -52,3 +52,8 @@ export const tokenConversionFactors: Record<SupportedTokens, BigNumber> = {
   [SupportedTokens.LSK]: BigNumber(1e8),
   [SupportedTokens.ETH]: BigNumber(1e8),
 };
+
+export const FORMS = {
+  CREATE_PROJECT: '0x101',
+  POST_EXCLUSIVE_CONTENT: '0x102',
+};

@@ -1,5 +1,5 @@
 import {ImageFormats, ImageSource} from '@/app/config/types';
-import type {ContributionTier} from '@/app/components/Projects/types';
+import type {ContributionTier, ProjectType} from '@/app/components/Projects/types';
 
 interface User {
   id: string;
@@ -17,13 +17,6 @@ export interface Image {
   id: number;
   documentId: string;
   formats: ImageFormats;
-}
-
-export enum ProjectType {
-  Single = 'single',
-  EP = 'ep',
-  Album = 'album',
-  MusicVideo = 'music_video',
 }
 
 export enum ProjectStatus {

@@ -5,8 +5,9 @@ import campaignJson from '@/app/config/abi.json';
 import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
 import {getContract} from '@/app/utils/blockchain';
+import {ProjectAttrs} from '@/app//components/Projects/types';
 
-export const createProject = async (data: Record<string, unknown>) => {
+export const createProject = async (data: ProjectAttrs) => {
   const result = {
     success: false,
     error: '',
@@ -14,8 +15,8 @@ export const createProject = async (data: Record<string, unknown>) => {
 
   try {
     const deadline = Math.floor(new Date(data.planned_release_date as string).getTime() / 1000); // timestamp in seconds
-    const goal = ethers.parseEther(data.soft_goal as string);
-    const hardCap = ethers.parseEther(data.hard_goal as string);
+    const goal = ethers.parseEther(data.soft_goal.toString());
+    const hardCap = ethers.parseEther(data.hard_goal.toString());
 
     const campaignContract = getContract();
     const tx = await campaignContract.createCampaign(goal, hardCap, deadline);
