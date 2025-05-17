@@ -48,9 +48,9 @@ const CreateProjectForm: FC = () => {
 
   useEffect(() => {
     try {
-      const stored = JSON.parse(localStorage.getItem(FORMS.CREATE_PROJECT) || '{}');
-      const isValid = validateForm(schema, stored);
-      if (isValid) {
+      const stored = JSON.parse(localStorage.getItem(FORMS.CREATE_PROJECT) || '');
+      const storedValidity = validateForm(schema, stored);
+      if (storedValidity.isValid) {
         setData(stored);
       }
     } catch (error) {

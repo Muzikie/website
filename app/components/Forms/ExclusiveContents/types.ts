@@ -14,7 +14,7 @@ export interface ExclusiveContentData {
 
 export interface PostExclusiveContent {
   projectId: string;
-  initialData: ExclusiveContentData;
+  contributionTiers: ContributionTier[];
 }
 
 

@@ -54,7 +54,7 @@ const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
   };
 
   const handleEdit = () => {
-    push(`${Routes.Projects}/${projectId}/post-exclusive-content`);
+    push(`${Routes.Projects}/${projectId}/add-contribution-tier`);
   };
 
   useEffect(() => {

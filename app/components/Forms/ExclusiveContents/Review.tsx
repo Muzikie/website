@@ -13,6 +13,7 @@ import {Button} from '@/app/components/Elements';
 import Feedback from '@/app/components/Feedback';
 import type {PostExclusiveContentsReviewProps} from './types';
 import {Routes} from '@/app/config/routes';
+import {FORMS} from '@/app/config/constants';
 import {postExclusiveContent} from '@/app/actions/postExclusiveContent';
 
 const PostExclusiveContentsReview: FC<PostExclusiveContentsReviewProps> = ({
@@ -61,8 +62,7 @@ const PostExclusiveContentsReview: FC<PostExclusiveContentsReviewProps> = ({
 
   useEffect(() => {
     try {
-      const storedData = localStorage.getItem('exclusiveContent') || '';
-      console.log('storedData', storedData);
+      const storedData = localStorage.getItem(FORMS.POST_EXCLUSIVE_CONTENT) || '';
       const parsedData = JSON.parse(storedData) as ExclusiveContentAttrs;
       setData(parsedData);
     } catch (error) {

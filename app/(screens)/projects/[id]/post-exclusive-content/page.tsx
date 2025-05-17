@@ -11,15 +11,13 @@ const PostContentScreen: FC<{params: Params<{id: string}>}> = async ({params}) =
   const awaitedParams = await params;
   const projectId = awaitedParams.id;
   const project = await getProjectDetails(projectId);
-  const initialData = {
-    title: '',
-    description: '',
-    accessible_tiers: project.project.contribution_tiers,
-  };
 
   return (
     <SafeArea>
-      <PostContentsForm projectId={projectId} initialData={initialData} />
+      <PostContentsForm
+        projectId={projectId}
+        contributionTiers={project.project.contribution_tiers}
+      />
     </SafeArea>
   );
 };

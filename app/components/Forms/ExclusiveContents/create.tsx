@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React, {FC, useState} from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 
 import {ExclusiveContentAttrs} from '@/app/components/Feed/types';
@@ -13,10 +13,8 @@ import {Button, Input, CheckBox} from '@/app/components/Elements';
 import type {ContributionTier} from '@/app/components/Projects/types';
 import {Routes} from '@/app/config/routes';
 import {schema} from './schema';
-import type {
-  AccessibleTiersSelectProps,
-  PostExclusiveContent,
-} from './types';
+import type {AccessibleTiersSelectProps, PostExclusiveContent} from './types';
+import {FORMS} from '@/app/config/constants';
 
 const AccessibleTiersSelect: FC<AccessibleTiersSelectProps> = ({
   tiers,
@@ -37,21 +35,22 @@ const AccessibleTiersSelect: FC<AccessibleTiersSelectProps> = ({
 );
 
 const PostExclusiveContentsForm: FC<PostExclusiveContent> = ({
-  initialData, projectId
+  contributionTiers,
+  projectId,
 }) => {
   const {push} = useRouter();
   const [data, setData] = useState<ExclusiveContentAttrs>({
     title: '',
     description: '',
-    accessible_tiers: initialData.accessible_tiers,
+    accessible_tiers: contributionTiers,
     public_access: false,
     media: null,
     project: projectId,
   });
 
   const onSubmit = async () => {
-    localStorage.setItem('exclusiveContent', JSON.stringify(data));
-    push(`${Routes.Projects}/${projectId}/post-exclusive-content/review`)
+    localStorage.setItem(FORMS.POST_EXCLUSIVE_CONTENT, JSON.stringify(data));
+    push(`${Routes.Projects}/${projectId}/post-exclusive-content/review`);
   };
 
   const onChange = (fieldName: string) => (value: string) => {
@@ -64,18 +63,30 @@ const PostExclusiveContentsForm: FC<PostExclusiveContent> = ({
   const onSelect = (item: ContributionTier) => {
     setData({
       ...data,
-      accessible_tiers: data.accessible_tiers.map((val: ContributionTier) => (
-        {
-          ...val,
-          selected: item.id === val.id && !item.selected
-        }
-      ))
+      accessible_tiers: data.accessible_tiers.map((val: ContributionTier) => ({
+        ...val,
+        selected: item.id === val.id && !item.selected,
+      })),
     });
   };
 
   const handleCancel = () => {
     push(`${Routes.Projects}/${projectId}`);
   };
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(
+        localStorage.getItem(FORMS.POST_EXCLUSIVE_CONTENT) || '',
+      );
+      const storedValidity = validateForm(schema, stored);
+      if (storedValidity.isValid) {
+        setData(stored);
+      }
+    } catch (error) {
+      console.log('NO_VALID_STATE', error);
+    }
+  }, []);
 
   const validity = validateForm(schema, data);
 
@@ -97,25 +108,27 @@ const PostExclusiveContentsForm: FC<PostExclusiveContent> = ({
       />
       <AccessibleTiersSelect
         tiers={data.accessible_tiers}
-        selection={data.accessible_tiers.filter(item => item.selected).map((item) => item.id)}
+        selection={data.accessible_tiers
+          .filter(item => item.selected)
+          .map(item => item.id)}
         onSelect={onSelect}
       />
-    
-    <ValidationFeedback {...validity} />
-    <View className="w-full flex flex-row justify-center gap-4 pt-4">
-      <Button
-        title="Cancel"
-        theme={ButtonThemes.secondary}
-        onPress={handleCancel}
-      />
-      <Button
-        title="Continue"
-        theme={ButtonThemes.primary}
-        onPress={onSubmit}
-        disabled={!validity.isValid}
-      />
-    </View>
-  </ScrollView>
+
+      <ValidationFeedback {...validity} />
+      <View className="w-full flex flex-row justify-center gap-4 pt-4">
+        <Button
+          title="Cancel"
+          theme={ButtonThemes.secondary}
+          onPress={handleCancel}
+        />
+        <Button
+          title="Continue"
+          theme={ButtonThemes.primary}
+          onPress={onSubmit}
+          disabled={!validity.isValid}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
