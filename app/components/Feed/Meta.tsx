@@ -19,7 +19,9 @@ const Meta: FC<MetaProps> = ({reactionCount, backers, type, status}) => {
         <View className="flex flex row nowrap items-center">
           <Icon name="thumbsUp" size={18} color="#6D6C6C" />
           {reactionCount && reactionCount > 0 ? (
-            <Span className="text-neutralSteady font-light">{reactionCount}</Span>
+            <Span className="text-neutralSteady font-light">
+              {reactionCount}
+            </Span>
           ) : null}
         </View>
 
@@ -30,12 +32,14 @@ const Meta: FC<MetaProps> = ({reactionCount, backers, type, status}) => {
           </View>
         ) : null}
       </View>
-      <View
-        className={`${statusTag === 'Successful' ? 'text-assureStrong' : ''} ${
-          statusTag === 'Successful' ? 'text-warnStrong' : ''
-        } text-neutralPure rounded-xl`}>
-        <Span>{statusTag}</Span>
-      </View>
+      {type === FeedType.Project ? (
+        <View
+          className={`${statusTag === 'Successful' ? 'text-assureStrong' : ''} ${
+            statusTag === 'Successful' ? 'text-warnStrong' : ''
+          } text-neutralPure rounded-xl`}>
+          <Span>{statusTag}</Span>
+        </View>
+      ) : null}
     </View>
   );
 };

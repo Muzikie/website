@@ -123,9 +123,7 @@ export const SuccessfulProjectOwner: FC<SuccessfulProjectOwnerProps> = ({
   projectId, onChainId,
 }) => {
   const onWithdraw = async () => {
-    console.log('Withdraw', projectId);
-    const res = await withdraw(projectId, onChainId);
-    console.log('res', res);
+    await withdraw(projectId, onChainId);
   };
 
   return (

@@ -5,7 +5,7 @@ import React, {FC} from 'react';
 import {H3, H4, Span, TouchableOpacity, View} from '@/app/components/Polyfills';
 import {CheckBox} from '@/app/components/Elements';
 import {ContributeOptionProps} from './types';
-import {fromBaseToken} from '@/app/utils/formatters';
+import {formatAmount} from '@/app/utils/formatters';
 
 const Option: FC<ContributeOptionProps> = ({data, selected, onSelected}) => {
   const onPress = () => onSelected(data.id);
@@ -25,7 +25,7 @@ const Option: FC<ContributeOptionProps> = ({data, selected, onSelected}) => {
             <H3>
               {data.name}
             </H3>
-            <H4>{fromBaseToken(data.amount, 3)}</H4>
+            <H4>{formatAmount(data.amount)}</H4>
           </View>
           <Span className="w-full text-left">
             {data.rewards}

@@ -15,8 +15,8 @@ export interface DeadlineProps {
 
 export interface FundingProgressProps {
   currentFunding: string;
-  softGoal: string;
-  hardGoal: string;
+  softGoal: number;
+  hardGoal: number;
 }
 
 export interface ActionsProps {

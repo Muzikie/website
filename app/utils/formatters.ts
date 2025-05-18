@@ -45,6 +45,9 @@ export const fromBaseToken = (
   return token ? `${formatted} ${token}` : formatted;
 };
 
+export const formatAmount = (num: number) =>
+  `${num} ${SupportedTokens.LSK}`
+
 export const toBaseToken = (num: string | number): string => {
   const token = process.env.NEXT_PUBLIC_TOKEN_SYMBOL as SupportedTokens;
   return BigNumber(num).multipliedBy(tokenConversionFactors[token]).toFixed(0);

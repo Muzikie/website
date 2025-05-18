@@ -6,7 +6,10 @@ import {SafeArea} from '@/app/components/Elements';
 import PublishProject from '@/app/components/PublishProject';
 import {getProjectDetails} from '@/app/actions/getProjectDetails';
 import {getProjectContributionTier} from '@/app/actions/getProjectContributionTiers';
-import {fromBaseToken} from '@/app/utils/formatters';
+import {formatAmount} from '@/app/utils/formatters';
+
+interface Item {name: string; amount: number}
+type Acc = Record<string, {name: string; amount: string}>
 
 const ProjectPublishScreen: FC<{params: Params<{id: string}>}> = async ({params}) => {
   const awaitedParams = await params;
@@ -14,10 +17,10 @@ const ProjectPublishScreen: FC<{params: Params<{id: string}>}> = async ({params}
   const {artist, project} = await getProjectDetails(projectId);
   const contributionTiers = await getProjectContributionTier(projectId);
 
-  const tiers = contributionTiers.reduce((acc, item, index: number) => {
+  const tiers = contributionTiers.reduce((acc: Acc, item: Item, index: number) => {
     acc[`contribution_tier_#${index + 1}`] = {
       name: item.name,
-      amount: fromBaseToken(item.amount, 2),
+      amount: formatAmount(item.amount),
     };
     return acc;
   }, {});

@@ -7,7 +7,7 @@ import {useRouter} from 'next/navigation';
 import { signIn, signUp } from '@/app/actions/auth';
 import {Small, H3, Span, View, TextInput} from '../Polyfills';
 import {Button, SafeArea} from '../Elements';
-import appLogo from '../../../public/images/applogo.png';
+import appLogo from '../../../public/images/logo.svg';
 import {Routes} from '@/app/config/routes';
 
 const ErrorMessage: FC<{errorMessage: string}> = ({errorMessage}) => {
@@ -60,7 +60,7 @@ const Login = () => {
     <SafeArea className="flex flex-col justify-center items-center">
       <View className="px-6 w-[510px]">
         <View className="p-6 flex flex-row justify-center items-center">
-          <NextImage alt="App Logo" src={appLogo} />
+          <NextImage alt="App Logo" src={appLogo} className="w-[150px]" />
         </View>
 
         <H3 className="text-primaryStrong py-6">Login</H3>

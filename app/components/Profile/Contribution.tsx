@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 
 import {Routes} from '@/app/config/routes';
 import {getSmallestSize} from '@/app/utils/image';
-import {fromBaseToken} from '@/app/utils/formatters';
+import {formatAmount} from '@/app/utils/formatters';
 import {View, H4, Span, Image, Link} from '@/app/components/Polyfills';
 import {ImageFormats} from '@/app/config/types';
 import type {ContributionProps} from './types';
@@ -32,7 +32,7 @@ const Contribution: FC<ContributionProps> = ({data}) => {
             {data.contribution_tier.name}
           </H4>
           <Span className="text-primaryStrong font-light">
-            {fromBaseToken(data.amount, 2)}
+            {formatAmount(data.amount)}
           </Span>
         </View>
       </View>

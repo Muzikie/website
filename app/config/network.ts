@@ -30,5 +30,5 @@ export const liskSepoliaNet = {
 }
 
 
-export const NETWORK = process.env.NETWORK === 'sepolia' ? liskSepoliaNet : liskMainNet;
-export const CHAIN_ID = process.env.NETWORK === 'sepolia' ? LISK_SEPOLIA_CHAIN_ID : LISK_MAIN_CHAIN_ID;
+export const NETWORK = process.env.NEXT_PUBLIC_NETWORK === 'sepolia' ? liskSepoliaNet : liskMainNet;
+export const CHAIN_ID = process.env.NEXT_PUBLIC_NETWORK === 'sepolia' ? LISK_SEPOLIA_CHAIN_ID : LISK_MAIN_CHAIN_ID;
