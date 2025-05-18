@@ -104,9 +104,9 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    const ethereum = window.ethereum as EthereumProvider;
-    const provider = new ethers.BrowserProvider(ethereum);
+    const ethereum: EthereumProvider = window.ethereum;
     if (window.ethereum) {
+      const provider = new ethers.BrowserProvider(ethereum);
       check(provider);
       ethereum.on('accountsChanged', handleAccountChange);
       ethereum.on('disconnect', handleDisconnection);
