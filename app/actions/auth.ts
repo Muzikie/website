@@ -34,12 +34,10 @@ export const signIn = async (email: string, password: string) => {
     }
 
     const json = await response.json();
-    console.log(`json -> ${JSON.stringify(json)}`);
     if (json.jwt) {
       const awaitedCookies = await cookies();
       awaitedCookies.set(AUTH_COOKIE, json.jwt, LIVE_COOKIE);
       const savedCookie = awaitedCookies.get(AUTH_COOKIE);
-      console.log(`savedCookie -> ${JSON.stringify(savedCookie)}`);
       if (!savedCookie || savedCookie.value !== json.jwt) {
         throw new Error('Failed to persist auth cookie.');
       }

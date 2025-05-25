@@ -8,7 +8,6 @@ async function proxyRequest(method: string, path: string, request: NextRequest) 
   // Get the JWT from cookies
   const awaitedCookies = await cookies();
   const jwt = awaitedCookies.get(AUTH_COOKIE)?.value;
-  console.log('proxyRequest jwt', jwt)
 
   // Set up headers
   const headers: HeadersInit = {
@@ -28,11 +27,8 @@ async function proxyRequest(method: string, path: string, request: NextRequest) 
   }
 
   // Forward the request to Strapi API
-  console.log('proxyRequest body', options)
   const response = await fetch(`${apiBaseUrl}/${path}`, options);
-  console.log('proxyRequest response', response)
   const responseData = await response.json();
-  console.log('proxyRequest responseData', responseData)
 
   return NextResponse.json(responseData, { status: response.status });
 };
