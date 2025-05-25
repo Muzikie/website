@@ -18,13 +18,6 @@ export const signOut = async () => {
 export const signIn = async (email: string, password: string) => {
   try {
     const url = `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_BASE_URL}/proxy/auth/local`;
-    console.log(`url -> ${url}`);
-    console.log(`email -> ${email}`);
-    console.log(`password -> ${password}`);
-    console.log(`BODY -> ${JSON.stringify({
-        identifier: email,
-        password,
-      })}`);
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -35,8 +28,6 @@ export const signIn = async (email: string, password: string) => {
         password,
       }),
     });
-
-    console.log(`response -> ${JSON.stringify(response)}`);
 
     if (!response.ok) {
       throw new Error(`API call failed: ${response.status}`);
