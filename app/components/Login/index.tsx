@@ -32,26 +32,26 @@ const ErrorMessage: FC<{errorMessage: string}> = ({errorMessage}) => {
 
 const Login = () => {
   const [error, setError] = useState('');
-  const [email, setEmail] = useState('ali@muzikie.com');
-  const [password, setPassword] = useState('Sina1373ksh');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
 
   const onLogin = async () => {
     const response = await signIn(email, password);
     if (!response.success) {
       setError(response.error)
+    } else {
+      router.replace(Routes.Home);
     }
-
-    router.replace(Routes.Home);
   };
 
   const onRegister = async () => {
     const response = await signUp(email, password);
     if (!response.success) {
       setError(response.error)
+    } else {
+      router.replace(Routes.Home);
     }
-
-    router.replace(Routes.Home);
   };
 
   const isButtonDisabled = !email || !password;
