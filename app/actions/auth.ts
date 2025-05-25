@@ -34,6 +34,11 @@ export const signIn = async (email: string, password: string) => {
     if (json.jwt) {
       const awaitedCookies = await cookies();
       awaitedCookies.set(AUTH_COOKIE, json.jwt, LIVE_COOKIE);
+      const savedCookie = awaitedCookies.get(AUTH_COOKIE);
+      if (!savedCookie || savedCookie.value !== json.jwt) {
+        throw new Error('Failed to persist auth cookie.');
+      }
+
       return {success: true};
     }
     return {success: true, error: 'invalid credentials'};
