@@ -19,6 +19,8 @@ export const signIn = async (email: string, password: string) => {
   try {
     const url = `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_BASE_URL}/proxy/auth/local`;
     console.log(`url -> ${url}`);
+    console.log(`email -> ${email}`);
+    console.log(`password -> ${password}`);
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify({
