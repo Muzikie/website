@@ -21,8 +21,15 @@ export const signIn = async (email: string, password: string) => {
     console.log(`url -> ${url}`);
     console.log(`email -> ${email}`);
     console.log(`password -> ${password}`);
+    console.log(`BODY -> ${JSON.stringify({
+        identifier: email,
+        password,
+      })}`);
     const response = await fetch(url, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         identifier: email,
         password,
