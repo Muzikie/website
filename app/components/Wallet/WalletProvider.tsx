@@ -34,7 +34,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     return ethers.formatEther(balance);
   };
 
-   const switchToLisk = async (ethereum: EthereumProvider) => {
+  const switchToLisk = async (ethereum: EthereumProvider) => {
     try {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
