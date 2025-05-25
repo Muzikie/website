@@ -18,6 +18,7 @@ export const signOut = async () => {
 export const signIn = async (email: string, password: string) => {
   try {
     const url = `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_BASE_URL}/proxy/auth/local`;
+    console.log(`url -> ${url}`);
     const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify({
@@ -26,15 +27,19 @@ export const signIn = async (email: string, password: string) => {
       }),
     });
 
+    console.log(`response -> ${JSON.stringify(response)}`);
+
     if (!response.ok) {
       throw new Error(`API call failed: ${response.status}`);
     }
 
     const json = await response.json();
+    console.log(`json -> ${JSON.stringify(json)}`);
     if (json.jwt) {
       const awaitedCookies = await cookies();
       awaitedCookies.set(AUTH_COOKIE, json.jwt, LIVE_COOKIE);
       const savedCookie = awaitedCookies.get(AUTH_COOKIE);
+      console.log(`savedCookie -> ${JSON.stringify(savedCookie)}`);
       if (!savedCookie || savedCookie.value !== json.jwt) {
         throw new Error('Failed to persist auth cookie.');
       }
