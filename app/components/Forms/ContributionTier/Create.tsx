@@ -1,6 +1,6 @@
 'use client';
 
-import React, {FC, useState} from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 
 import SectionHeader from '@/app/components/SectionHeader';
@@ -13,6 +13,7 @@ import {Button, Input} from '@/app/components/Elements';
 import {Routes} from '@/app/config/routes';
 import type {ContributionTier} from './types';
 import {schema} from './schema';
+import { FORMS } from '@/app/config/constants';
 
 const emptyFormValues = {
   name: '',
@@ -28,7 +29,7 @@ const CreateContributionTierForm: FC<ContributionTier> = ({projectId}) => {
  const validity = validateForm(schema, data);
 
  const handleSubmit = () => {
-    localStorage.setItem('formData', JSON.stringify(data));
+    localStorage.setItem(FORMS.ADD_CONTRIBUTION_TIER, JSON.stringify(data));
     push(`${Routes.Projects}/${projectId}/add-contribution-tier/review`)
   };
 
@@ -42,6 +43,18 @@ const CreateContributionTierForm: FC<ContributionTier> = ({projectId}) => {
       [fieldName]: value,
     });
   };
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem(FORMS.ADD_CONTRIBUTION_TIER) || '');
+      const storedValidity = validateForm(schema, stored);
+      if (storedValidity.isValid) {
+        setData(stored);
+      }
+    } catch (error) {
+      console.log('NO_VALID_STATE', error);
+    }
+  }, []);
 
   return (
     <ScrollView className="w-full h-full p-4">

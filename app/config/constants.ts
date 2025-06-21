@@ -57,4 +57,7 @@ export const tokenConversionFactors: Record<SupportedTokens, BigNumber> = {
 export const FORMS = {
   CREATE_PROJECT: '0x101',
   POST_EXCLUSIVE_CONTENT: '0x102',
+  ADD_CONTRIBUTION_TIER: '0x103',
+  CONTRIBUTE: '0x104',
+  PUBLISH: '0x104',
 };

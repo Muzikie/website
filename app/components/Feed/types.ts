@@ -104,7 +104,6 @@ export interface ContributionTierAttrs {
 
 export interface ContributionTierForm {
   name: string;
-  description: string;
   rewards: string;
   amount: number;
   project: string;  // documentId, retrieved from URL, used by forms

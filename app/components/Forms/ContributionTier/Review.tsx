@@ -2,6 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
+import {ethers, parseUnits} from 'ethers';
 
 import {View, ScrollView} from '@/app/components/Polyfills';
 import {toBaseToken} from '@/app/utils/formatters';
@@ -12,18 +13,22 @@ import Feedback from '@/app/components/Feedback';
 import {FetchStatus, SubmitTitle} from '@/app/config/types';
 import type {CreateContributionTierReviewProps} from './types';
 import {addContributionTier} from '@/app/actions/addContributionTier';
+import {useWallet} from '@/app/components/Wallet/useWallet';
 import type {ContributionTierForm} from '@/app/components/Feed/types';
+import {getProjectDetails} from '@/app/actions/getProjectDetails';
 import {Routes} from '@/app/config/routes';
+import MELODYNE_ABI from '@/app/config/melodyneAbi.json';
+import { FORMS } from '@/app/config/constants';
 
 const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
   const {push} = useRouter();
+  const {sendTransaction} = useWallet();
   const [feedback, setFeedback] = useState({
     status: FetchStatus.Idle,
     message: '',
   });
   const [data, setData] = useState<ContributionTierForm>({
     name: '',
-    description: '',
     rewards: '',
     amount: 0,
     project: projectId,
@@ -31,14 +36,37 @@ const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
 
   const handleSubmit = async () => {
     try {
+      const {project} = await getProjectDetails(projectId as string);
+      const amount = parseUnits(data.amount.toString(), 6);
+      const receipt = await sendTransaction('addTier', [project.on_chain_id, amount]);
+
+      const iface = new ethers.Interface(MELODYNE_ABI);
+      let tierId: string | null = null;
+
+      for (const log of receipt.logs) {
+        try {
+          const parsed = iface.parseLog(log);
+          if (parsed?.name === 'TierAdded') {
+            tierId = parsed.args[0].toString();
+            break;
+          }
+        } catch {
+          continue;
+        }
+      }
+
       const res = await addContributionTier({
         ...data,
         project: projectId,
         amount: Number(toBaseToken(data?.amount ?? '')),
+        on_chain_id: tierId,
       });
+
       if (!res.success) {
         throw new Error(res.error);
       }
+
+      localStorage.removeItem(FORMS.ADD_CONTRIBUTION_TIER);
 
       setFeedback({
         status: FetchStatus.Success,
@@ -58,15 +86,15 @@ const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
   };
 
   useEffect(() => {
-    try {
-      const storedData = localStorage.getItem('formData') || '';
-      console.log('storedData', storedData);
-      const parsedData = JSON.parse(storedData) as ContributionTierForm;
-      setData(parsedData);
-    } catch (error) {
-      console.log(`Error reading form data, ${error}`);
-    }
-  }, []);
+     try {
+       const storedData =
+         localStorage.getItem(FORMS.ADD_CONTRIBUTION_TIER) || '';
+       const parsedData = JSON.parse(storedData) as ContributionTierForm;
+       setData(parsedData);
+     } catch (error) {
+       console.log('NO_VALID_STATE', error);
+     }
+   }, []);
 
   const formattedValue = {
     ...data,
