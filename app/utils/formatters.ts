@@ -66,3 +66,18 @@ export const CapitalizeKey = (key: string = ''): string =>
       return index === 0 ? capitalizedWord : word.toLowerCase(); // Handle first word separately
     })
     .join(' ');
+
+export const showBalance = (val: string, token: SupportedTokens) => {
+  const value = BigNumber(val);
+
+  let decimalPlaces = 5;
+  if (value.gte(1000)) {
+    decimalPlaces = 0;
+  } else if (value.gte(100)) {
+    decimalPlaces = 2;
+  } else if (value.gte(1)) {
+    decimalPlaces = 3;
+  }
+
+  return `${value.toFixed(decimalPlaces)} ${token}`;
+}

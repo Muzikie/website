@@ -51,6 +51,7 @@ export const AUTH_PROVIDERS = [
 export const tokenConversionFactors: Record<SupportedTokens, BigNumber> = {
   [SupportedTokens.LSK]: BigNumber(1e8),
   [SupportedTokens.ETH]: BigNumber(1e8),
+  [SupportedTokens.USDC]: BigNumber(1e6),
 };
 
 export const FORMS = {

@@ -33,9 +33,10 @@ export interface ProjectAttrs {
   description: string;
   project_type: ProjectType;
   planned_release_date: string;
-  soft_goal: number;
+  soft_goal: string;
   deadline: string;
-  hard_goal: number;
+  hard_goal: string;
+  on_chain_id?: string;
   users_permissions_user?: AccountAttrs;
 }
 

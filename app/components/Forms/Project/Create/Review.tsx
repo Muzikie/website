@@ -2,6 +2,7 @@
 
 import React, {FC, useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
+import {ethers, parseUnits} from 'ethers';
 
 import {View, ScrollView} from '@/app/components/Polyfills';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
@@ -14,9 +15,12 @@ import {Routes} from '@/app/config/routes';
 import {FORMS} from '@/app/config/constants';
 import {createProject} from '@/app/actions/createProject';
 import {ProjectType} from '@/app/components/Projects/types';
+import {useWallet} from '@/app/components/Wallet/useWallet';
+import MELODYNE_ABI from '@/app/config/melodyneAbi.json';
 
 const CreateProjectReview: FC = () => {
   const {push} = useRouter();
+  const {sendTransaction} = useWallet();
   const [feedback, setFeedback] = useState({
     status: FetchStatus.Idle,
     message: '',
@@ -27,16 +31,45 @@ const CreateProjectReview: FC = () => {
     description: '',
     project_type: ProjectType.Single,
     planned_release_date: '',
-    soft_goal: 0,
+    soft_goal: '0',
     deadline: '',
-    hard_goal: 0,
+    hard_goal: '0',
+    on_chain_id: '',
   });
   const handleSubmit = async () => {
     try {
-      const res = await createProject(data);
+      const deadline = Math.floor(new Date(data.planned_release_date as string).getTime() / 1000);
+      const goal = parseUnits(data.soft_goal.toString(), 6);
+      const hardCap = parseUnits(data.hard_goal.toString(), 6);
+      const receipt = await sendTransaction('createCampaign', [goal, hardCap, deadline]);
+
+      const iface = new ethers.Interface(MELODYNE_ABI);
+      let campaignId: string | null = null;
+
+      for (const log of receipt.logs) {
+        try {
+          const parsed = iface.parseLog(log);
+          if (parsed?.name === 'CampaignCreated') {
+            campaignId = parsed.args[0].toString();
+            break;
+          }
+        } catch {
+          continue;
+        }
+      }
+
+      if (!campaignId) throw new Error('Could not find CampaignCreated event');
+
+      const res = await createProject({
+        ...data,
+        on_chain_id: campaignId,
+      });
+      console.log('res : ', res);
       if (!res.success) {
         throw new Error(res.error);
       }
+
+      localStorage.removeItem(FORMS.CREATE_PROJECT)
 
       setFeedback({
         status: FetchStatus.Success,

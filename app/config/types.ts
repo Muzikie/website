@@ -139,6 +139,7 @@ export type SamSite = true | false | 'lax' | 'strict' | 'none' | undefined;
 export enum SupportedTokens {
   LSK = 'LSK',
   ETH = 'ETH',
+  USDC = 'USDC',
 }
 
 export enum SupportedBlockchains {

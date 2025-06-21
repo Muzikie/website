@@ -19,6 +19,7 @@ export interface ContributeProps {
 
 export interface TierData {
   index: number;
+  amount: number;
   id: string;
   documentId: string;
 }

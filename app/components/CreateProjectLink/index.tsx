@@ -7,19 +7,19 @@ import {Icon} from '@/app/components/Elements';
 import {useWallet} from '../Wallet/useWallet';
 
 const CreateProjectLink: FC = () => {
-  const [balance, setBalance] = useState('0');
+  const [balances, setBalances] = useState(['0', '0']);
   const {getBalance} = useWallet();
 
   const fetch = async () => {
-    const balance = await getBalance();
-    setBalance(balance);
+    const value = await getBalance();
+    setBalances(value);
   };
 
   useEffect(() => {
     fetch();
   }, []);
 
-  if (balance === '0') {
+  if (balances[1] === '0') {
     return (
       <Link
         to={{screen: Routes.CreateProjects}}

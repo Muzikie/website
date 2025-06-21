@@ -3,13 +3,15 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 
 import {Timeout} from '@/app/config/types';
-import {View, H1, H2, Span, TouchableHighlight} from '@/app/components/Polyfills';
+import {View, H1, H2, H3, Span, TouchableHighlight} from '@/app/components/Polyfills';
 import {Icon, Input} from '@/app/components/Elements';
 
 import ConnectWalletButton from '@/app/components/Wallet/ConnectWalletButton';
 import {updateProfile} from '@/app/actions/updateProfile';
 import {WalletProps} from './types';
-import { useWallet } from '../Wallet/useWallet';
+import {useWallet} from '../Wallet/useWallet';
+import {showBalance} from '@/app/utils/formatters';
+import {SupportedTokens} from '@/app/config/types';
 
 const Carrot = () => {
   const presets = {};
@@ -24,7 +26,7 @@ const Carrot = () => {
 const Wallet: FC<WalletProps> = ({data}) => {
   const {getBalance, address} = useWallet();
   const [isEditing, setIsEditing] = useState(false);
-  const [balance, setBalance] = useState('');
+  const [balances, setBalances] = useState<string[]>(['0', '0']);
   const [formData, setFormData] = useState({
     first_name: data?.first_name ?? '',
     last_name: data?.last_name ?? '',
@@ -34,7 +36,7 @@ const Wallet: FC<WalletProps> = ({data}) => {
 
   const updateBalance = async () => {
     const value = await getBalance();
-    setBalance(value);
+    setBalances(value);
   };
 
   const save = async () => {
@@ -113,8 +115,11 @@ const Wallet: FC<WalletProps> = ({data}) => {
         <View className="w-full text-center mb-6">
           <Span className="text-neutralSteady font-light">Balances</Span>
           <H1 className="text-primaryStrong">
-            {balance}
+            {showBalance(balances[1], SupportedTokens.USDC)}
           </H1>
+          <H3 className="text-primaryStrong">
+            {showBalance(balances[0], SupportedTokens.ETH)}
+          </H3>
         </View>
         <View className="w-full text-center">
           <Span className="text-neutralSteady font-light">{`${

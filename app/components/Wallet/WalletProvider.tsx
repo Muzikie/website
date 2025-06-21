@@ -5,14 +5,23 @@ import {ethers} from 'ethers';
 import {createWallet} from '@/app/actions/createWallet';
 import {SupportedBlockchains, SupportedWallets} from '@/app/config/types';
 import {NETWORK, CHAIN_ID} from '@/app/config/network';
+import USDC_ABI from '@/app/config/usdcAbi.json';
+import MELODYNE_ABI from '@/app/config/melodyneAbi.json';
 import {EthereumProvider} from './types';
+
+const USDC_ADDRESS = process.env.NEXT_PUBLIC_USDC_ADDRESS || '';
+if (!USDC_ADDRESS) {
+  throw new Error('Missing env variable NEXT_PUBLIC_USDC_ADDRESS');
+}
+
 
 type WalletContextType = {
   address: string | null;
   provider: ethers.BrowserProvider | null;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  getBalance: () => Promise<string>;
+  getBalance: () => Promise<string[]>;
+  sendTransaction: (method: string, args: unknown[]) => Promise<ethers.TransactionReceipt>;
 };
 
 export const WalletContext = createContext<WalletContextType>({
@@ -20,18 +29,28 @@ export const WalletContext = createContext<WalletContextType>({
   provider: null,
   connect: async () => {},
   disconnect: async () => {},
-  getBalance: async () => '',
+  getBalance: async () => ['0', '0'],
+  sendTransaction: async () => {},
 });
 
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   const [address, setAddress] = useState<string | null>(null);
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
 
-  const getBalance = async (): Promise<string> => {
-    if (!provider || !address) return '0';
-    const balance = await provider.getBalance(address);
-    console.log('Provider balance', balance);
-    return ethers.formatEther(balance);
+  const getBalance = async (): Promise<string[]> => {
+    if (!provider || !address) return ['0', '0'];
+
+    const usdc = new ethers.Contract(USDC_ADDRESS, USDC_ABI, provider);
+    const [rawBalance, decimals] = await Promise.all([
+      usdc.balanceOf(address),
+      usdc.decimals(),
+    ]);
+
+    const rawEth = await provider.getBalance(address);
+
+    const usdcBalance = ethers.formatUnits(rawBalance, decimals);
+    const ethBalance =  ethers.formatEther(rawEth);
+    return [ethBalance, usdcBalance]
   };
 
   const switchToLisk = async (ethereum: EthereumProvider) => {
@@ -103,6 +122,27 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     disconnect();
   };
 
+  const sendTransaction = async (
+    method: string,
+    args: unknown[]
+  ): Promise<ethers.TransactionReceipt> => {
+    if (!provider || !address) throw new Error('Wallet not connected');
+    const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
+    if (!CONTRACT_ADDRESS) {
+      throw new Error('Missing env variable CONTRACT_ADDRESS');
+    }
+
+    const signer = await provider.getSigner(address);
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, MELODYNE_ABI, signer);
+    console.log(`method : ${method}`);
+    console.log('args : ', args);
+    const tx = await contract[method](...args);
+    const receipt = await tx.wait();
+    console.log('receipt : ', receipt);
+
+    return receipt;
+  };
+
   useEffect(() => {
     const ethereum: EthereumProvider = window.ethereum;
     if (window.ethereum) {
@@ -119,7 +159,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <WalletContext.Provider value={{ address, provider, connect, disconnect, getBalance }}>
+    <WalletContext.Provider value={{ address, provider, connect, disconnect, getBalance, sendTransaction }}>
       {children}
     </WalletContext.Provider>
   );
