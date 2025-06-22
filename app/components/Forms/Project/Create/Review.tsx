@@ -37,6 +37,10 @@ const CreateProjectReview: FC = () => {
   });
   const handleSubmit = async () => {
     try {
+      setFeedback({
+        status: FetchStatus.Pending,
+        message: '',
+      });
       const deadline = Math.floor(new Date(data.planned_release_date as string).getTime() / 1000);
       const goal = parseUnits(data.soft_goal.toString(), 6);
       const hardCap = parseUnits(data.hard_goal.toString(), 6);

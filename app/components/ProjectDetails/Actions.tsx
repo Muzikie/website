@@ -20,7 +20,7 @@ const Actions: FC<ActionsProps> = async ({owner, project, refresh}) => {
   const projectId = project?.documentId;
   const status = project?.project_status;
   const isPastDeadline = new Date(project.deadline) < new Date();
-  const isOwner = Number(project.users_permissions_user.id) === account?.id;
+  const isOwner = Number(project.users_permissions_user?.id) === account?.id;
   const editable = isOwner && status === ProjectStatus.Draft && !isPastDeadline;
 
   const published =
