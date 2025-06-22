@@ -1,6 +1,6 @@
 'use client';
 
-import {ethers} from 'ethers';
+import {ethers, toUtf8String} from 'ethers';
 
 import React, {createContext, useEffect, useState} from 'react';
 import {createWallet} from '@/app/actions/createWallet';
@@ -8,7 +8,7 @@ import {SupportedBlockchains, SupportedWallets} from '@/app/config/types';
 import {NETWORK, CHAIN_ID} from '@/app/config/network';
 import USDC_ABI from '@/app/config/usdcAbi.json';
 import MELODYNE_ABI from '@/app/config/melodyneAbi.json';
-import {EthereumProvider} from './types';
+import {EthereumProvider, OnChainError, WalletContextType} from './types';
 
 const USDC_ADDRESS = process.env.NEXT_PUBLIC_USDC_ADDRESS || '';
 if (!USDC_ADDRESS) {
@@ -17,13 +17,13 @@ if (!USDC_ADDRESS) {
 
 const iface = new ethers.Interface(MELODYNE_ABI);
 
-function extractRevertReason(error: any): string | null {
+function extractRevertReason(error: OnChainError): string | null {
   if (error.reason) return error.reason;
 
   if (error.error?.data?.message) return error.error.data.message;
   if (typeof error.data === 'string') {
     try {
-      const reason = ethers.utils.toUtf8String('0x' + error.data.slice(138));
+      const reason = toUtf8String('0x' + error.data.slice(138));
       return reason;
     } catch {}
   }
@@ -33,22 +33,13 @@ function extractRevertReason(error: any): string | null {
 }
 
 
-type WalletContextType = {
-  address: string | null;
-  provider: ethers.BrowserProvider | null;
-  connect: () => Promise<void>;
-  disconnect: () => Promise<void>;
-  getBalance: () => Promise<string[]>;
-  sendTransaction: (method: string, args: unknown[], eventNameToParse?: string) => Promise<{receipt: ethers.TransactionReceipt; id?: string}>;
-};
-
 export const WalletContext = createContext<WalletContextType>({
   address: null,
   provider: null,
   connect: async () => {},
   disconnect: async () => {},
   getBalance: async () => ['0', '0'],
-  sendTransaction: async () => {},
+  sendTransaction: async () => {throw new Error('sendTransaction is not implemented yet.')},
 });
 
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
@@ -180,7 +171,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       return {receipt, id};
-    } catch (e: any) {
+    } catch (e: unknown) {
       const reason = extractRevertReason(e);
       console.error('Transaction failed:', reason || e.message);
       throw new Error(reason || 'Transaction failed');

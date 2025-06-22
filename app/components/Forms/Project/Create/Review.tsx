@@ -2,7 +2,7 @@
 
 import React, {FC, useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
-import {ethers, parseUnits} from 'ethers';
+import {parseUnits} from 'ethers';
 
 import {View, ScrollView} from '@/app/components/Polyfills';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
@@ -16,7 +16,6 @@ import {FORMS} from '@/app/config/constants';
 import {createProject} from '@/app/actions/createProject';
 import {ProjectType} from '@/app/components/Projects/types';
 import {useWallet} from '@/app/components/Wallet/useWallet';
-import MELODYNE_ABI from '@/app/config/melodyneAbi.json';
 
 const CreateProjectReview: FC = () => {
   const {push} = useRouter();

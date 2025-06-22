@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 
-import {Params} from '@/app/config/types';
-import {publishProject} from '@/app/actions/publishProject';
+import {Params, SupportedTokens} from '@/app/config/types';
 import {SafeArea} from '@/app/components/Elements';
 import PublishProject from '@/app/components/PublishProject';
 import {getProjectDetails} from '@/app/actions/getProjectDetails';
@@ -20,7 +19,7 @@ const ProjectPublishScreen: FC<{params: Params<{id: string}>}> = async ({params}
   const tiers = contributionTiers.reduce((acc: Acc, item: Item, index: number) => {
     acc[`contribution_tier_#${index + 1}`] = {
       name: item.name,
-      amount: formatAmount(item.amount),
+      amount: formatAmount(item.amount, SupportedTokens.USDC),
     };
     return acc;
   }, {});
@@ -37,7 +36,7 @@ const ProjectPublishScreen: FC<{params: Params<{id: string}>}> = async ({params}
       <PublishProject
         data={data}
         projectId={projectId}
-        onPublish={publishProject}
+        onchainId={project.on_chain_id}
       />
     </SafeArea>
   );

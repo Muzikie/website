@@ -10,8 +10,4 @@ export interface PublishProjectProps {
   };
   projectId: string;
   onchainId: string;
-  onPublish: (projectId: string) => Promise<{
-    success: boolean;
-    error: string;
-  }>
 }

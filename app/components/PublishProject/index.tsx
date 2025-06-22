@@ -1,7 +1,6 @@
 'use client'
 
 import React, {FC, useState} from 'react';
-import {ethers} from 'ethers';
 
 import {View, H2, Span, Link, ScrollView} from '@/app/components/Polyfills';
 import FormSummary from '@/app/components/FormElements/GenericSummary';
