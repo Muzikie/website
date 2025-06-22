@@ -22,6 +22,7 @@ export interface TierData {
   amount: number;
   id: string;
   documentId: string;
+  on_chain_id: string;
 }
 export interface ContributeOptionProps {
   data: ContributionTier;

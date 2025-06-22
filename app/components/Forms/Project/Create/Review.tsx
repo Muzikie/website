@@ -41,22 +41,7 @@ const CreateProjectReview: FC = () => {
       const deadline = Math.floor(new Date(data.planned_release_date as string).getTime() / 1000);
       const goal = parseUnits(data.soft_goal.toString(), 6);
       const hardCap = parseUnits(data.hard_goal.toString(), 6);
-      const receipt = await sendTransaction('createCampaign', [goal, hardCap, deadline]);
-
-      const iface = new ethers.Interface(MELODYNE_ABI);
-      let campaignId: string | null = null;
-
-      for (const log of receipt.logs) {
-        try {
-          const parsed = iface.parseLog(log);
-          if (parsed?.name === 'CampaignCreated') {
-            campaignId = parsed.args[0].toString();
-            break;
-          }
-        } catch {
-          continue;
-        }
-      }
+      const {id: campaignId} = await sendTransaction('createCampaign', [goal, hardCap, deadline], 'CampaignCreated');
 
       if (!campaignId) throw new Error('Could not find CampaignCreated event');
 
@@ -78,7 +63,7 @@ const CreateProjectReview: FC = () => {
     } catch (e) {
       setFeedback({
         status: FetchStatus.Error,
-        message: 'Error creating the project',
+        message: e.message,
       });
       console.error('Error creating the project:', e);
     }

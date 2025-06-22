@@ -9,10 +9,12 @@ import SectionHeader from '@/app/components/SectionHeader';
 import Feedback from '@/app/components/Feedback';
 import {contribute} from '@/app/actions/contribute';
 import {FetchStatus, SubmitTitle} from '@/app/config/types';
-import {ContributeProps} from './types';
+import {ContributeProps, TierData} from './types';
 import Option from './Option';
+import {useWallet} from '@/app/components/Wallet/useWallet';
 
 const Contribute: FC<ContributeProps> = ({project, artist, options}) => {
+  const {sendTransaction} = useWallet();
   const [selected, setSelected] = useState<number>(0);
   const [feedback, setFeedback] = useState({
     status: FetchStatus.Idle,
@@ -24,17 +26,23 @@ const Contribute: FC<ContributeProps> = ({project, artist, options}) => {
       status: FetchStatus.Pending,
       message: '',
     });
-    const optionData = options.find(item => item.id === selected);
-    const tierData = {
-      index: selected,
-      id: optionData?.id,
-      documentId: optionData?.documentId,
+    try {
+      const optionData = options.find(item => item.id === selected) as TierData;
+  
+      const {id: campaignId} = await sendTransaction('contribute', [project.on_chain_id, optionData.on_chain_id]);
+      if (!campaignId) throw new Error('Could not find CampaignCreated event');
+      
+      const result = await contribute(optionData?.documentId as string);
+      setFeedback({
+        status: result.success ? FetchStatus.Success : FetchStatus.Error,
+        message: result.error,
+      });
+    } catch (e) {
+      setFeedback({
+        status: FetchStatus.Error,
+        message: e.message,
+      });
     }
-    const result = await contribute(project.on_chain_id, tierData);
-    setFeedback({
-      status: result.success ? FetchStatus.Success : FetchStatus.Error,
-      message: result.error,
-    });
   };
 
   // @todo update account balance (fetch from Klayr blockchain)

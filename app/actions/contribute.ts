@@ -1,30 +1,19 @@
 'use server'
 
-import { parseUnits } from 'ethers';
-
 import {ENDPOINTS} from '@/app/config/endpoints';
 import {apiClient} from '@/app/utils/apiClient';
-import {getContract, getUsdcContract} from '@/app/utils/blockchain';
-import {TierData} from '@/app/components/Forms/Project/Contribute/types';
 
-export const contribute = async (campaignId:number, tierData: TierData) => {
+export const contribute = async (documentId: string) => {
   const result = {
     success: false,
     error: '',
   };
 
   try {
-    const usdcContract = getUsdcContract();
-    const campaignContract = getContract();
-    const amount = parseUnits(tierData.amount.toString(), 6);
-    usdcContract.approve(campaignContract.getAddress(), amount);
-    const tx = await campaignContract.contribute(campaignId, tierData.index);
-    await tx.wait();
-
     const res = await apiClient(ENDPOINTS.CONTRIBUTIONS, {
       method: 'POST',
       body: JSON.stringify({
-        data: { contribution_tier: tierData.documentId },
+        data: { contribution_tier: documentId },
       }),
     });
 

@@ -45,8 +45,8 @@ export const fromBaseToken = (
   return token ? `${formatted} ${token}` : formatted;
 };
 
-export const formatAmount = (num: number) =>
-  `${num} ${SupportedTokens.LSK}`
+export const formatAmount = (num: number, token: SupportedTokens) =>
+  `${num} ${token}`
 
 export const toBaseToken = (num: string | number): string => {
   const token = process.env.NEXT_PUBLIC_TOKEN_SYMBOL as SupportedTokens;

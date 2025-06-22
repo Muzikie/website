@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
-import {ethers, parseUnits} from 'ethers';
+import {parseUnits} from 'ethers';
 
 import {View, ScrollView} from '@/app/components/Polyfills';
 import {toBaseToken} from '@/app/utils/formatters';
@@ -17,7 +17,6 @@ import {useWallet} from '@/app/components/Wallet/useWallet';
 import type {ContributionTierForm} from '@/app/components/Feed/types';
 import {getProjectDetails} from '@/app/actions/getProjectDetails';
 import {Routes} from '@/app/config/routes';
-import MELODYNE_ABI from '@/app/config/melodyneAbi.json';
 import { FORMS } from '@/app/config/constants';
 
 const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
@@ -38,22 +37,7 @@ const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
     try {
       const {project} = await getProjectDetails(projectId as string);
       const amount = parseUnits(data.amount.toString(), 6);
-      const receipt = await sendTransaction('addTier', [project.on_chain_id, amount]);
-
-      const iface = new ethers.Interface(MELODYNE_ABI);
-      let tierId: string | null = null;
-
-      for (const log of receipt.logs) {
-        try {
-          const parsed = iface.parseLog(log);
-          if (parsed?.name === 'TierAdded') {
-            tierId = parsed.args[0].toString();
-            break;
-          }
-        } catch {
-          continue;
-        }
-      }
+      const {id: tierId} = await sendTransaction('addTier', [project.on_chain_id, amount], 'TierAdded');
 
       const res = await addContributionTier({
         ...data,
@@ -75,7 +59,7 @@ const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
     } catch (e) {
       setFeedback({
         status: FetchStatus.Error,
-        message: 'Error posting exclusive content'
+        message: e.message,
       });
       console.error('Error creating project:', e);
     }

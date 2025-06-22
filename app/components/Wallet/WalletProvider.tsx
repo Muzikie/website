@@ -1,7 +1,8 @@
 'use client';
 
-import React, {createContext, useEffect, useState} from 'react';
 import {ethers} from 'ethers';
+
+import React, {createContext, useEffect, useState} from 'react';
 import {createWallet} from '@/app/actions/createWallet';
 import {SupportedBlockchains, SupportedWallets} from '@/app/config/types';
 import {NETWORK, CHAIN_ID} from '@/app/config/network';
@@ -14,6 +15,23 @@ if (!USDC_ADDRESS) {
   throw new Error('Missing env variable NEXT_PUBLIC_USDC_ADDRESS');
 }
 
+const iface = new ethers.Interface(MELODYNE_ABI);
+
+function extractRevertReason(error: any): string | null {
+  if (error.reason) return error.reason;
+
+  if (error.error?.data?.message) return error.error.data.message;
+  if (typeof error.data === 'string') {
+    try {
+      const reason = ethers.utils.toUtf8String('0x' + error.data.slice(138));
+      return reason;
+    } catch {}
+  }
+
+  if (error.data?.message) return error.data.message;
+  return null;
+}
+
 
 type WalletContextType = {
   address: string | null;
@@ -21,7 +39,7 @@ type WalletContextType = {
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   getBalance: () => Promise<string[]>;
-  sendTransaction: (method: string, args: unknown[]) => Promise<ethers.TransactionReceipt>;
+  sendTransaction: (method: string, args: unknown[], eventNameToParse?: string) => Promise<{receipt: ethers.TransactionReceipt; id?: string}>;
 };
 
 export const WalletContext = createContext<WalletContextType>({
@@ -76,6 +94,13 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   const connect = async () => {
     try {
       if (!window.ethereum) return alert('Please install MetaMask');
+
+
+      await window.ethereum.request({
+        method: 'wallet_requestPermissions',
+        params: [{ eth_accounts: {} }],
+      });
+
       const _provider = new ethers.BrowserProvider(window.ethereum);
       const accounts = await _provider.send('eth_requestAccounts', []);
 
@@ -124,8 +149,9 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
 
   const sendTransaction = async (
     method: string,
-    args: unknown[]
-  ): Promise<ethers.TransactionReceipt> => {
+    args: unknown[],
+    eventNameToParse?: string,
+  ): Promise<{receipt: ethers.TransactionReceipt; id?: string}> => {
     if (!provider || !address) throw new Error('Wallet not connected');
     const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
     if (!CONTRACT_ADDRESS) {
@@ -134,13 +160,31 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
 
     const signer = await provider.getSigner(address);
     const contract = new ethers.Contract(CONTRACT_ADDRESS, MELODYNE_ABI, signer);
-    console.log(`method : ${method}`);
-    console.log('args : ', args);
-    const tx = await contract[method](...args);
-    const receipt = await tx.wait();
-    console.log('receipt : ', receipt);
+    try {
+      const tx = await contract[method](...args);
+      const receipt = await tx.wait();
 
-    return receipt;
+      let id: string | undefined;
+      if (eventNameToParse) {
+        for (const log of receipt.logs) {
+          try {
+            const parsed = iface.parseLog(log);
+            if (parsed?.name === eventNameToParse) {
+              id = parsed.args[0]?.toString();
+              break;
+            }
+          } catch {
+            continue;
+          }
+        }
+      }
+
+      return {receipt, id};
+    } catch (e: any) {
+      const reason = extractRevertReason(e);
+      console.error('Transaction failed:', reason || e.message);
+      throw new Error(reason || 'Transaction failed');
+    }
   };
 
   useEffect(() => {

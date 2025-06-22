@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import {FundingProgressProps} from './types';
 import {View, Span, H1, H3, H4} from '@/app/components/Polyfills';
 import {formatAmount} from '@/app/utils/formatters';
+import { SupportedTokens } from '@/app/config/types';
 
 const FundingProgress: FC<FundingProgressProps> = ({
   currentFunding,
@@ -28,7 +29,7 @@ const FundingProgress: FC<FundingProgressProps> = ({
           <View className="flex flex-row items-center gap-2">
             <Span className="text-neutralLight dark:text-neutralSteady">Goal:&nbsp;</Span>
             <H4 className="text-neutralPure dark:text-neutralMighty">
-              {formatAmount(softGoal)}
+              {formatAmount(softGoal, SupportedTokens.USDC)}
             </H4>
           </View>
           <View className="flex flex-row items-center gap-2">
@@ -36,7 +37,7 @@ const FundingProgress: FC<FundingProgressProps> = ({
               Max acceptable:&nbsp;
             </Span>
             <H3 className="text-neutralPure dark:text-neutralMighty">
-              {formatAmount(hardGoal)}
+              {formatAmount(hardGoal, SupportedTokens.USDC)}
             </H3>
           </View>
         </View>

@@ -1,17 +1,21 @@
 'use client'
 
 import React, {FC, useState} from 'react';
+import {ethers} from 'ethers';
 
 import {View, H2, Span, Link, ScrollView} from '@/app/components/Polyfills';
 import FormSummary from '@/app/components/FormElements/GenericSummary';
+import {publishProject} from '@/app/actions/publishProject';
 import {Button} from '@/app/components/Elements';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
 import {Routes} from '@/app/config/routes';
 import {FetchStatus, SubmitTitle} from '@/app/config/types';
 import Feedback from '@/app/components/Feedback';
 import {PublishProjectProps} from './types';
+import {useWallet} from '../Wallet/useWallet';
 
-const PublishProject: FC<PublishProjectProps> = ({projectId, data, onPublish}) => {
+const PublishProject: FC<PublishProjectProps> = ({projectId, data, onchainId}) => {
+  const {sendTransaction} = useWallet();
   const [feedback, setFeedback] = useState({
     status: FetchStatus.Idle,
     message: '',
@@ -22,17 +26,18 @@ const PublishProject: FC<PublishProjectProps> = ({projectId, data, onPublish}) =
       message: '',
     });
 
-    const result = await onPublish(projectId);
-
-    if (result.success) {
+    try {
+      await sendTransaction('publishCampaign', [onchainId], 'CampaignPublished');
+      const result = await publishProject(projectId);
       setFeedback({
-        status: FetchStatus.Success,
-        message: '',
+        status: result.success ? FetchStatus.Success : FetchStatus.Error,
+        message: result.error,
       });
-    } else {
+      console.log('res', result)
+    } catch (e) {
       setFeedback({
         status: FetchStatus.Error,
-        message: result.error,
+        message: e.message,
       });
     }
   };
