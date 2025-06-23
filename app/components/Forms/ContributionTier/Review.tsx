@@ -5,7 +5,6 @@ import {useRouter} from 'next/navigation';
 import {parseUnits} from 'ethers';
 
 import {View, ScrollView} from '@/app/components/Polyfills';
-import {toBaseToken} from '@/app/utils/formatters';
 import {ButtonThemes} from '@/app/components/Elements/Button/types';
 import FormSummary from '@/app/components/FormElements/GenericSummary';
 import {Button} from '@/app/components/Elements';
