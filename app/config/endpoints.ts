@@ -10,6 +10,7 @@ export const ENDPOINTS = {
   CONTRIBUTION_TIERS: '/contribution-tiers',
   CONTRIBUTIONS: '/contributions',
   EXCLUSIVE_CONTENT: '/exclusive-contents',
+  REACTIONS: '/reactions',
   FILES: '/upload/files',
 };
 
