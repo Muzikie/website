@@ -35,6 +35,10 @@ const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
 
   const handleSubmit = async () => {
     try {
+      setFeedback({
+        status: FetchStatus.Pending,
+        message: ''
+      });
       const {project} = await getProjectDetails(projectId as string);
       const amount = parseUnits(data.amount.toString(), 6);
       const {id: tierId} = await sendTransaction('addTier', [project.on_chain_id, amount], 'TierAdded');
@@ -42,7 +46,7 @@ const CreateTierReview = ({projectId}: CreateContributionTierReviewProps) => {
       const res = await addContributionTier({
         ...data,
         project: projectId,
-        amount: Number(toBaseToken(data?.amount ?? '')),
+        amount: data.amount,
         on_chain_id: tierId,
       });
 

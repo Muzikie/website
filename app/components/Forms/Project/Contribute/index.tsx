@@ -28,10 +28,9 @@ const Contribute: FC<ContributeProps> = ({project, artist, options}) => {
     });
     try {
       const optionData = options.find(item => item.id === selected) as TierData;
-  
-      const {id: campaignId} = await sendTransaction('contribute', [project.on_chain_id, optionData.on_chain_id]);
+
+      const {id: campaignId} = await sendTransaction('contribute', [project.on_chain_id, Number(optionData.on_chain_id)], 'Contributed');
       if (!campaignId) throw new Error('Could not find CampaignCreated event');
-      
       const result = await contribute(optionData?.documentId as string);
       setFeedback({
         status: result.success ? FetchStatus.Success : FetchStatus.Error,

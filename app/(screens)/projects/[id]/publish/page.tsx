@@ -7,8 +7,8 @@ import {getProjectDetails} from '@/app/actions/getProjectDetails';
 import {getProjectContributionTier} from '@/app/actions/getProjectContributionTiers';
 import {formatAmount} from '@/app/utils/formatters';
 
-interface Item {name: string; amount: number}
-type Acc = Record<string, {name: string; amount: string}>
+interface Item {name: string; amount: number, rewards: string}
+type Acc = Record<string, {name: string; amount: string, rewards: string}>
 
 const ProjectPublishScreen: FC<{params: Params<{id: string}>}> = async ({params}) => {
   const awaitedParams = await params;
@@ -19,6 +19,7 @@ const ProjectPublishScreen: FC<{params: Params<{id: string}>}> = async ({params}
   const tiers = contributionTiers.reduce((acc: Acc, item: Item, index: number) => {
     acc[`contribution_tier_#${index + 1}`] = {
       name: item.name,
+      rewards: item.rewards,
       amount: formatAmount(item.amount, SupportedTokens.USDC),
     };
     return acc;
