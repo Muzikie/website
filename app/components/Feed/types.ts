@@ -69,6 +69,7 @@ export type Project = ProjectAttrs & {
   documentId: string;
   current_funding: string;
   reaction_count: number;
+  has_reaction: boolean;
   users_permissions_user: User;
   images: Image[];
   owner: Owner;
@@ -115,10 +116,13 @@ export interface LinkToProjectProps {
 }
 
 export interface MetaProps {
+  projectId: number;
+  documentId: string;
   reactionCount?: number;
   backers?: number;
   type: FeedType;
   status?: ProjectStatus;
+  hasReaction?: boolean;
 }
 
 export interface FeedProps {

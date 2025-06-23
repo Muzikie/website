@@ -9,24 +9,27 @@ import {Routes} from '@/app/config/routes';
 import { getSmallestSize } from '@/app/utils/image';
 
 const Project: FC<ProjectProps> = ({data}) => {
-  const {documentId, name, summary, owner, reaction_count, type, images} = data;
+  const {documentId, id, name, summary, owner, reaction_count, type, images, has_reaction} = data;
   const thumbnails = (images || []).map(item => getSmallestSize(item.formats));
 
   return (
-    <View className="w-full bg-neutralPure p-4 rounded-xl mb-6">
-      <Artist data={owner} />
+    <View className="w-full bg-neutralPure pt-4 rounded-xl mb-6">
+      <Artist data={owner} className='px-4' />
       <Link to={{screen: `${Routes.Projects}/${documentId}`}}>
-        <View>
+        <View className='px-4'>
           <H4 className="pt-4 pb-2">{name}</H4>
           <Span className="text-neutralMighty dark:!text-neutralStrong font-light">{summary}</Span>
           <Thumbnails data={thumbnails}  />
-          <Meta
-            reactionCount={reaction_count}
-            type={type}
-            status={ProjectStatus.Live}
-          />
         </View>
       </Link>
+      <Meta
+        projectId={id}
+        documentId={documentId}
+        reactionCount={reaction_count}
+        hasReaction={has_reaction}
+        type={type}
+        status={ProjectStatus.Live}
+      />
     </View>
   );
 };
