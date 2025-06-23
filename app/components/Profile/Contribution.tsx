@@ -4,7 +4,7 @@ import {Routes} from '@/app/config/routes';
 import {getSmallestSize} from '@/app/utils/image';
 import {formatAmount} from '@/app/utils/formatters';
 import {View, H4, Span, Image, Link} from '@/app/components/Polyfills';
-import {ImageFormats} from '@/app/config/types';
+import {ImageFormats, SupportedTokens} from '@/app/config/types';
 import type {ContributionProps} from './types';
 
 const Contribution: FC<ContributionProps> = ({data}) => {
@@ -32,7 +32,7 @@ const Contribution: FC<ContributionProps> = ({data}) => {
             {data.contribution_tier.name}
           </H4>
           <Span className="text-primaryStrong font-light">
-            {formatAmount(data.amount)}
+            {formatAmount(data.amount, SupportedTokens.USDC)}
           </Span>
         </View>
       </View>
