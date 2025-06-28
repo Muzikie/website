@@ -6,6 +6,12 @@ export interface BaseElementProps {
   className?: string;
 }
 
+export interface MarkDownPros {
+  children?: string;
+  style?: Record<string, unknown>;
+  className?: string;
+}
+
 export interface ImageProps {
   source: string;
   alt?: string;

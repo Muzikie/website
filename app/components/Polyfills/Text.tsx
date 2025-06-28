@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
+import ReactMarkdown from 'react-markdown';
 
-import {BaseElementProps} from './types';
+import {BaseElementProps, MarkDownPros} from './types';
 
 export const Text: FC<BaseElementProps> = ({children, ...rest}) => (
   <span {...(rest || {})}>{children}</span>
@@ -32,4 +33,17 @@ export const Span: FC<BaseElementProps> = ({children, className, ...rest}) => (
 
 export const Small: FC<BaseElementProps> = ({children, className, ...rest}) => (
   <small {...(rest || {})} className={`font-poppins text-neutralAbsolute font-light text-xs tracking-wide ${className}`}>{children}</small>
+);
+
+export const MarkDown: FC<MarkDownPros> = ({children}) => (
+  <ReactMarkdown
+    components={{
+      p: (props) => <p className="font-poppins text-neutralAbsolute font-light text-sm tracking-wider leading-7 mb-2" {...props} />,
+      span: (props) => <span className="font-poppins text-neutralAbsolute font-light text-sm tracking-wider leading-7" {...props} />,
+      strong: (props) => <strong className="font-poppins text-neutralAbsolute font-semibold text-sm tracking-wider leading-7" {...props} />,
+      a: ({ href, ...props }) => <a href={href} className="font-poppins text-neutralAbsolute font-medium text-sm tracking-wider leading-7" {...props} />,
+    }}
+  >
+    {children}
+  </ReactMarkdown>
 );

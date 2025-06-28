@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 
 import {getProjectDetails} from '@/app/actions/getProjectDetails';
-import {ScrollView, H2, H3, Span, View} from '@/app/components/Polyfills';
+import {ScrollView, H2, H3, Span, View, MarkDown} from '@/app/components/Polyfills';
 import Gallery from '@/app/components/ProjectGallery';
 import Deadline from './Deadline';
 import Artist from './Artist';
@@ -43,10 +43,10 @@ const ProjectDetails: FC<ProjectDetailsProps> = async ({projectId}) => {
           {project.summary}
         </Span>
         <Deadline date={project.deadline} />
-        <Span className="!font-light dark:!text-neutralStrong">{project.description}</Span>
+        <MarkDown className="!font-light dark:!text-neutralStrong">{project.description}</MarkDown>
         <Artist data={artist} />
         <H3 className="!font-light pt-4 pb-6 dark:!text-neutralStrong">
-          By supporting her, you are not just funding the music—you are becoming a
+          By supporting this artist, you are not just funding the music—you are becoming a
           part of the creative journey!
         </H3>
         <FundingProgress
