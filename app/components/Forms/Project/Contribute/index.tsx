@@ -14,7 +14,7 @@ import Option from './Option';
 import {useWallet} from '@/app/components/Wallet/useWallet';
 
 const Contribute: FC<ContributeProps> = ({project, artist, options}) => {
-  const {sendTransaction} = useWallet();
+  const {sendTransaction ,ensureAllowance} = useWallet();
   const [selected, setSelected] = useState<number>(0);
   const [feedback, setFeedback] = useState({
     status: FetchStatus.Idle,
@@ -29,6 +29,7 @@ const Contribute: FC<ContributeProps> = ({project, artist, options}) => {
     try {
       const optionData = options.find(item => item.id === selected) as TierData;
 
+      await ensureAllowance(optionData.amount);
       const {id: campaignId} = await sendTransaction('contribute', [project.on_chain_id, Number(optionData.on_chain_id)], 'Contributed');
       if (!campaignId) throw new Error('Could not find CampaignCreated event');
       const result = await contribute(optionData?.documentId as string);

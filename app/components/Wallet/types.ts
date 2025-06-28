@@ -27,4 +27,5 @@ export type WalletContextType = {
   disconnect: () => Promise<void>;
   getBalance: () => Promise<string[]>;
   sendTransaction: (method: string, args: unknown[], eventNameToParse?: string) => Promise<{receipt: ethers.TransactionReceipt; id?: string}>;
+  ensureAllowance: (val: number) => Promise<void>;
 };

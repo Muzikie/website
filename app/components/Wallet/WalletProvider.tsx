@@ -1,6 +1,6 @@
 'use client';
 
-import {ethers, toUtf8String} from 'ethers';
+import {ethers, toUtf8String, parseUnits} from 'ethers';
 
 import React, {createContext, useEffect, useState} from 'react';
 import {createWallet} from '@/app/actions/createWallet';
@@ -13,6 +13,11 @@ import {EthereumProvider, OnChainError, WalletContextType} from './types';
 const USDC_ADDRESS = process.env.NEXT_PUBLIC_USDC_ADDRESS || '';
 if (!USDC_ADDRESS) {
   throw new Error('Missing env variable NEXT_PUBLIC_USDC_ADDRESS');
+}
+
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
+if (!CONTRACT_ADDRESS) {
+  throw new Error('Missing env variable CONTRACT_ADDRESS');
 }
 
 const iface = new ethers.Interface(MELODYNE_ABI);
@@ -40,6 +45,7 @@ export const WalletContext = createContext<WalletContextType>({
   disconnect: async () => {},
   getBalance: async () => ['0', '0'],
   sendTransaction: async () => {throw new Error('sendTransaction is not implemented yet.')},
+  ensureAllowance: async () => {throw new Error('ensureAllowance is not implemented yet.')},
 });
 
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
@@ -138,19 +144,30 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     disconnect();
   };
 
+  const ensureAllowance = async (val: number) => {
+    if (!provider || !address) throw new Error('Wallet not connected');
+
+    const signer = await provider.getSigner(address);
+    const tokenContract = new ethers.Contract(USDC_ADDRESS, USDC_ABI, signer);
+    const amount = parseUnits(val.toString(), 6);
+    const allowance = await tokenContract.allowance(address, CONTRACT_ADDRESS);
+
+    if (allowance < amount) {
+      const approveTx = await tokenContract.approve(CONTRACT_ADDRESS, amount);
+      await approveTx.wait();
+    }
+  };
+
   const sendTransaction = async (
     method: string,
     args: unknown[],
     eventNameToParse?: string,
   ): Promise<{receipt: ethers.TransactionReceipt; id?: string}> => {
     if (!provider || !address) throw new Error('Wallet not connected');
-    const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
-    if (!CONTRACT_ADDRESS) {
-      throw new Error('Missing env variable CONTRACT_ADDRESS');
-    }
 
     const signer = await provider.getSigner(address);
     const contract = new ethers.Contract(CONTRACT_ADDRESS, MELODYNE_ABI, signer);
+
     try {
       const tx = await contract[method](...args);
       const receipt = await tx.wait();
@@ -194,7 +211,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <WalletContext.Provider value={{ address, provider, connect, disconnect, getBalance, sendTransaction }}>
+    <WalletContext.Provider value={{ address, provider, connect, disconnect, getBalance, sendTransaction, ensureAllowance }}>
       {children}
     </WalletContext.Provider>
   );
