@@ -42,6 +42,9 @@ export const MarkDown: FC<MarkDownPros> = ({children}) => (
       span: (props) => <span className="font-poppins text-neutralAbsolute font-light text-sm tracking-wider leading-7" {...props} />,
       strong: (props) => <strong className="font-poppins text-neutralAbsolute font-semibold text-sm tracking-wider leading-7" {...props} />,
       a: ({ href, ...props }) => <a href={href} className="font-poppins text-neutralAbsolute font-medium text-sm tracking-wider leading-7" {...props} />,
+      ul: (props) => <ul className="list-disc pl-6 mb-4 mt-2" {...props} />,
+      ol: (props) => <ol className="font-poppins text-neutralAbsolute font-light text-sm tracking-wider leading-7 list-decimal pl-6 mb-4" {...props} />,
+      li: (props) => <li className="font-poppins text-neutralAbsolute font-light text-sm tracking-wider leading-7 mb-1" {...props} />,
     }}
   >
     {children}
