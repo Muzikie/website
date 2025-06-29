@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 
-import {getProjectDetails} from '@/app/actions/getProjectDetails';
+
 import {ScrollView, H2, H3, Span, View, MarkDown} from '@/app/components/Polyfills';
 import Gallery from '@/app/components/ProjectGallery';
 import Deadline from './Deadline';
@@ -12,17 +12,8 @@ import {ProjectDetailsProps} from './types';
 
 
 
-const ProjectDetails: FC<ProjectDetailsProps> = async ({projectId}) => {
-  let {artist, project} = await getProjectDetails(projectId);
-
-  const refresh = async () => {
-    'use server'
-    const result = await getProjectDetails(projectId);
-    artist = result.artist;
-    project = result.project;
-  };
-
-  if (projectId && project.documentId != projectId) {
+const ProjectDetails: FC<ProjectDetailsProps> = async ({project, artist, onRefresh}) => {
+  if (!project.documentId) {
     return <NotFound />;
   }
 
@@ -33,7 +24,7 @@ const ProjectDetails: FC<ProjectDetailsProps> = async ({projectId}) => {
         id={project.documentId}
         projectStatus={project.project_status}
         ownerId={project.users_permissions_user?.id}
-        refresh={refresh}
+        refresh={onRefresh}
       />
       <View className="p-4">
         <H2 className="dark:!text-primaryStrong">
@@ -57,7 +48,7 @@ const ProjectDetails: FC<ProjectDetailsProps> = async ({projectId}) => {
         <Actions
           project={project}
           owner={artist}
-          refresh={refresh}
+          refresh={onRefresh}
         />
       </View>
     </ScrollView>

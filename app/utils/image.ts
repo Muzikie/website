@@ -10,14 +10,21 @@ const priorities = [
 ];
 const reversePriorities = priorities.reverse();
 
-const baseURl = `${process.env.NEXT_PUBLIC_IMAGE_PROTOCOL}://${process.env.NEXT_PUBLIC_IMAGE_HOSTNAME}${process.env.NEXT_PUBLIC_IMAGE_PORT ? ':' + process.env.NEXT_PUBLIC_IMAGE_PORT : ''}`
+if (!process.env.NEXT_PUBLIC_IMAGE_PROTOCOL || !process.env.NEXT_PUBLIC_IMAGE_HOSTNAME || !process.env.NEXT_PUBLIC_PROTOCOL || !process.env.NEXT_PUBLIC_BASE_URL) {
+  throw new Error('Missing required base URL variables');
+}
+
+const API_BASE_URL = `${process.env.NEXT_PUBLIC_IMAGE_PROTOCOL}://${process.env.NEXT_PUBLIC_IMAGE_HOSTNAME}${process.env.NEXT_PUBLIC_IMAGE_PORT ? ':' + process.env.NEXT_PUBLIC_IMAGE_PORT : ''}`
+const WEBSITE_BASE_URL = `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_BASE_URL}`
 
 export const getSmallestSize = (obj: ImageFormats): ImageSource => {
   let source = {...thumbnailPlaceholder};
+  source.blurDataURL = `${WEBSITE_BASE_URL}${source.blurDataURL}`
+  source.src = `${WEBSITE_BASE_URL}${source.src}`
   for (const size of priorities) {
     if (obj.hasOwnProperty(size)) {
       source = {
-        src: `${baseURl}${obj[size].url}`,
+        src: `${API_BASE_URL}${obj[size].url}`,
         width: obj[size].width,
         height: obj[size].height,
       };
@@ -34,7 +41,7 @@ export const getLargestSize = (obj: ImageFormats): ImageSource => {
   for (const size of reversePriorities) {
     if (obj.hasOwnProperty(size)) {
       source = {
-        src: `${baseURl}${obj[size].url}`,
+        src: `${API_BASE_URL}${obj[size].url}`,
         width: obj[size].width,
         height: obj[size].height,
       };

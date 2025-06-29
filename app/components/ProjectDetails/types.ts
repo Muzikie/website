@@ -2,7 +2,9 @@ import type {Project} from '../Projects/types';
 import type {FetchStatus, AccountAttrs} from '@/app/config/types';
 
 export interface ProjectDetailsProps {
-  projectId: string;
+  project: Project;
+  artist: AccountAttrs;
+  onRefresh:  () => Promise<void>;
 }
 
 export interface ArtistProps {

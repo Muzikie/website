@@ -1,28 +1,36 @@
 import {Project} from '@/app/components/Projects/types';
-import { AccountAttrs } from '../config/types';
+import {ImageFormats, AccountAttrs} from '@/app/config/types';
+import {getSmallestSize} from './image';
+
+export const getShareInfo = (
+  project: Project,
+  artist: AccountAttrs,
+) => {
+  const artistName =
+      artist?.first_name || artist?.last_name
+        ? `${artist.first_name} ${artist.last_name}`
+        : `${artist?.email}`;
+  const url = `https://app.muzikie.com/projects/${project.documentId}`;
+  const image = getSmallestSize(project.images?.length ? project.images[0].formats : ({} as ImageFormats));
+
+  return {artistName, url, image};
+};
 
 export const shareProjectInvitation = async (
   user: AccountAttrs | undefined,
   project: Project,
   artist: AccountAttrs,
 ) => {
-  // Fetch user's name and family, fallback to email if not available
+  const {artistName, url} = getShareInfo(project, artist);
   const userName =
-    user?.first_name && user?.last_name
+    user?.first_name || user?.last_name
       ? `${user.first_name} ${user.last_name}`
       : user?.email;
-
-  const artistName =
-    artist?.first_name && artist?.last_name
-      ? `${artist.first_name} ${artist.last_name}`
-      : `${artist?.email}`;
-
-  // Format message
   const message = `
-    ${userName} has invited you to view and support a new music project on Muzikie\n\n
-    ${project.name} by ${artistName}\n\n
-    Join the project: muzikie://project/${project.id}\n\n
-    New to Muzikie? Visit https://muzikie.app/install
+    ${userName} just invited you to discover a new music project on Muzikie!
+    🎵 ${project.name} by ${artistName}
+    Check it out and show your support:  
+    ${url}
   `;
 
   try {
