@@ -58,9 +58,9 @@ const Login = () => {
 
   return (
     <SafeArea className="flex flex-col justify-center items-center">
-      <View className="px-6 w-[510px]">
+      <View className="px-6 max-w-[510px]">
         <View className="p-6 flex flex-row justify-center items-center">
-          <NextImage alt="App Logo" src={appLogo} className="w-[150px]" />
+          <NextImage alt="App Logo" src={appLogo} className="w-[100px] md:w-[150px]" />
         </View>
 
         <H3 className="text-primaryStrong py-6">Login</H3>
@@ -83,17 +83,19 @@ const Login = () => {
 
         <ErrorMessage errorMessage={error} />
 
-        <View className="flex flex-row nowrap gap-6 justify-center items-center">
+        <View className="flex flex-col md:flex-row nowrap gap-2 md:gap-6 justify-center items-center mt-2 md:mt-0">
           <Button
             onPress={onLogin}
             title="Sign in"
             disabled={isButtonDisabled}
+            className="w-full md:w-auto"
           />
           <Span>Or</Span>
           <Button
             onPress={onRegister}
             title="Sign up"
             disabled={isButtonDisabled}
+            className="w-full md:w-auto"
           />
         </View>
       </View>
