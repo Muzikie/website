@@ -10,7 +10,8 @@ export const getShareInfo = (
       artist?.first_name || artist?.last_name
         ? `${artist.first_name} ${artist.last_name}`
         : `${artist?.email}`;
-  const url = `https://app.muzikie.com/projects/${project.documentId}`;
+  const WEBSITE_BASE_URL = `${process.env.NEXT_PUBLIC_PROTOCOL}://${process.env.NEXT_PUBLIC_BASE_URL}`
+  const url = `${WEBSITE_BASE_URL}/projects/${project.documentId}`;
   const image = getSmallestSize(project.images?.length ? project.images[0].formats : ({} as ImageFormats));
 
   return {artistName, url, image};

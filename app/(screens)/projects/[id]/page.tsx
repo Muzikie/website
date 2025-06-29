@@ -1,11 +1,27 @@
 import React, {FC} from 'react';
 import Head from 'next/head';
+import type { Metadata } from 'next'
 
 import {getProjectDetails} from '@/app/actions/getProjectDetails';
 import {Params} from '@/app/config/types';
 import {SafeArea} from '@/app/components/Elements';
 import ProjectDetails from '@/app/components/ProjectDetails';
 import {getShareInfo} from '@/app/utils/shareMenu';
+
+
+export async function generateMetadata(
+  {params}: {params: Promise<{ id: string }>},
+): Promise<Metadata> {
+  const awaitedParams = await params;
+  const {artist, project} = await getProjectDetails(awaitedParams.id);
+  const {artistName, image} = getShareInfo(project, artist);
+ 
+  return {
+    title: `${project.name} by ${artistName}`,
+    description: 'Discover and support this new music project on Muzikie.',
+    icons: [image.src],
+  }
+}
 
 const ProjectDetailsScreen: FC<{params: Params<{id: string}>}> = async ({params}) => {
   const awaitedParams = await params;
