@@ -2,16 +2,14 @@
 export const dynamic = 'force-dynamic';
 
 import React from 'react';
-import { ScrollView } from '@/app/components/Polyfills';
-import Contributions from '@/app/components/Profile/ContributionsOld';
-import { SafeArea } from '@/app/components/Elements';
-import Basics from '@/app/components/Profile/BasicsOld';
+import {ScrollView} from '@/app/components/Polyfills';
+import {SafeArea} from '@/app/components/Elements';
+import {Overview} from '@/app/components/Profile/Overview';
 
 const ProfilePage = async () => (
   <SafeArea>
-    <ScrollView>
-      <Basics />
-      <Contributions />
+    <ScrollView className="p-6">
+      <Overview />
     </ScrollView>
   </SafeArea>
 );
