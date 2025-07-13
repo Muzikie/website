@@ -4,7 +4,7 @@ import { getUserAccount } from '@/app/actions/getUserAccount';
 import { getUserContributions } from '@/app/actions/getUserContributions';
 import {View} from '@/app/components/Polyfills';
 import SectionHeader from '../SectionHeader';
-import Contribution from './Contribution';
+import Contribution from './ContributionOld';
 import type {Contribution as ContributionType} from './types';
 
 

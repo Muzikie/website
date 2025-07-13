@@ -4,8 +4,8 @@ import React from 'react';
 
 import {View} from '@/app/components/Polyfills';
 import {getUserAccount} from '@/app/actions/getUserAccount';
-import Avatar from './Avatar';
-import Wallet from './Wallet';
+import Avatar from './AvatarOld';
+import Wallet from './WalletOld';
 
 const Basics = async () => {
   const account = await getUserAccount();
