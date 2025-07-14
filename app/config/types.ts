@@ -78,6 +78,7 @@ export interface Profile {
 export interface AccountAttrs {
   first_name: string;
   last_name: string;
+  bio?: string;
   points: number;
   email: string;
   id: number;

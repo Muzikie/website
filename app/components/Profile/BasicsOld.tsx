@@ -4,7 +4,7 @@ import React from 'react';
 
 import {View} from '@/app/components/Polyfills';
 import {getUserAccount} from '@/app/actions/getUserAccount';
-import Avatar from './AvatarOld';
+import Avatar from './Avatar';
 import Wallet from './WalletOld';
 
 const Basics = async () => {

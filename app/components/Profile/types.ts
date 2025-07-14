@@ -36,3 +36,7 @@ export interface AvatarAttrs {
   profileId: string;
   data: ImageFormats;
 }
+
+export interface AboutMeAttrs {
+  data: AccountAttrs;
+}
