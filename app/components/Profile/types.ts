@@ -58,3 +58,7 @@ export interface BadgesAttrs {
 export interface PointsAttrs {
   points: number;
 }
+
+export interface TotalContributionsAttrs {
+  amount: string;
+}

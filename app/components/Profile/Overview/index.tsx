@@ -4,6 +4,7 @@ import React, {FC} from 'react';
 import {View} from '@/app/components/Polyfills';
 import {AboutMe} from '@/app/components/Profile/AboutMe';
 import {Badges} from '@/app/components/Profile/Badges';
+import {TotalContributions} from '@/app/components/Profile/TotalContributions';
 import {getUserAccount} from '@/app/actions/getUserAccount';
 
 export const Overview: FC = async () => {
@@ -16,7 +17,7 @@ export const Overview: FC = async () => {
           <AboutMe data={account} />
         </div>
         <div className="w-full lg:hidden"><Badges achievedBadges={[]} /></div>
-        <div><div className="h-[204px] bg-[#ff0]">Box 5</div></div>
+        <div><TotalContributions amount="240.00" /></div>
       </div>
       <div className="basis-1/2 lg:basis-2/3 flex flex-col lg:flex-row flex-nowrap lg:flex-wrap gap-y-6">
         <div className=" w-full hidden lg:block"><Badges achievedBadges={[]} /></div>
