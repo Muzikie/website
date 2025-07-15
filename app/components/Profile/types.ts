@@ -40,3 +40,21 @@ export interface AvatarAttrs {
 export interface AboutMeAttrs {
   data: AccountAttrs;
 }
+
+export interface BoxTitleAttr {
+  children: string;
+  className?: string;
+}
+
+export interface BadgeAttrs {
+  name: string;
+  isActive?: boolean;
+}
+
+export interface BadgesAttrs {
+  achievedBadges: string[];
+}
+
+export interface PointsAttrs {
+  points: number;
+}

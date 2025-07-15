@@ -1,8 +1,7 @@
 'use client';
 
-import React, {FC, useState, useRef} from 'react';
+import React, {FC, useState} from 'react';
 
-import {Timeout} from '@/app/config/types';
 import {View, H2, Span, TouchableHighlight} from '@/app/components/Polyfills';
 import {Icon, Input} from '@/app/components/Elements';
 import {updateProfile} from '@/app/actions/updateProfile';
@@ -15,7 +14,6 @@ export const AboutMe: FC<AboutMeAttrs> = ({data}) => {
     first_name: data?.first_name ?? '',
     last_name: data?.last_name ?? '',
   });
-  const timer = useRef<Timeout>();
   const onInputChange = (fieldName: string) => (value: string) => {
     setFormData({
       ...formData,
@@ -41,7 +39,7 @@ export const AboutMe: FC<AboutMeAttrs> = ({data}) => {
 
   const fullName =
     [data?.first_name, data?.last_name].filter(item => !!item).join(' ') ||
-    'Set your name';
+    'Future Grammy winner';
 
   return (
     <View className="h-[600px] from-[#0D83AE] to-[#5BB2B6] bg-gradient-to-b rounded-[32px] text-center overflow-hidden border border-neutralStrong">
