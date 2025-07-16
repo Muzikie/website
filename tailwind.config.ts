@@ -45,6 +45,7 @@ const config: Config = {
     },
     fontFamily: {
       poppins: ["Poppins", "sans-serif"],
+      martian: ["Martian Mono", "monospace"],
     },
   },
   plugins: [],

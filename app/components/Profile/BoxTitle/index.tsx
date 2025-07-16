@@ -2,9 +2,8 @@
 
 import React, {FC} from 'react';
 
-import {Span} from '@/app/components/Polyfills';
 import {BoxTitleAttr} from '../types';
 
 export const BoxTitle: FC<BoxTitleAttr> = ({children, className}) => (
-  <Span className={`text-neutralString uppercase ${className}`}>{children}</Span>
+  <h4 className={`font-martian text-neutralStrong uppercase ${className}`}>{children}</h4>
 );

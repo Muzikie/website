@@ -9,6 +9,7 @@ export const ENDPOINTS = {
   PROJECTS: '/projects',
   CONTRIBUTION_TIERS: '/contribution-tiers',
   CONTRIBUTIONS: '/contributions',
+  CONTRIBUTIONS_OVERVIEW: '/contributions/overview',
   EXCLUSIVE_CONTENT: '/exclusive-contents',
   REACTIONS: '/reactions',
   FILES: '/upload/files',

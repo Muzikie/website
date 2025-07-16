@@ -158,3 +158,11 @@ export interface WalletInput {
   wallet_type: SupportedWallets;
 }
 
+export interface ContributionsOverview {
+  total_contributions_amount: string,
+  total_contributions_count: number,
+  unique_projects_count: number,
+  latest_contribution_at: number,
+  top_contributed_project: number,
+  average_contribution_amount: string,
+}

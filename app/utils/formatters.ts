@@ -67,7 +67,7 @@ export const CapitalizeKey = (key: string = ''): string =>
     })
     .join(' ');
 
-export const showBalance = (val: string, token: SupportedTokens) => {
+export const showBalance = (val: string, token?: SupportedTokens) => {
   const value = BigNumber(val);
 
   let decimalPlaces = 5;
@@ -79,5 +79,5 @@ export const showBalance = (val: string, token: SupportedTokens) => {
     decimalPlaces = 3;
   }
 
-  return `${value.toFixed(decimalPlaces)} ${token}`;
+  return `${value.toFixed(decimalPlaces)} ${token || ''}`;
 }
