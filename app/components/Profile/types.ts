@@ -62,3 +62,7 @@ export interface PointsAttrs {
 export interface TotalContributionsAttrs {
   amount: string;
 }
+
+export interface BalancesAttrs {
+  balances: string[]
+}

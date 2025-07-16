@@ -6,7 +6,7 @@ import {Timeout} from '@/app/config/types';
 import {View, H1, H2, H3, Span, TouchableHighlight} from '@/app/components/Polyfills';
 import {Icon, Input} from '@/app/components/Elements';
 
-import ConnectWalletButton from '@/app/components/Wallet/ConnectWalletButton';
+import {ConnectWallet} from '@/app/components/Wallet/ConnectWallet';
 import {updateProfile} from '@/app/actions/updateProfile';
 import {WalletProps} from './types';
 import {useWallet} from '../Wallet/useWallet';
@@ -125,7 +125,7 @@ const Wallet: FC<WalletProps> = ({data}) => {
           <Span className="text-neutralSteady font-light">{`${
             process.env.NEXT_PUBLIC_NETWORK_NAME || ''
           } Wallet Address`}</Span>
-          <ConnectWalletButton />
+          <ConnectWallet />
         </View>
       </View>
     </View>

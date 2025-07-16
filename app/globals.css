@@ -11,6 +11,7 @@
   --neutral-light: #AAAAAA;
   --neutral-pale: #CCCCCC;
   --neutral-pure: #FFFFFF;
+  --neutral-see-through: rgba(255, 255, 255, 0.5);
   --primary-mighty: #130C14;
   --primary-strong: #453248;
   --primary-mild: #A687AB;
@@ -20,13 +21,15 @@
   --warn-mild: #FF9DAA;
   --assure-strong: #42BFC7;
   --assure-mild: #BDDFE1;
+  --lush-light: #84B379;
   --sky-strong: #1C74E9;
   --sky-mild: #4C92EE;
   --sky-weak: #BBE1FF;
-  --amber-mild: #FF9939;
+  --amber-mighty: #E2A128;
+  --amber-strong: #FF9939;
   --amber-mild: #F3B173;
   --amber-weak: #FFDAB8;
-
+  --coffee-strong: #3C301A;
   --body-bg: #453248;
   --body-color: #FFFFFF;
   --wrapper-bg: #3D3D3D;
