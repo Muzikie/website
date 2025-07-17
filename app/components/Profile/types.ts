@@ -65,4 +65,5 @@ export interface TotalContributionsAttrs {
 
 export interface BalancesAttrs {
   balances: string[]
+  disconnect: () => void;
 }
