@@ -1,3 +1,5 @@
+import {ChangeEvent} from 'react';
+
 import {ImageData} from '@/app/components/Projects/types';
 import {AccountAttrs, ImageFormats} from '@/app/config/types';
 
@@ -66,4 +68,23 @@ export interface TotalContributionsAttrs {
 export interface BalancesAttrs {
   balances: string[]
   disconnect: () => void;
+}
+
+
+export enum SupportedSocials {
+  INSTAGRAM = 'instagram',
+  TIKTOK = 'tiktok',
+  TWITTER = 'twitter',
+}
+export interface SocialsAttrs {
+  instagram?: string;
+  tiktok?: string;
+  twitter?: string;
+}
+
+export interface SocialItemAttrs {
+  platform: SupportedSocials;
+  isEditing: boolean;
+  value: string;
+  onChange: (fieldName: string) => (e: ChangeEvent<HTMLInputElement>) => void;
 }
