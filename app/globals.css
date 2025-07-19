@@ -24,17 +24,19 @@
   --lush-light: #84B379;
   --sky-strong: #1C74E9;
   --sky-mild: #4C92EE;
+  --sky-pale: #9FAAC9;
   --sky-weak: #BBE1FF;
   --amber-mighty: #E2A128;
   --amber-strong: #FF9939;
   --amber-mild: #F3B173;
   --amber-weak: #FFDAB8;
   --coffee-strong: #3C301A;
+  --coffee-soft: #CB7046;
   --body-bg: #453248;
   --body-color: #FFFFFF;
   --wrapper-bg: #3D3D3D;
   --input-bg: #EDEDED;
-  --menu-bg: #1E191E;
+  --menu-bg:rgb(2, 0, 2);
 }
 
 html.dark {

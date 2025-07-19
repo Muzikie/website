@@ -51,7 +51,7 @@ export const Socials: FC<SocialsAttrs> = (attrs) => {
   };
 
   return (
-    <section className="h-[264px] lg:pr-6 border-box">
+    <section className="h-[280px] lg:pr-6 border-box">
       <div className="w-full h-full border-box p-6 bg-lushLight rounded-[32px] flex flex-col justify-between relative">
         <div className="flex flex-row justify-between">
           <BoxTitle>Socials</BoxTitle>

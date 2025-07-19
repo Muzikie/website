@@ -7,6 +7,8 @@ import {Badges} from '@/app/components/Profile/Badges';
 import {TotalContributions} from '@/app/components/Profile/TotalContributions';
 import {Wallet} from '@/app/components/Profile/Wallet';
 import {Socials} from '@/app/components/Profile/Socials';
+import {Activity} from '@/app/components/Profile/Activity';
+import {TopCampaigns} from '@/app/components/Profile/TopCampaigns';
 import {getUserAccount} from '@/app/actions/getUserAccount';
 import {getContributionsOverview} from '@/app/actions/getContributionsOverview';
 
@@ -26,9 +28,9 @@ export const Overview: FC = async () => {
       <div className="basis-1/2 lg:basis-2/3 flex flex-col lg:flex-row flex-nowrap lg:flex-wrap gap-y-6">
         <div className=" w-full hidden lg:block"><Badges achievedBadges={[]} /></div>
         <div className="lg:basis-1/2"><Wallet /></div>
-        <div className="lg:basis-1/2"><div className="h-[384px] bg-[#0ff]">Box 4</div></div>
+        <div className="lg:basis-1/2"><Activity /></div>
         <div className="lg:basis-2/5"><Socials /></div>
-        <div className="lg:basis-3/5"><div className="h-[241px] bg-[#aaa]">Box 7</div></div>
+        <div className="lg:basis-3/5"><TopCampaigns /></div>
       </div>
     </View>
   );
