@@ -1,44 +1,77 @@
-'use client'
+'use client';
 
 import React, {FC, useState, ChangeEvent} from 'react';
+import {redirect, RedirectType} from 'next/navigation';
 
 import {TouchableHighlight} from '@/app/components/Polyfills';
 import {Icon} from '@/app/components/Elements';
 import {SocialsAttrs, SocialItemAttrs, SupportedSocials} from '../types';
+import {SOCIAL_BASE_URLS} from '@/app/config/constants';
+import {storeSocials} from '@/app/actions/storeSocials';
 import {BoxTitle} from '../BoxTitle';
 
-const SocialItem: FC<SocialItemAttrs> = ({platform, isEditing, value, onChange}) => {
-  const sizeStyles = isEditing ? 'h-[48px] rounded-[12px] border-box px-2' : 'w-[64px] h-[64px] rounded-[32px] justify-center';
+const SocialItem: FC<SocialItemAttrs> = ({
+  platform,
+  isEditing,
+  value,
+  saving,
+  onChange,
+  setIsEditing,
+}) => {
+  const sizeStyles = isEditing
+    ? 'h-[48px] rounded-[12px] border-box px-2'
+    : 'w-[64px] h-[64px] rounded-[32px] justify-center';
+
+  const onClick = () => {
+    if (!isEditing && value) {
+      redirect(`${SOCIAL_BASE_URLS[platform]}${value}`, RedirectType.push);
+    } else if (!isEditing && !value) {
+      setIsEditing(true);
+    }
+  };
 
   return (
-    <div className={`bg-neutralSeeThrough flex flex-row items-center ${sizeStyles}`}>
+    <div
+      className={`bg-neutralSeeThrough relative flex flex-row items-center ${sizeStyles}`}
+      onClick={onClick}>
       <Icon name={platform} color="#293426" size={32} />
-      {
-        isEditing ? (
-          <input placeholder={`${platform} username`} value={value} onChange={onChange(platform)} className="bg-transparent w-full h-full border-box pl-4 placeholder:text-[#29342640]" />
-        ) : null
-      }
+      {isEditing && (
+        <input
+          placeholder={`${platform} username`}
+          value={value}
+          disabled={saving}
+          onChange={onChange(platform)}
+          className="bg-transparent w-full h-full border-box pl-4 placeholder:text-[#29342640]"
+        />
+      )}
     </div>
   );
 };
 
-export const Socials: FC<SocialsAttrs> = (attrs) => {
+export const Socials: FC<SocialsAttrs> = attrs => {
+  const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    instagram: attrs.instagram ?? '',
-    tiktok: attrs.tiktok ?? '',
-    twitter: attrs.twitter ?? '',
+  const [formData, setFormData] = useState<Record<SupportedSocials, string>>({
+    [SupportedSocials.INSTAGRAM]: attrs.instagram ?? '',
+    [SupportedSocials.TIKTOK]: attrs.tiktok ?? '',
+    [SupportedSocials.TWITTER]: attrs.twitter ?? '',
   });
 
-  const onChange = (fieldName: string) => (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [fieldName]: e.target.value,
-    });
-  };
-  
+  const onChange =
+    (fieldName: string) => (e: ChangeEvent<HTMLInputElement>) => {
+      setFormData({
+        ...formData,
+        [fieldName]: e.target.value,
+      });
+    };
+
   const save = async () => {
-    // @todo do the save
+    setSaving(true);
+    try {
+      await storeSocials(attrs.profileId, formData);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const toggleEdit = async () => {
@@ -59,19 +92,36 @@ export const Socials: FC<SocialsAttrs> = (attrs) => {
             onPress={toggleEdit}
             className="w-[44px] h-[44px] cursor-pointer absolute right-5 top-5">
             <Icon
-              name={isEditing ? 'check' : 'feather'}
+              name={saving ? 'hourGlass' : isEditing ? 'check' : 'feather'}
               size={28}
               color={'#fff'}
             />
           </TouchableHighlight>
         </div>
 
-        <h3 className={`${isEditing ? 'hidden' : 'font-poppins text-neutralPure text-lg font-light leading-7 pb-8'}`}>Use your socials to extend your reach and increase your support</h3>
+        <h3
+          className={`${isEditing ? 'hidden' : 'font-poppins text-neutralPure text-lg font-light leading-7 pb-8'}`}>
+          Use your socials to extend your reach and increase your support
+        </h3>
 
-        <div className={`flex ${isEditing ? 'flex-col pt-6 gap-2' : 'flex-row gap-6'} flex-nowrap`}>
-          <SocialItem platform={SupportedSocials.INSTAGRAM} isEditing={isEditing} onChange={onChange} value={formData.instagram} />
-          <SocialItem platform={SupportedSocials.TIKTOK} isEditing={isEditing} onChange={onChange} value={formData.tiktok} />
-          <SocialItem platform={SupportedSocials.TWITTER} isEditing={isEditing} onChange={onChange} value={formData.twitter} />
+        <div
+          className={`flex ${isEditing ? 'flex-col pt-6 gap-2' : 'flex-row gap-6'} flex-nowrap`}>
+          {(
+            Object.entries(SupportedSocials) as [
+              keyof typeof SupportedSocials,
+              SupportedSocials,
+            ][]
+          ).map(([key, value]) => (
+            <SocialItem
+              key={key}
+              platform={value}
+              isEditing={isEditing}
+              saving={saving}
+              onChange={onChange}
+              value={formData[value]}
+              setIsEditing={setIsEditing}
+            />
+          ))}
         </div>
       </div>
     </section>

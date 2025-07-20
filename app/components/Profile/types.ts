@@ -76,7 +76,9 @@ export enum SupportedSocials {
   TIKTOK = 'tiktok',
   TWITTER = 'twitter',
 }
+
 export interface SocialsAttrs {
+  profileId: string;
   instagram?: string;
   tiktok?: string;
   twitter?: string;
@@ -86,5 +88,7 @@ export interface SocialItemAttrs {
   platform: SupportedSocials;
   isEditing: boolean;
   value: string;
+  saving: boolean;
   onChange: (fieldName: string) => (e: ChangeEvent<HTMLInputElement>) => void;
+  setIsEditing: (value: boolean) => void;
 }

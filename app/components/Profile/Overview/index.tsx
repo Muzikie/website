@@ -29,7 +29,7 @@ export const Overview: FC = async () => {
         <div className=" w-full hidden lg:block"><Badges achievedBadges={[]} /></div>
         <div className="lg:basis-1/2"><Wallet /></div>
         <div className="lg:basis-1/2"><Activity /></div>
-        <div className="lg:basis-2/5"><Socials /></div>
+        <div className="lg:basis-2/5"><Socials profileId={account.profileId} /></div>
         <div className="lg:basis-3/5"><TopCampaigns /></div>
       </div>
     </View>

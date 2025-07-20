@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import {SamSite, SupportedTokens} from './types';
+import {SupportedSocials} from '@/app/components/Profile/types';
 
 export const SPOTIFY_LINK_REG = /^https:\/\/open\.spotify\.com\/track\/[\w-]+/;
 
@@ -60,4 +61,10 @@ export const FORMS = {
   ADD_CONTRIBUTION_TIER: '0x103',
   CONTRIBUTE: '0x104',
   PUBLISH: '0x104',
+};
+
+export const SOCIAL_BASE_URLS = {
+  [SupportedSocials.INSTAGRAM]: 'https://instagram.com/',
+  [SupportedSocials.TWITTER]: 'https://x.com/',
+  [SupportedSocials.TIKTOK]: 'https://www.tiktok.com/@',
 };
