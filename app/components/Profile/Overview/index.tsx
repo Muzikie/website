@@ -10,11 +10,14 @@ import {Socials} from '@/app/components/Profile/Socials';
 import {Activity} from '@/app/components/Profile/Activity';
 import {TopCampaigns} from '@/app/components/Profile/TopCampaigns';
 import {getUserAccount} from '@/app/actions/getUserAccount';
+import {getFeed} from '@/app/actions/getFeed';
 import {getContributionsOverview} from '@/app/actions/getContributionsOverview';
 
 export const Overview: FC = async () => {
   const account = await getUserAccount();
   const contributionsOverview = await getContributionsOverview();
+  const {data: campaigns} = await getFeed();
+
 
   return (
     <View className="md:flex md:flex-row md:flex-nowrap gap-6">
@@ -30,7 +33,7 @@ export const Overview: FC = async () => {
         <div className="lg:basis-1/2"><Wallet /></div>
         <div className="lg:basis-1/2"><Activity /></div>
         <div className="lg:basis-2/5"><Socials profileId={account.profileId} /></div>
-        <div className="lg:basis-3/5"><TopCampaigns /></div>
+        <div className="lg:basis-3/5"><TopCampaigns data={campaigns} /></div>
       </div>
     </View>
   );

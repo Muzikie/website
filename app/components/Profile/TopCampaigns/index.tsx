@@ -1,13 +1,38 @@
-'use client';
+'use server';
 
-import React from 'react';
+import React, {FC} from 'react';
 
 import {BoxTitle} from '@/app/components/Profile/BoxTitle';
+import { getSmallestSize } from '@/app/utils/image';
+import {Image} from '@/app/components/Polyfills';
+import {Project} from '@/app/components/Feed/types';
 
-export const TopCampaigns = () => (
+const Campaign: FC<{data: Project}> = ({data}) => {
+  const {name, images} = data;
+  const thumbnail = getSmallestSize(images[0].formats);
+
+  return (
+    <div className="w-[120px] h-[120px] rounded-[60px] overflow-hidden">
+      <Image
+        key={thumbnail.src}
+        alt={name}
+        source ={thumbnail.src}
+        width={thumbnail.width}
+        height={thumbnail.height}
+      />
+    </div>
+  );
+};
+
+export const TopCampaigns: FC<{data: Project[]}> = async ({data = []}) => (
   <section className="bg-skyPale w-full h-[280px] rounded-[32px] p-6">
     <BoxTitle>Top Campaigns</BoxTitle>
-    <main className="flex items-center grow shrink-0">
+    <main className="h-full flex items-end grow shrink-0 border-box pb-6">
+      {
+        data.filter((item: Project) => item.images?.length > 0).map((item: Project) => (
+          <Campaign data={item} key={item.documentId} />
+        ))
+      }
     </main>
   </section>
 );
