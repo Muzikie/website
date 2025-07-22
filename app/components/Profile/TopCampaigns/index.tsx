@@ -24,15 +24,24 @@ const Campaign: FC<{data: Project}> = ({data}) => {
   );
 };
 
+const EmptyState = () => (
+  <div className="overflow-hidden w-full h-full bg-[url(/images/artist-enjoying.png)] bg-no-repeat bg-contain bg-right-bottom" />
+);
+
 export const TopCampaigns: FC<{data: Project[]}> = async ({data = []}) => (
   <section className="bg-skyPale w-full h-[280px] rounded-[32px] p-6">
     <BoxTitle>Top Campaigns</BoxTitle>
-    <main className="h-full flex items-end grow shrink-0 border-box pb-6">
-      {
-        data.filter((item: Project) => item.images?.length > 0).map((item: Project) => (
-          <Campaign data={item} key={item.documentId} />
-        ))
-      }
-    </main>
+    {
+      data.length ? (
+        <main className="h-full flex items-end grow shrink-0 border-box pb-6">
+          {
+            data.filter((item: Project) => item.images?.length > 0).map((item: Project) => (
+              <Campaign data={item} key={item.documentId} />
+            ))
+          }
+        </main>
+      ) : <EmptyState />
+    }
+    
   </section>
 );
