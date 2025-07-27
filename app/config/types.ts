@@ -1,3 +1,5 @@
+import {Social} from '@/app/components/Profile/types';
+
 export interface KeyValue {
   [key: string]: unknown;
 }
@@ -90,9 +92,7 @@ export interface AccountAttrs {
     id: number;
     formats: ImageFormats;
   };
-  twitter: string;
-  instagram: string;
-  twitch: string;
+  socials: Social[]
 }
 
 export type Account  = {

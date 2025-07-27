@@ -5,10 +5,23 @@ import {redirect, RedirectType} from 'next/navigation';
 
 import {TouchableHighlight} from '@/app/components/Polyfills';
 import {Icon} from '@/app/components/Elements';
-import {SocialsAttrs, SocialItemAttrs, SupportedSocials} from '../types';
+import {SocialsAttrs, SocialItemAttrs, SupportedSocials, Social} from '../types';
 import {SOCIAL_BASE_URLS} from '@/app/config/constants';
 import {storeSocials} from '@/app/actions/storeSocials';
 import {BoxTitle} from '../BoxTitle';
+
+const toSocialDict = (data: Social[]) => 
+  Object.entries(SupportedSocials).reduce((acc, [, value]) => {
+    const username = data.find(account => account.platform === value)?.username ?? '';
+    acc[value] = username;
+    return acc;
+  }, {} as Record<SupportedSocials, string>);
+
+
+const toSocialArr = (data: Record<SupportedSocials, string>): Social[] => 
+  (Object.entries(data) as [SupportedSocials, string][])
+    .filter(([, username]: [SupportedSocials, string]) => !!username)
+    .map(([platform, username]: [SupportedSocials, string]) => ({platform, username}));
 
 const SocialItem: FC<SocialItemAttrs> = ({
   platform,
@@ -48,17 +61,13 @@ const SocialItem: FC<SocialItemAttrs> = ({
   );
 };
 
-export const Socials: FC<SocialsAttrs> = attrs => {
+export const Socials: FC<SocialsAttrs> = (attrs) => {
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<Record<SupportedSocials, string>>({
-    [SupportedSocials.INSTAGRAM]: attrs.instagram ?? '',
-    [SupportedSocials.TIKTOK]: attrs.tiktok ?? '',
-    [SupportedSocials.TWITTER]: attrs.twitter ?? '',
-  });
+  const [formData, setFormData] = useState<Record<SupportedSocials, string>>(toSocialDict(attrs.socials));
 
   const onChange =
-    (fieldName: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    (fieldName: SupportedSocials) => (e: ChangeEvent<HTMLInputElement>) => {
       setFormData({
         ...formData,
         [fieldName]: e.target.value,
@@ -68,7 +77,7 @@ export const Socials: FC<SocialsAttrs> = attrs => {
   const save = async () => {
     setSaving(true);
     try {
-      await storeSocials(attrs.profileId, formData);
+      await storeSocials(attrs.profileId, toSocialArr(formData));
     } finally {
       setSaving(false);
     }

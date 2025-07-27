@@ -77,11 +77,14 @@ export enum SupportedSocials {
   TWITTER = 'twitter',
 }
 
+export interface Social {
+  platform: SupportedSocials;
+  username: string;
+}
+
 export interface SocialsAttrs {
   profileId: string;
-  instagram?: string;
-  tiktok?: string;
-  twitter?: string;
+  socials: Social[];
 }
 
 export interface SocialItemAttrs {
@@ -91,4 +94,12 @@ export interface SocialItemAttrs {
   saving: boolean;
   onChange: (fieldName: string) => (e: ChangeEvent<HTMLInputElement>) => void;
   setIsEditing: (value: boolean) => void;
+}
+
+export interface ActivityAttrs {
+  data: {
+    likesCount: number;
+    projectsCount: number;
+    reachCount: number;
+  }
 }

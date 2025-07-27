@@ -9,10 +9,11 @@ const Input = ({
   name,
   placeholder,
   className,
+  wrapperClassName,
   inputMode = 'text',
   multiline = false,
 }: InputProps) => (
-  <View className="w-full">
+  <View className={`w-full ${wrapperClassName}`}>
     <Span>{placeholder}</Span>
     <TextInput
       onChangeText={onChange(name)}

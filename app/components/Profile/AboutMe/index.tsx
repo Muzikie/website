@@ -13,6 +13,7 @@ export const AboutMe: FC<AboutMeAttrs> = ({data}) => {
   const [formData, setFormData] = useState({
     first_name: data?.first_name ?? '',
     last_name: data?.last_name ?? '',
+    bio: data?.bio ?? '',
   });
   const onInputChange = (fieldName: string) => (value: string) => {
     setFormData({
@@ -43,7 +44,7 @@ export const AboutMe: FC<AboutMeAttrs> = ({data}) => {
 
   return (
     <View className="h-[600px] from-[#0D83AE] to-[#5BB2B6] bg-gradient-to-b rounded-[32px] text-center overflow-hidden border border-neutralStrong">
-      <View className="h-full px-8 pt-12 bg-[url(/images/clouds.png)] bg-right-bottom bg-no-repeat relative">
+      <View className="h-full flex flex-col justify-stretch px-8 pt-12 bg-[url(/images/clouds.png)] bg-right-bottom bg-no-repeat relative">
         <TouchableHighlight
           onPress={toggleEdit}
           className="w-[44px] h-[44px] cursor-pointer absolute right-5 top-5">
@@ -66,20 +67,35 @@ export const AboutMe: FC<AboutMeAttrs> = ({data}) => {
           </>
         )}
         {isEditing && (
-          <View className="w-full flex flex-row justify-center items-end p-6 gap-2">
-            <Input
-              placeholder="First name"
-              onChange={onInputChange}
-              value={formData.first_name}
-              name="first_name"
-            />
-            <Input
-              placeholder="Last name"
-              onChange={onInputChange}
-              value={formData.last_name}
-              name="last_name"
-            />
-          </View>
+          <>
+            <View className="w-full flex flex-row justify-center items-end p-6 gap-2">
+              <Input
+                placeholder="First name"
+                onChange={onInputChange}
+                value={formData.first_name}
+                name="first_name"
+                wrapperClassName="text-left"
+              />
+              <Input
+                placeholder="Last name"
+                onChange={onInputChange}
+                value={formData.last_name}
+                name="last_name"
+                wrapperClassName="text-left"
+              />
+            </View>
+            <View className="grow">
+              <Input
+                placeholder="Bio"
+                onChange={onInputChange}
+                value={formData.bio}
+                name="bio"
+                wrapperClassName="h-full p-6 border-box flex flex-col text-left"
+                className="grow"
+                multiline
+              />
+            </View>
+          </>
         )}
       </View>
     </View>

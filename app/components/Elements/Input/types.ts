@@ -4,6 +4,7 @@ export interface InputProps {
   name: string;
   placeholder: string;
   className?: string;
+  wrapperClassName?: string;
   multiline?: boolean;
   inputMode?: 'text'|'decimal'|'numeric'|'email'|'url'|'tel';
 }
