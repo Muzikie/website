@@ -19,6 +19,7 @@ const Campaign: FC<{data: Project}> = ({data}) => {
         source ={thumbnail.src}
         width={thumbnail.width}
         height={thumbnail.height}
+        className="min-w-[120px] min-h-[120px]"
       />
     </div>
   );
@@ -42,6 +43,5 @@ export const TopCampaigns: FC<{data: Project[]}> = async ({data = []}) => (
         </main>
       ) : <EmptyState />
     }
-    
   </section>
 );

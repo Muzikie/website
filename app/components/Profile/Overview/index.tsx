@@ -10,14 +10,14 @@ import {Socials} from '@/app/components/Profile/Socials';
 import {Activity} from '@/app/components/Profile/Activity';
 import {TopCampaigns} from '@/app/components/Profile/TopCampaigns';
 import {getUserAccount} from '@/app/actions/getUserAccount';
-import {getFeed} from '@/app/actions/getFeed';
+import {getUserCampaigns} from '@/app/actions/getUserCampaigns';
 import {getProfileActivity} from '@/app/actions/getProfileActivity';
 import {getContributionsOverview} from '@/app/actions/getContributionsOverview';
 
 export const Overview: FC = async () => {
   const account = await getUserAccount();
   const contributionsOverview = await getContributionsOverview();
-  const {data: campaigns} = await getFeed();
+  const {data: campaigns} = await getUserCampaigns({max: 4, userId: account.id});
   const {data: activity} = await getProfileActivity(account.id);
 
   return (
